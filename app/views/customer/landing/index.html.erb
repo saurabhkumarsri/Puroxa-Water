@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PUROXA WATER</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    body {
+      background: #000;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .neon {
+      text-shadow: 0 0 5px #00eaff, 0 0 10px #00eaff, 0 0 20px #00eaff;
+    }
+
+    .glow-btn {
+      box-shadow: 0 0 15px #00eaff;
+    }
+
+    .section {
+      min-height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+
+<%= render "navbar" %>
+
+<!-- HERO -->
+<section id="home" class="section flex flex-col justify-center items-center text-center px-4">
+  <h1 class="text-3xl sm:text-6xl font-extrabold neon hero-title">
+    PURE WATER
+  </h1>
+  <p class="mt-4 sm:mt-6 text-base sm:text-xl text-gray-300 hero-sub">
+    500ml • 1L • 2L Bottles Delivered
+  </p>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section flex items-center justify-center px-4">
+  <div class="max-w-3xl text-center about-box">
+    <h2 class="text-2xl sm:text-4xl neon mb-4 sm:mb-6">
+      Why PUROXA?
+    </h2>
+    <p class="text-gray-400 text-sm sm:text-lg">
+      PUROXA delivers ultra-pure mineral water with modern purification
+      technology. Trusted by vendors & homes.
+    </p>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="section flex flex-col justify-center items-center px-4">
+  <h2 class="text-2xl sm:text-4xl neon mb-10 sm:mb-20">
+    Our Bottles
+  </h2>
+
+  <div class="flex flex-col sm:flex-row gap-6 sm:gap-16 product-cards w-full sm:w-auto">
+    <div class="p-6 sm:p-10 border border-cyan-400 glow-btn text-center">
+      500ml
+    </div>
+    <div class="p-6 sm:p-10 border border-cyan-400 glow-btn text-center">
+      1 Litre
+    </div>
+    <div class="p-6 sm:p-10 border border-cyan-400 glow-btn text-center">
+      2 Litre
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section flex flex-col justify-center items-center px-4 text-center">
+  <h2 class="text-2xl sm:text-4xl neon mb-4 sm:mb-6">
+    Become a Vendor
+  </h2>
+  <p class="text-gray-400 mb-6 sm:mb-10 text-sm sm:text-base">
+    Join PUROXA & grow your water business
+  </p>
+  <a href="/signup" class="px-6 sm:px-8 py-3 sm:py-4 bg-cyan-400 text-black font-bold glow-btn">
+    Join Now
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-8 text-center text-gray-500 text-sm">
+  © 2025 PUROXA WATER
+</footer>
+
+<!-- GSAP -->
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from(".hero-title", { opacity: 0, y: 100, duration: 1.2 });
+  gsap.from(".hero-sub", { opacity: 0, y: 50, delay: 0.5 });
+
+  gsap.from(".about-box", {
+    scrollTrigger: { trigger: "#about", start: "top 70%" },
+    opacity: 0,
+    y: 100,
+    duration: 1
+  });
+
+  gsap.from(".product-cards div", {
+    scrollTrigger: { trigger: "#products", start: "top 70%" },
+    opacity: 0,
+    y: 80,
+    stagger: 0.3
+  });
+</script>
+
+</body>
+</html>
