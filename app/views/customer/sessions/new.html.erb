@@ -12,109 +12,114 @@
 
   <style>
     body {
-      background: radial-gradient(circle at top, #00111f, #000);
-      color: #fff;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)),
+        url('<%= image_path("fresh_water.jpg") %>') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
       font-family: 'Inter', sans-serif;
-      margin-top: 30px;
     }
 
     .neon {
       text-shadow:
-        0 0 5px #00eaff,
-        0 0 15px #00eaff;
+        0 0 6px #00eaff,
+        0 0 18px #00eaff;
     }
 
     .input-glow:focus {
       outline: none;
-      box-shadow: 0 0 15px #00eaff;
+      box-shadow: 0 0 18px #00eaff;
       border-color: #00eaff;
     }
 
     .btn-glow {
-      box-shadow: 0 0 20px #00eaff;
+      box-shadow: 0 0 25px #00eaff;
     }
   </style>
 </head>
 
 <body class="min-h-screen flex items-center justify-center px-4">
 
-  <div class="bg-black/70 backdrop-blur-lg 
-              p-6 sm:p-10 
-              rounded-2xl 
-              w-full max-w-md 
-              border border-cyan-500">
-    
+  <!-- Login Card -->
+  <div class="w-full max-w-md bg-black/60 backdrop-blur-xl
+              p-8 sm:p-10
+              rounded-2xl
+              border border-cyan-500/50
+              shadow-2xl">
+
     <!-- Logo -->
-    <h1 class="text-2xl sm:text-3xl font-bold text-center neon mb-2">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-center neon mb-2">
       PUROXA
     </h1>
 
-    <p class="text-center text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">
-      Customer Login
+    <p class="text-center text-gray-400 mb-8">
+      Pure Water. Pure Trust.
     </p>
 
     <!-- Login Form -->
-    <form method="POST" action="/login">
+    <form method="POST" action="<%= customer_login_path %>">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
       <!-- Email / Mobile -->
-      <div class="mb-4 sm:mb-6">
-        <label class="block text-xs sm:text-sm text-gray-400 mb-2">
+      <div class="mb-6">
+        <label class="block text-sm text-gray-300 mb-2">
           Email or Mobile Number
         </label>
         <input
           type="text"
           name="login"
           placeholder="email@example.com or 9876543210"
-          class="w-full px-4 py-2.5 sm:py-3 
-                 bg-transparent 
-                 border border-gray-600 
-                 rounded-lg 
+          class="w-full px-4 py-3 bg-transparent
+                 border border-gray-600
+                 rounded-lg
+                 text-white
+                 placeholder-gray-500
                  input-glow"
           required
         />
       </div>
 
       <!-- Password -->
-      <div class="mb-4 sm:mb-6">
-        <label class="block text-xs sm:text-sm text-gray-400 mb-2">
+      <div class="mb-6">
+        <label class="block text-sm text-gray-300 mb-2">
           Password
         </label>
         <input
           type="password"
           name="password"
           placeholder="••••••••"
-          class="w-full px-4 py-2.5 sm:py-3 
-                 bg-transparent 
-                 border border-gray-600 
-                 rounded-lg 
+          class="w-full px-4 py-3 bg-transparent
+                 border border-gray-600
+                 rounded-lg
+                 text-white
+                 placeholder-gray-500
                  input-glow"
           required
         />
       </div>
 
-      <!-- Submit -->
+      <!-- Login Button -->
       <button
         type="submit"
-        class="w-full py-2.5 sm:py-3 
-               bg-cyan-400 
-               text-black 
-               font-bold 
-               rounded-lg 
-               btn-glow 
-               hover:bg-cyan-300 
+        class="w-full py-3 mt-2
+               bg-cyan-400
+               text-black
+               font-bold
+               rounded-lg
+               btn-glow
+               hover:bg-cyan-300
                transition">
         Login
       </button>
-
     </form>
 
-    <!-- Extra Links -->
-    <div class="text-center mt-5 sm:mt-6 text-xs sm:text-sm text-gray-400">
+    <!-- Links -->
+    <div class="text-center mt-6 text-sm text-gray-400">
       <a href="/forgot-password" class="hover:text-cyan-400">
         Forgot Password?
       </a>
 
-      <span class="block mt-3">
+      <span class="block mt-4">
         New customer?
         <a href="/customer/signup" class="text-cyan-400 hover:underline">
           Create Account

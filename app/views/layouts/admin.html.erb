@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Puroxa Water - Admin" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-100">
+    <div class="flex">
+
+      <!-- Sidebar -->
+      <%= render "layouts/sidebar" %>
+
+      <!-- Main Content -->
+      <div class="flex-1">
+        <%= render "layouts/topbar" %>
+
+        <main class="p-6">
+          <%= yield %>
+        </main>
+      </div>
+
+    </div>
+  </body>
+</html>

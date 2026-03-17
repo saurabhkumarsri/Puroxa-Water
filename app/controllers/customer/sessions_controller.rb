@@ -2,12 +2,29 @@ class Customer::SessionsController < ApplicationController
   def new
   end
 
-  def create
+  def login
+    identifier = params[:login]
+    password   = params[:password]
+
+    user = User.find_by(
+      "email = :value OR contact = :value",
+      value: identifier
+    )
+
+    Rails.logger.debug "USER => #{user.inspect}==========================================="
+
+    if user&.valid_password?(password)
+      session[:user_id] = user.id
+      redirect_to customer_dashboards_index_path, notice: "Login successful"
+    else
+      flash.now[:alert] = "Invalid email/mobile or password"
+      render :new, status: :unprocessable_entity
+    end
   end
+
 
   def destroy
-  end
-
-  def sign_up
+    session[:user_id] = nil
+    redirect_to customer_login_path
   end
 end

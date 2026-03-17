@@ -14,110 +14,157 @@
 
   <style>
     body {
-      background: #000;
-      color: white;
+      font-family: 'Segoe UI', sans-serif;
       overflow-x: hidden;
     }
 
-    .neon {
-      text-shadow: 0 0 5px #00eaff, 0 0 10px #00eaff, 0 0 20px #00eaff;
+    /* HERO */
+    .hero-bg {
+      background: linear-gradient(to bottom, #7fd3f7, #ffffff);
+      position: relative;
     }
 
-    .glow-btn {
-      box-shadow: 0 0 15px #00eaff;
+    /* 3D WATER */
+    .water-wave {
+      filter: drop-shadow(0 -20px 35px rgba(255,255,255,0.4));
     }
 
-    .section {
-      min-height: 100vh;
+    .water-wave.depth {
+      filter: blur(3px);
+      opacity: 0.85;
     }
+
+    /* CARDS */
+    .service-card {
+      background: white;
+      border-radius: 18px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-12px);
+    }
+
+    .floating-water {
+      animation: floatWater 4s ease-in-out infinite;
+    }
+
+    @keyframes floatWater {
+      0%   { transform: translate(-50%, 0); }
+      50%  { transform: translate(-50%, -20px); }
+      100% { transform: translate(-50%, 0); }
+    }
+
   </style>
 </head>
 
 <body>
 
-<%= render "navbar" %>
+<%=render 'navbar'%>
+<section
+  class="relative min-h-screen flex items-center justify-center text-center px-6"
+  style="background-image: url('<%= image_path "fresh_water.jpg" %>');
+         background-size: cover;
+         background-position: center;"
+>
 
-<!-- HERO -->
-<section id="home" class="section flex flex-col justify-center items-center text-center px-4">
-  <h1 class="text-3xl sm:text-6xl font-extrabold neon hero-title">
-    PURE WATER
-  </h1>
-  <p class="mt-4 sm:mt-6 text-base sm:text-xl text-gray-300 hero-sub">
-    500ml • 1L • 2L Bottles Delivered
-  </p>
-</section>
+  <!-- DARK OVERLAY -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
 
-<!-- ABOUT -->
-<section id="about" class="section flex items-center justify-center px-4">
-  <div class="max-w-3xl text-center about-box">
-    <h2 class="text-2xl sm:text-4xl neon mb-4 sm:mb-6">
-      Why PUROXA?
-    </h2>
-    <p class="text-gray-400 text-sm sm:text-lg">
-      PUROXA delivers ultra-pure mineral water with modern purification
-      technology. Trusted by vendors & homes.
+  <!-- CONTENT -->
+  <div class="relative z-10 max-w-3xl">
+
+    <h1 class="text-3xl sm:text-5xl font-light text-white leading-tight hero-title">
+      WE SPECIALIZE IN<br>
+      <span class="font-semibold text-sky-300">PURE & MINERAL WATER</span>
+    </h1>
+
+    <p class="mt-6 text-gray-200 hero-sub">
+      We provide high-quality drinking water solutions, purification technology,
+      and trusted distribution for homes & businesses.
     </p>
+
+    <a href="#services"
+       class="mt-10 inline-block px-8 py-3 bg-sky-500 hover:bg-sky-600
+              text-white rounded-full text-sm shadow-xl transition">
+      KNOW MORE
+    </a>
+
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section id="products" class="section flex flex-col justify-center items-center px-4">
-  <h2 class="text-2xl sm:text-4xl neon mb-10 sm:mb-20">
-    Our Bottles
+<!-- SERVICES -->
+<section id="services" class="py-28 bg-[#0b6fb3]">
+  <h2 class="text-center text-3xl font-semibold text-white mb-20">
+    OUR SERVICES
   </h2>
 
-  <div class="flex flex-col sm:flex-row gap-6 sm:gap-16 product-cards w-full sm:w-auto">
-    <div class="p-6 sm:p-10 border border-cyan-400 glow-btn text-center">
-      500ml
+  <div class="max-w-7xl mx-auto grid sm:grid-cols-3 gap-12 px-6">
+
+    <div class="service-card text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2933/2933186.png" class="mx-auto h-16 mb-6">
+      <h3 class="font-semibold mb-3">Water Processing</h3>
+      <p class="text-sm text-gray-600">
+        Advanced purification & mineral balancing systems.
+      </p>
     </div>
-    <div class="p-6 sm:p-10 border border-cyan-400 glow-btn text-center">
-      1 Litre
+
+    <div class="service-card text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png" class="mx-auto h-16 mb-6">
+      <h3 class="font-semibold mb-3">Distribution Support</h3>
+      <p class="text-sm text-gray-600">
+        Vendor onboarding, logistics & supply chain solutions.
+      </p>
     </div>
-    <div class="p-6 sm:p-10 border border-cyan-400 glow-btn text-center">
-      2 Litre
+
+    <div class="service-card text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/4285/4285632.png" class="mx-auto h-16 mb-6">
+      <h3 class="font-semibold mb-3">Quality Analysis</h3>
+      <p class="text-sm text-gray-600">
+        Lab-tested purity & international safety standards.
+      </p>
     </div>
+
   </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="section flex flex-col justify-center items-center px-4 text-center">
-  <h2 class="text-2xl sm:text-4xl neon mb-4 sm:mb-6">
-    Become a Vendor
-  </h2>
-  <p class="text-gray-400 mb-6 sm:mb-10 text-sm sm:text-base">
-    Join PUROXA & grow your water business
-  </p>
-  <a href="/signup" class="px-6 sm:px-8 py-3 sm:py-4 bg-cyan-400 text-black font-bold glow-btn">
-    Join Now
-  </a>
 </section>
 
 <!-- FOOTER -->
-<footer class="py-8 text-center text-gray-500 text-sm">
-  © 2025 PUROXA WATER
+<footer class="py-10 text-center text-gray-500 bg-white">
+  © 2025 PUROXA WATER. All rights reserved.
 </footer>
 
 <!-- GSAP -->
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-  gsap.from(".hero-title", { opacity: 0, y: 100, duration: 1.2 });
-  gsap.from(".hero-sub", { opacity: 0, y: 50, delay: 0.5 });
+  /* HERO ZOOM */
+  gsap.fromTo(".hero", 
+    { scale: 1.1 },
+    { scale: 1, duration: 6, ease: "power2.out" }
+  );
 
-  gsap.from(".about-box", {
-    scrollTrigger: { trigger: "#about", start: "top 70%" },
-    opacity: 0,
-    y: 100,
-    duration: 1
-  });
+  gsap.from(".hero-title", { opacity: 0, y: 40, duration: 1 });
+  gsap.from(".hero-sub", { opacity: 0, y: 30, delay: 0.4 });
 
-  gsap.from(".product-cards div", {
-    scrollTrigger: { trigger: "#products", start: "top 70%" },
+  gsap.from(".service-card", {
+    scrollTrigger: { trigger: "#services", start: "top 70%" },
     opacity: 0,
     y: 80,
-    stagger: 0.3
+    stagger: 0.25
+  });
+
+  /* WATER ANIMATION */
+  gsap.to(".water-wave path", {
+    duration: 6,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+    attr: {
+      d: "M0,150 C120,170 240,200 360,190 C480,180 600,140 720,150
+          C840,160 960,180 1080,190 C1200,200 1320,180 1440,170
+          L1440,320 L0,320 Z"
+    }
   });
 </script>
-
-</body>
-</html>
