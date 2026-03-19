@@ -1,133 +1,33 @@
-<%= render "customer/landing/navbar" %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Puroxa Customer Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    body {
-      background:
-        linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)),
-        url('<%= image_path("fresh_water.jpg") %>') no-repeat center center fixed;
-      background-size: cover;
-      color: #ffffff;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .neon {
-      text-shadow:
-        0 0 6px #00eaff,
-        0 0 18px #00eaff;
-    }
-
-    .input-glow:focus {
-      outline: none;
-      box-shadow: 0 0 18px #00eaff;
-      border-color: #00eaff;
-    }
-
-    .btn-glow {
-      box-shadow: 0 0 25px #00eaff;
-    }
-  </style>
-</head>
-
-<body class="min-h-screen flex items-center justify-center px-4">
-
-  <!-- Login Card -->
-  <div class="w-full max-w-md bg-black/60 backdrop-blur-xl
-              p-8 sm:p-10
-              rounded-2xl
-              border border-cyan-500/50
-              shadow-2xl">
-
-    <!-- Logo -->
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-center neon mb-2">
-      PUROXA
-    </h1>
-
-    <p class="text-center text-gray-400 mb-8">
-      Pure Water. Pure Trust.
-    </p>
+<div class="min-h flex items-center justify-center bg-gradient-to-b from-cyan-50 to-gray-50 px-4">
+  <div class="w-full max-w-md bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl border border-gray-200">
+    
+    <!-- Logo / Title -->
+    <h1 class="text-5xl font-extrabold text-center text-cyan-700 mb-2 drop-shadow-md">PUROXA</h1>
+    <p class="text-center text-gray-500 mb-10">Pure Water. Pure Trust.</p>
 
     <!-- Login Form -->
-    <form method="POST" action="<%= customer_login_path %>">
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-
-      <!-- Email / Mobile -->
+    <%= form_with url: customer_login_path, method: :post, local: true do %>
       <div class="mb-6">
-        <label class="block text-sm text-gray-300 mb-2">
-          Email or Mobile Number
-        </label>
-        <input
-          type="text"
-          name="login"
-          placeholder="email@example.com or 9876543210"
-          class="w-full px-4 py-3 bg-transparent
-                 border border-gray-600
-                 rounded-lg
-                 text-white
-                 placeholder-gray-500
-                 input-glow"
-          required
-        />
+        <%= label_tag :login, "Email or Mobile Number", class: "block text-sm text-gray-700 mb-2" %>
+        <%= text_field_tag :login, nil, placeholder: "email@example.com or 9876543210", class: "w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition shadow-sm hover:shadow-md", required: true %>
       </div>
 
-      <!-- Password -->
       <div class="mb-6">
-        <label class="block text-sm text-gray-300 mb-2">
-          Password
-        </label>
-        <input
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          class="w-full px-4 py-3 bg-transparent
-                 border border-gray-600
-                 rounded-lg
-                 text-white
-                 placeholder-gray-500
-                 input-glow"
-          required
-        />
+        <%= label_tag :password, "Password", class: "block text-sm text-gray-700 mb-2" %>
+        <%= password_field_tag :password, nil, placeholder: "••••••••", class: "w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition shadow-sm hover:shadow-md", required: true %>
       </div>
 
-      <!-- Login Button -->
-      <button
-        type="submit"
-        class="w-full py-3 mt-2
-               bg-cyan-400
-               text-black
-               font-bold
-               rounded-lg
-               btn-glow
-               hover:bg-cyan-300
-               transition">
-        Login
-      </button>
-    </form>
+      <%= submit_tag "Login", class: "w-full py-3 bg-cyan-500 text-white font-bold rounded-xl shadow-lg hover:bg-cyan-600 hover:shadow-2xl transition transform hover:-translate-y-0.5" %>
+    <% end %>
 
     <!-- Links -->
-    <div class="text-center mt-6 text-sm text-gray-400">
-      <a href="/forgot-password" class="hover:text-cyan-400">
-        Forgot Password?
-      </a>
-
+    <div class="text-center mt-6 text-sm text-gray-500">
+      <%= link_to "Forgot Password?", root_path, class: "hover:text-cyan-600 transition font-medium" %>
       <span class="block mt-4">
         New customer?
-        <a href="/customer/signup" class="text-cyan-400 hover:underline">
-          Create Account
-        </a>
+        <%= link_to "Create Account", customer_signup_path, class: "text-cyan-500 hover:underline transition font-medium" %>
       </span>
     </div>
-
   </div>
-
-</body>
-</html>
+</div>

@@ -1,146 +1,50 @@
-<%= render "customer/landing/navbar" %>
+<!-- Signup Card -->
+<div class="w-full max-w-lg bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl border border-gray-200">
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Puroxa | Signup</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Header -->
+  <h1 class="text-5xl font-extrabold text-center text-cyan-700 mb-2">PUROXA</h1>
+  <p class="text-center text-gray-500 mb-10">Create Shop / Customer Account</p>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Form -->
+  <%= form_with url: customer_signup_path, method: :post, local: true do %>
 
-  <style>
-    body {
-      background:
-        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.85)),
-        url('<%= image_path("fresh_water.jpg") %>') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .neon {
-      text-shadow: 0 0 6px #00eaff, 0 0 20px #00eaff;
-    }
-
-    .input-glow:focus {
-      outline: none;
-      border-color: #00eaff;
-      box-shadow: 0 0 15px #00eaff;
-    }
-
-    .btn-glow {
-      box-shadow: 0 0 25px #00eaff;
-    }
-  </style>
-</head>
-
-<body class="min-h-screen flex items-center justify-center px-4 py-12">
-
-  <!-- Signup Card -->
-  <div class="w-full max-w-lg
-              bg-black/60 backdrop-blur-xl
-              p-8 sm:p-10
-              rounded-2xl
-              border border-cyan-500/50
-              shadow-2xl">
-
-    <!-- Header -->
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-center neon mb-2">
-      PUROXA
-    </h1>
-    <p class="text-center text-gray-400 mb-8">
-      Create Shop / Customer Account
-    </p>
-
-    <!-- Signup Form -->
-    <form method="POST" action="/customers/signup">
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-
-      <!-- Shop Name -->
-      <div class="mb-4">
-        <label class="block text-sm text-gray-300 mb-1">Shop Name</label>
-        <input
-          type="text"
-          name="shop_name"
-          placeholder="Shree Water Store"
-          class="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white placeholder-gray-500 input-glow"
-          required>
-      </div>
-
-      <!-- Owner Name -->
-      <div class="mb-4">
-        <label class="block text-sm text-gray-300 mb-1">Owner Name</label>
-        <input
-          type="text"
-          name="name"
-          placeholder="Rahul Verma"
-          class="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white placeholder-gray-500 input-glow"
-          required>
-      </div>
-
-      <!-- Email -->
-      <div class="mb-4">
-        <label class="block text-sm text-gray-300 mb-1">Email</label>
-        <input
-          type="email"
-          name="email"
-          placeholder="shop@email.com"
-          class="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white placeholder-gray-500 input-glow"
-          required>
-      </div>
-
-      <!-- Mobile -->
-      <div class="mb-4">
-        <label class="block text-sm text-gray-300 mb-1">Mobile Number</label>
-        <input
-          type="tel"
-          name="mobile"
-          placeholder="9876543210"
-          class="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white placeholder-gray-500 input-glow"
-          required>
-      </div>
-
-      <!-- Password -->
-      <div class="mb-4">
-        <label class="block text-sm text-gray-300 mb-1">Password</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          class="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white placeholder-gray-500 input-glow"
-          required>
-      </div>
-
-      <!-- Address -->
-      <div class="mb-6">
-        <label class="block text-sm text-gray-300 mb-1">Shop Address</label>
-        <textarea
-          name="address"
-          rows="3"
-          placeholder="Full shop address"
-          class="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white placeholder-gray-500 input-glow"
-          required></textarea>
-      </div>
-
-      <!-- Submit -->
-      <button
-        type="submit"
-        class="w-full py-3 bg-cyan-400 text-black font-bold rounded-lg btn-glow hover:bg-cyan-300 transition">
-        Create Account
-      </button>
-    </form>
-
-    <!-- Footer -->
-    <div class="text-center mt-6 text-sm text-gray-400">
-      Already have an account?
-      <a href="/customer/login" class="text-cyan-400 hover:underline">
-        Login here
-      </a>
+    <div class="mb-4">
+      <%= label_tag :shop_name, "Shop Name", class: "block text-sm text-gray-700 mb-2" %>
+      <%= text_field_tag :shop_name, nil, class: "w-full px-4 py-3 border rounded-xl" %>
     </div>
 
+    <div class="mb-4">
+      <%= label_tag :name, "Owner Name" %>
+      <%= text_field_tag :name, nil, class: "w-full px-4 py-3 border rounded-xl" %>
+    </div>
+
+    <div class="mb-4">
+      <%= label_tag :email, "Email" %>
+      <%= email_field_tag :email, nil, class: "w-full px-4 py-3 border rounded-xl" %>
+    </div>
+
+    <div class="mb-4">
+      <%= label_tag :mobile, "Mobile Number" %>
+      <%= telephone_field_tag :mobile, nil, class: "w-full px-4 py-3 border rounded-xl" %>
+    </div>
+
+    <div class="mb-4">
+      <%= label_tag :password, "Password" %>
+      <%= password_field_tag :password, nil, class: "w-full px-4 py-3 border rounded-xl" %>
+    </div>
+
+    <div class="mb-6">
+      <%= label_tag :address, "Shop Address" %>
+      <%= text_area_tag :address, nil, rows: 3, class: "w-full px-4 py-3 border rounded-xl" %>
+    </div>
+
+    <%= submit_tag "Create Account", class: "w-full py-3 bg-cyan-500 text-white rounded-xl" %>
+
+  <% end %>
+
+  <div class="text-center mt-6 text-sm">
+    Already have an account?
+    <%= link_to "Login", customer_login_path, class: "text-cyan-500" %>
   </div>
 
-</body>
-</html>
+</div>

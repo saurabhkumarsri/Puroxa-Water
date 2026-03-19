@@ -1,19 +1,21 @@
-<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur shadow">
-  <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-    <a href="<%= root_path %>" class="text-xl sm:text-2xl font-bold neon">
-      PUROXA
-    </a>
-    <div class="hidden sm:flex gap-6 text-gray-700">
-      <a href="#">Home</a>
-      <a href="#services">Services</a>
-      <a href="#">Products</a>
-      <a href="#">Contact</a>
-      <a href="/customer/login" class="px-3 py-1 border border-cyan-400 glow-btn">
-        Login
-      </a>
-      <a href="/customer/signup" class="px-3 py-1 bg-cyan-400 text-black font-bold glow-btn">
-        Signup
-      </a>
-    </div>
+<header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+  
+  <!-- Logo -->
+  <div class="text-2xl font-bold text-[#0d2c63]">
+    <%= link_to "Puroxa Water", root_path %>
   </div>
-</nav>
+
+  <!-- Menu -->
+  <nav class="flex items-center gap-6">
+    <%= link_to "Home", root_path, class: "hover:text-blue-600" %>
+    <%= link_to "Products", root_path, class: "hover:text-blue-600" %>
+    <%= link_to "Contact", root_path, class: "hover:text-blue-600" %>
+
+    <%= link_to "Login", customer_login_path,
+      class: "px-4 py-2 border border-[#0d2c63] rounded-lg hover:bg-gray-100" %>
+
+    <%= link_to "Sign up", customer_signup_path,
+      class: "px-5 py-2 bg-[#0d2c63] text-white rounded-lg shadow-md hover:scale-105 transition" %>
+  </nav>
+
+</header>
