@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  namespace :customer do
+  namespace :vendor do
     get  "login",  to: "sessions#new"
     post "login",  to: "sessions#login"
     delete "logout", to: "sessions#destroy"
@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   end
 
 
-  root "customer/landing#index"
+  root "vendor/landing#index"
 
   namespace :admin do
     get "dashboards/index"

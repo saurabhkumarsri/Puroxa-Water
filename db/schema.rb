@@ -22,17 +22,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_21_073926) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "customers", force: :cascade do |t|
-    t.string "shop_name"
-    t.string "contact_number"
-    t.text "address"
-    t.boolean "approved"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_customers_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -58,6 +47,5 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_21_073926) do
     t.index ["user_id"], name: "index_vendors_on_user_id"
   end
 
-  add_foreign_key "customers", "users"
   add_foreign_key "vendors", "users"
 end

@@ -2,7 +2,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  ROLES = { admin: 0, customer: 1 }.freeze
+  ROLES = { admin: 0, customer: 1, vendor: 2 }.freeze
 
   def role
     ROLES.key(read_attribute(:role))
@@ -18,5 +18,9 @@ class User < ApplicationRecord
 
   def customer?
     role == :customer.to_s
+  end
+
+  def vendor?
+    role == :vendor.to_s
   end
 end

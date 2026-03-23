@@ -1,4 +1,4 @@
-class Customer::SessionsController < ApplicationController
+class Vendor::SessionsController < ApplicationController
   def new
   end
 
@@ -15,7 +15,7 @@ class Customer::SessionsController < ApplicationController
 
     if user&.valid_password?(password)
       session[:user_id] = user.id
-      redirect_to customer_dashboards_index_path, notice: "Login successful"
+      redirect_to vendor_dashboards_index_path, notice: "Login successful"
     else
       flash.now[:alert] = "Invalid email/mobile or password"
       render :new, status: :unprocessable_entity
@@ -25,6 +25,6 @@ class Customer::SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    redirect_to customer_login_path
+    redirect_to vendor_login_path
   end
 end
