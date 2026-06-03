@@ -1,0 +1,61 @@
+<% content_for :title, "My Orders" %>
+
+<div class="max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">My Orders 📦</h1>
+    <%= link_to "+ New Order", new_customer_order_path,
+      class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition" %>
+  </div>
+
+  <% if @orders.any? %>
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50">
+            <tr class="border-b">
+              <th class="py-3 px-4">Order #</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @orders.each do |order| %>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="py-3 px-4 font-medium">#<%= order.id %></td>
+                <td><%= order.created_at.strftime("%d %b %Y, %I:%M %p") %></td>
+                <td><%= order.order_items.count %> items</td>
+                <td>₹<%= order.total_amount %></td>
+                <td>
+                  <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                    <%= order.status.titleize %>
+                  </span>
+                </td>
+                <td>
+                  <div class="flex gap-2">
+                    <%= link_to "View", customer_order_path(order),
+                      class: "text-[#0d2c63] hover:underline text-sm" %>
+                    <% if order.pending? %>
+                      <%= button_to "Cancel", cancel_customer_order_path(order),
+                        method: :patch,
+                        data: { turbo_confirm: "Are you sure?" },
+                        class: "text-red-600 hover:underline text-sm" %>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-xl shadow p-12 text-center">
+      <p class="text-gray-500 text-lg mb-4">You haven't placed any orders yet.</p>
+      <%= link_to "Order Now", new_customer_order_path,
+        class: "bg-[#0d2c63] text-white px-6 py-3 rounded-lg hover:scale-105 transition inline-block" %>
+    </div>
+  <% end %>
+</div>

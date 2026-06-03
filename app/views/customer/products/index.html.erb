@@ -1,0 +1,39 @@
+<% content_for :title, "Our Products" %>
+
+<div class="max-w-6xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Order Water Bottles 🧴</h1>
+
+  <% if @products.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <% @products.each do |product| %>
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <div class="h-40 bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
+            <% if product.image.present? %>
+              <img src="<%= product.image %>" class="h-full object-contain" alt="<%= product.name %>">
+            <% else %>
+              <img src="<%= image_path 'bottle.png' %>" class="h-full object-contain" alt="<%= product.name %>">
+            <% end %>
+          </div>
+
+          <h3 class="font-semibold text-lg mb-1"><%= product.name %></h3>
+          <p class="text-gray-500 text-sm mb-2"><%= product.description %></p>
+          <p class="text-sm text-gray-600 mb-3">Size: <%= product.size %></p>
+
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xl">₹<%= product.price %></span>
+            <span class="text-xs text-gray-500">Stock: <%= product.stock_quantity %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-8 text-center">
+      <%= link_to "Place Order", new_customer_order_path,
+        class: "bg-[#0d2c63] text-white px-8 py-3 rounded-lg hover:scale-105 transition inline-block text-lg font-medium" %>
+    </div>
+  <% else %>
+    <div class="text-center py-12 bg-white rounded-xl shadow">
+      <p class="text-gray-500 text-lg">No products available right now.</p>
+    </div>
+  <% end %>
+</div>

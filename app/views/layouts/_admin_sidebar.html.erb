@@ -1,0 +1,53 @@
+<aside id="sidebar"
+  class="w-64 bg-white min-h-screen border-r border-gray-200 fixed md:static z-40 hidden md:flex md:flex-col">
+
+  <div class="p-6 border-b">
+    <h1 class="text-xl font-bold text-[#0d2c63]">Puroxa Admin</h1>
+  </div>
+
+  <nav class="p-4 space-y-1 flex-1">
+    <%= link_to admin_dashboard_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'dashboards' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      📊 <span>Dashboard</span>
+    <% end %>
+
+    <%= link_to admin_vendors_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'vendors' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      🏪 <span>Vendors</span>
+    <% end %>
+
+    <%= link_to admin_customers_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'customers' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      👥 <span>Customers</span>
+    <% end %>
+
+    <%= link_to admin_orders_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'orders' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      📦 <span>Orders</span>
+    <% end %>
+
+    <%= link_to admin_products_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'products' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      🧴 <span>Products</span>
+    <% end %>
+
+    <%= link_to admin_subadmins_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'subadmins' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      🛡️ <span>Subadmins</span>
+    <% end %>
+
+    <hr class="my-4 border-gray-200">
+
+    <%= link_to root_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition" do %>
+      🏠 <span>Website</span>
+    <% end %>
+
+    <% logout_path = current_user&.admin? ? admin_logout_path : subadmin_logout_path %>
+    <%= link_to logout_path,
+      data: { turbo_method: :delete },
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition" do %>
+      🚪 <span>Logout</span>
+    <% end %>
+  </nav>
+</aside>

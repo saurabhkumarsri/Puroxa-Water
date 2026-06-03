@@ -1,0 +1,33 @@
+<aside class="w-64 bg-[#0d2c63] text-white p-6 hidden md:flex flex-col h-screen sticky top-0">
+  <h2 class="text-xl font-bold mb-8">My Account</h2>
+
+  <nav class="space-y-4 text-sm">
+    <%= link_to customer_dashboard_path, class: "block hover:text-cyan-300 py-2" do %>
+      📊 Dashboard
+    <% end %>
+
+    <%= link_to customer_orders_path, class: "block hover:text-cyan-300 py-2" do %>
+      📦 My Orders
+    <% end %>
+
+    <%= link_to customer_products_path, class: "block hover:text-cyan-300 py-2" do %>
+      🛒 Order Water
+    <% end %>
+
+    <%= link_to customer_profile_path, class: "block hover:text-cyan-300 py-2" do %>
+      👤 Profile
+    <% end %>
+
+    <%= link_to customer_addresses_path, class: "block hover:text-cyan-300 py-2" do %>
+      📍 Addresses
+    <% end %>
+
+    <hr class="border-gray-600 my-4">
+
+    <%= link_to destroy_user_session_path,
+      data: { turbo_method: :delete },
+      class: "block hover:text-red-300 py-2" do %>
+      🚪 Logout
+    <% end %>
+  </nav>
+</aside>

@@ -1,0 +1,17 @@
+<aside class="w-64 bg-[#0d2c63] text-white p-6 hidden md:flex flex-col h-screen sticky top-0">
+  <h2 class="text-2xl font-bold mb-10">Hi, <%= current_user.display_name %> 👋</h2>
+
+  <nav class="space-y-5 text-sm">
+    <%= link_to "📊 Dashboard", vendor_dashboard_path, class: "block hover:text-cyan-300 py-2" %>
+    <%= link_to "📦 Orders", vendor_orders_path, class: "block hover:text-cyan-300 py-2" %>
+    <%= link_to "👤 Profile", vendor_profile_path, class: "block hover:text-cyan-300 py-2" %>
+  </nav>
+
+  <div class="mt-auto">
+    <%= link_to vendor_logout_path,
+      data: { turbo_method: :delete, turbo_confirm: "Logout?" },
+      class: "block text-red-300 hover:text-red-100 py-2" do %>
+      🚪 Logout
+    <% end %>
+  </div>
+</aside>

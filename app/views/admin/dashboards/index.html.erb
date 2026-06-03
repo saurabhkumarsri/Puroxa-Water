@@ -1,2 +1,82 @@
-<h1>Admin::Dashboards#index</h1>
-<p>Find me in app/views/admin/dashboards/index.html.erb</p>
+<% content_for :page_title, "Dashboard" %>
+
+<!-- STATS CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Total Customers</p>
+    <p class="text-3xl font-bold text-[#0d2c63] mt-1"><%= @total_customers %></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Total Vendors</p>
+    <p class="text-3xl font-bold text-blue-600 mt-1"><%= @total_vendors %></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Total Orders</p>
+    <p class="text-3xl font-bold text-purple-600 mt-1"><%= @total_orders %></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Pending Orders</p>
+    <p class="text-3xl font-bold text-yellow-500 mt-1"><%= @pending_orders %></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Monthly Revenue</p>
+    <p class="text-3xl font-bold text-green-600 mt-1">₹<%= @monthly_revenue %></p>
+  </div>
+</div>
+
+<!-- CHART + RECENT ORDERS -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow">
+    <h2 class="font-semibold mb-4">Recent Orders</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b text-gray-500 text-sm">
+            <th class="py-2">Order #</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_orders.each do |order| %>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="py-2 font-medium">#<%= order.id %></td>
+              <td><%= order.customer.display_name %></td>
+              <td>₹<%= order.total_amount %></td>
+              <td>
+                <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                  <%= order.status.titleize %>
+                </span>
+              </td>
+              <td class="text-sm text-gray-500"><%= order.created_at.strftime("%d %b") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <h2 class="font-semibold mb-4">Quick Actions</h2>
+    <div class="space-y-3">
+      <%= link_to admin_vendors_path, class: "block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition" do %>
+        <p class="font-medium">🏪 Manage Vendors</p>
+        <p class="text-sm text-gray-500">Approve or reject vendor requests</p>
+      <% end %>
+      <%= link_to admin_orders_path, class: "block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition" do %>
+        <p class="font-medium">📦 View Orders</p>
+        <p class="text-sm text-gray-500">Track all customer orders</p>
+      <% end %>
+      <%= link_to admin_products_path, class: "block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition" do %>
+        <p class="font-medium">🧴 Manage Products</p>
+        <p class="text-sm text-gray-500">Update stock and pricing</p>
+      <% end %>
+    </div>
+  </div>
+</div>

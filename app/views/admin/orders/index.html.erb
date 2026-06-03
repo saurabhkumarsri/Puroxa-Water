@@ -1,0 +1,53 @@
+<% content_for :page_title, "Orders" %>
+
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">All Orders 📦</h1>
+  <div class="flex gap-2">
+    <%= link_to "All", admin_orders_path, class: "px-3 py-1 rounded border hover:bg-gray-50 #{params[:status].blank? ? 'bg-gray-100 font-medium' : ''}" %>
+    <%= link_to "Pending", admin_orders_path(status: "pending"), class: "px-3 py-1 rounded border hover:bg-gray-50 #{params[:status] == 'pending' ? 'bg-yellow-100 font-medium' : ''}" %>
+    <%= link_to "Delivered", admin_orders_path(status: "delivered"), class: "px-3 py-1 rounded border hover:bg-gray-50 #{params[:status] == 'delivered' ? 'bg-green-100 font-medium' : ''}" %>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="py-3 px-4">Order #</th>
+          <th>Customer</th>
+          <th>Vendor</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Date</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr class="border-t hover:bg-gray-50">
+            <td class="py-3 px-4 font-medium">#<%= order.id %></td>
+            <td><%= order.customer.display_name %></td>
+            <td><%= order.vendor&.display_name || "—" %></td>
+            <td>₹<%= order.total_amount %></td>
+            <td>
+              <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                <%= order.status.titleize %>
+              </span>
+            </td>
+            <td>
+              <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.payment_badge_class %>">
+                <%= order.payment_status.titleize %>
+              </span>
+            </td>
+            <td class="text-sm text-gray-500"><%= order.created_at.strftime("%d %b %Y") %></td>
+            <td class="text-right px-4">
+              <%= link_to "View", admin_order_path(order), class: "text-[#0d2c63] hover:underline text-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

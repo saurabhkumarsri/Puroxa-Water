@@ -1,0 +1,66 @@
+<% content_for :page_title, "Order ##{@order.id}" %>
+
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-center gap-4 mb-6">
+    <%= link_to "← Back", subadmin_orders_path, class: "text-[#0d2c63] hover:underline" %>
+    <h1 class="text-2xl font-bold text-gray-800">Order #<%= @order.id %></h1>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow p-6">
+      <h2 class="font-semibold mb-4">Order Details</h2>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-gray-500">Status</span>
+          <span class="px-2 py-1 rounded-full text-xs font-medium <%= @order.status_badge_class %>"><%= @order.status.titleize %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Total</span>
+          <span class="font-bold">₹<%= @order.total_amount %></span>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <h3 class="font-medium mb-2">Update Status</h3>
+      <div class="flex flex-wrap gap-2">
+        <% %w[pending confirmed processing shipped delivered cancelled].each do |status| %>
+          <%= button_to status.titleize, update_status_subadmin_order_path(@order, status: status),
+            method: :patch,
+            class: "text-xs px-3 py-1 rounded border hover:bg-gray-100 #{'bg-gray-100 font-medium' if @order.status == status}" %>
+        <% end %>
+      </div>
+
+      <% if @order.vendor_id.blank? && @order.pending? %>
+        <hr class="my-4">
+        <h3 class="font-medium mb-2">Assign Vendor</h3>
+        <%= form_with url: assign_vendor_subadmin_order_path(@order), method: :patch, class: "flex gap-2" do |f| %>
+          <%= f.select :vendor_id,
+            User.where(role: User::ROLES[:vendor]).includes(:vendor_profile).map { |u| ["#{u.display_name} (#{u.vendor_profile&.shop_name})", u.id] },
+            { prompt: "Select Vendor" },
+            class: "border rounded-lg px-2 py-1 text-sm" %>
+          <%= f.submit "Assign", class: "text-xs bg-blue-600 text-white px-3 py-1 rounded" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="bg-white rounded-xl shadow p-6">
+      <h2 class="font-semibold mb-4">Items</h2>
+      <div class="space-y-3">
+        <% @order.order_items.each do |item| %>
+          <div class="flex justify-between items-center border-b pb-2">
+            <div>
+              <p class="font-medium"><%= item.product.name %></p>
+              <p class="text-sm text-gray-500"><%= item.quantity %> x ₹<%= item.unit_price %></p>
+            </div>
+            <p class="font-bold">₹<%= item.total_price %></p>
+          </div>
+        <% end %>
+      </div>
+      <div class="flex justify-between font-bold text-lg pt-3">
+        <span>Grand Total</span>
+        <span>₹<%= @order.total_amount %></span>
+      </div>
+    </div>
+  </div>
+</div>

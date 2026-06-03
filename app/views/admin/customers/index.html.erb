@@ -1,0 +1,43 @@
+<% content_for :page_title, "Customers" %>
+
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">All Customers 👥</h1>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="py-3 px-4">Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Orders</th>
+          <th>Joined</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @customers.each do |customer| %>
+          <tr class="border-t hover:bg-gray-50">
+            <td class="py-3 px-4 font-medium"><%= customer.display_name %></td>
+            <td><%= customer.email %></td>
+            <td><%= customer.contact.presence || "—" %></td>
+            <td><%= customer.orders.count %></td>
+            <td class="text-sm text-gray-500"><%= customer.created_at.strftime("%d %b %Y") %></td>
+            <td class="text-right px-4">
+              <div class="flex gap-2 justify-end">
+                <%= link_to "Edit", edit_admin_customer_path(customer),
+                  class: "text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700" %>
+                <%= button_to "Delete", admin_customer_path(customer),
+                  method: :delete,
+                  data: { turbo_confirm: "Are you sure?" },
+                  class: "text-xs bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -18,18 +18,23 @@
   </head>
 
   <body class="flex flex-col min-h-screen">
-
     <!-- Navbar -->
-    <%= render "vendor/landing/navbar" %>
+    <%= render "layouts/customer_navbar" %>
 
-    <!-- Page Content (Dynamic) -->
-    <main class="flex-grow flex items-center justify-center px-4 py-12 bg-gradient-to-b from-cyan-50 to-gray-50" style="
-    margin-top: -30px;">
+    <!-- Flash Messages -->
+    <% if notice %>
+      <div class="bg-green-100 text-green-800 p-4 text-center"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="bg-red-100 text-red-800 p-4 text-center"><%= alert %></div>
+    <% end %>
+
+    <!-- Page Content -->
+    <main class="flex-grow">
       <%= yield %>
     </main>
 
     <!-- Footer -->
-    <%= render "vendor/landing/footer" %>
-
+    <%= render "layouts/customer_footer" %>
   </body>
 </html>

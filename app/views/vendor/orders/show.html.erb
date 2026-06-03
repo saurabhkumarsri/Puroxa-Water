@@ -1,0 +1,76 @@
+<% content_for :title, "Order ##{@order.id}" %>
+
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-center gap-4 mb-6">
+    <%= link_to "← Back", vendor_orders_path, class: "text-[#0d2c63] hover:underline" %>
+    <h1 class="text-2xl font-bold">Order #<%= @order.id %></h1>
+  </div>
+
+  <div class="bg-white rounded-xl shadow p-6 mb-6">
+    <div class="flex flex-wrap gap-4 mb-6">
+      <div>
+        <p class="text-sm text-gray-500">Status</p>
+        <span class="px-3 py-1 rounded-full text-sm font-medium <%= @order.status_badge_class %>">
+          <%= @order.status.titleize %>
+        </span>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Total</p>
+        <p class="font-bold text-lg">₹<%= @order.total_amount %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Customer</p>
+        <p class="font-medium"><%= @order.customer.display_name %></p>
+      </div>
+    </div>
+
+    <h2 class="font-semibold mb-3">Items</h2>
+    <div class="border rounded-lg overflow-hidden mb-6">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="py-2 px-4">Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th class="text-right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order.order_items.each do |item| %>
+            <tr class="border-t">
+              <td class="py-2 px-4"><%= item.product.name %></td>
+              <td><%= item.quantity %></td>
+              <td>₹<%= item.unit_price %></td>
+              <td class="text-right px-4">₹<%= item.total_price %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-between font-bold text-lg border-t pt-4">
+      <span>Grand Total</span>
+      <span>₹<%= @order.total_amount %></span>
+    </div>
+  </div>
+
+  <% if @order.delivery_address.present? %>
+    <div class="bg-white rounded-xl shadow p-6 mb-6">
+      <h2 class="font-semibold mb-2">Delivery Address</h2>
+      <p class="text-gray-600"><%= @order.delivery_address %></p>
+    </div>
+  <% end %>
+
+  <!-- VENDOR STATUS UPDATE -->
+  <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="font-semibold mb-4">Update Order Status</h2>
+    <div class="flex flex-wrap gap-2">
+      <% allowed = %w[confirmed processing shipped delivered] %>
+      <% allowed.each do |status| %>
+        <%= button_to status.titleize, update_status_vendor_order_path(@order, status: status),
+          method: :patch,
+          class: "px-4 py-2 rounded border hover:bg-gray-100 #{'bg-[#0d2c63] text-white hover:bg-[#0d2c63]' if @order.status == status}" %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<% content_for :page_title, "Products" %>
+
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Products 🧴</h1>
+  <%= link_to "+ Add Product", new_admin_product_path,
+    class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition" %>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="py-3 px-4">Name</th>
+          <th>Size</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr class="border-t hover:bg-gray-50">
+            <td class="py-3 px-4 font-medium"><%= product.name %></td>
+            <td><%= product.size %></td>
+            <td>₹<%= product.price %></td>
+            <td><%= product.stock_quantity %></td>
+            <td>
+              <% if product.active? %>
+                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
+              <% else %>
+                <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">Inactive</span>
+              <% end %>
+            </td>
+            <td class="text-right px-4">
+              <div class="flex gap-2 justify-end">
+                <%= link_to "Edit", edit_admin_product_path(product),
+                  class: "text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700" %>
+                <%= button_to "Delete", admin_product_path(product),
+                  method: :delete,
+                  data: { turbo_confirm: "Are you sure?" },
+                  class: "text-xs bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

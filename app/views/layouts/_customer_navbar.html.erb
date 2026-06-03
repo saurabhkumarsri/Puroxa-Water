@@ -1,0 +1,33 @@
+<header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+  <!-- Logo -->
+  <div class="text-2xl font-bold text-[#0d2c63]">
+    <%= link_to "Puroxa Water", root_path %>
+  </div>
+
+  <% if current_user && current_user.customer? %>
+    <div class="flex items-center gap-4">
+      <span class="text-gray-600 hidden sm:block">Hi, <%= current_user.display_name %></span>
+      <%= link_to "Logout", destroy_user_session_path,
+        data: { turbo_method: :delete },
+        class: "text-red-600 font-medium hover:text-red-800" %>
+    </div>
+  <% elsif current_user && current_user.vendor? %>
+    <div class="flex items-center gap-4">
+      <span class="text-gray-600 hidden sm:block">Vendor Portal</span>
+      <%= link_to "Logout", vendor_logout_path,
+        data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+        class: "text-red-600 font-medium hover:text-red-800" %>
+    </div>
+  <% else %>
+    <nav class="flex items-center gap-4">
+      <%= link_to "Home", root_path, class: "hover:text-blue-600" %>
+      <%= link_to "Products", customer_products_path, class: "hover:text-blue-600" %>
+      <%= link_to "Vendor", vendor_login_path, class: "hover:text-blue-600" %>
+      <%= link_to "Login", new_user_session_path,
+        class: "px-4 py-2 border border-[#0d2c63] rounded-lg hover:bg-gray-100" %>
+
+      <%= link_to "Sign up", new_user_registration_path,
+        class: "px-5 py-2 bg-[#0d2c63] text-white rounded-lg shadow-md hover:scale-105 transition" %>
+    </nav>
+  <% end %>
+</header>

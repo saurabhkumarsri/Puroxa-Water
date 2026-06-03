@@ -1,0 +1,55 @@
+<% content_for :page_title, "Dashboard" %>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Total Customers</p>
+    <p class="text-3xl font-bold text-[#0d2c63] mt-1"><%= @total_customers %></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Total Orders</p>
+    <p class="text-3xl font-bold text-purple-600 mt-1"><%= @total_orders %></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Pending Orders</p>
+    <p class="text-3xl font-bold text-yellow-500 mt-1"><%= @pending_orders %></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-sm">Today's Orders</p>
+    <p class="text-3xl font-bold text-green-600 mt-1"><%= @todays_orders %></p>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow p-6">
+  <h2 class="font-semibold mb-4">Recent Orders</h2>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left">
+      <thead>
+        <tr class="border-b text-gray-500 text-sm">
+          <th class="py-2">Order #</th>
+          <th>Customer</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_orders.each do |order| %>
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-2 font-medium">#<%= order.id %></td>
+            <td><%= order.customer.display_name %></td>
+            <td>₹<%= order.total_amount %></td>
+            <td>
+              <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                <%= order.status.titleize %>
+              </span>
+            </td>
+            <td class="text-sm text-gray-500"><%= order.created_at.strftime("%d %b") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

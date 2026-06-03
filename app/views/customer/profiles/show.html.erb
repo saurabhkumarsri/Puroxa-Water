@@ -1,0 +1,32 @@
+<% content_for :title, "My Profile" %>
+
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">My Profile 👤</h1>
+
+  <div class="bg-white rounded-xl shadow p-6 space-y-4">
+    <div>
+      <p class="text-sm text-gray-500">Name</p>
+      <p class="font-medium"><%= @user.display_name %></p>
+    </div>
+
+    <div>
+      <p class="text-sm text-gray-500">Email</p>
+      <p class="font-medium"><%= @user.email %></p>
+    </div>
+
+    <div>
+      <p class="text-sm text-gray-500">Phone</p>
+      <p class="font-medium"><%= @user.contact.presence || "Not added" %></p>
+    </div>
+
+    <div>
+      <p class="text-sm text-gray-500">Member Since</p>
+      <p class="font-medium"><%= @user.created_at.strftime("%d %b %Y") %></p>
+    </div>
+
+    <div class="pt-4">
+      <%= link_to "Edit Profile", edit_customer_profile_path,
+        class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition inline-block" %>
+    </div>
+  </div>
+</div>

@@ -1,24 +1,30 @@
-<aside class="w-64 bg-gray-900 min-h-screen border-r border-gray-800">
-  <nav class="p-6 space-y-4">
+<aside id="sidebar"
+  class="w-64 bg-white min-h-screen border-r border-gray-800 fixed md:static z-40 hidden md:block">
 
-    <%= link_to root_path,
-          class: "block text-gray-300 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg" do %>
-      📊 Dashboard
+  <nav class="p-12 space-y-2">
+
+    <!-- DASHBOARD -->
+    <%= link_to admin_dashboard_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-black-300 hover:bg-gray-800 hover:text-white transition" do %>
+      📊 <span>Dashboard</span>
     <% end %>
 
+    <!-- USERS -->
     <%= link_to root_path,
-          class: "block text-gray-300 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg" do %>
-      👤 Users
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-black-300 hover:bg-gray-800 hover:text-white transition" do %>
+      👤 <span>Users</span>
     <% end %>
 
+    <!-- ORDERS -->
     <%= link_to root_path,
-          class: "block text-gray-300 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg" do %>
-      📦 Orders
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-black-300 hover:bg-gray-800 hover:text-white transition" do %>
+      📦 <span>Orders</span>
     <% end %>
 
+    <!-- SETTINGS -->
     <%= link_to root_path,
-          class: "block text-gray-300 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg" do %>
-      ⚙️ Settings
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-black-300 hover:bg-gray-800 hover:text-white transition" do %>
+      ⚙️ <span>Settings</span>
     <% end %>
 
   </nav>

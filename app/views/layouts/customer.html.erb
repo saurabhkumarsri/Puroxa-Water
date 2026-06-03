@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Puroxa Water" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50">
+    <!-- Customer Navbar -->
+    <%= render "layouts/customer_navbar" %>
+
+    <div class="flex min-h-screen">
+      <!-- Sidebar for logged in customers -->
+      <% if current_user && current_user.customer? %>
+        <%= render "layouts/customer_sidebar" %>
+      <% end %>
+
+      <!-- Main Content -->
+      <div class="flex-1 p-6">
+        <!-- Flash Messages -->
+        <% if notice %>
+          <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg"><%= notice %></div>
+        <% end %>
+        <% if alert %>
+          <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg"><%= alert %></div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <%= render "layouts/customer_footer" %>
+  </body>
+</html>

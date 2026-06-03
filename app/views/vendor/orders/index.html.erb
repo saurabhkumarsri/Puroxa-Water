@@ -1,0 +1,48 @@
+<% content_for :title, "My Orders" %>
+
+<div class="max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">My Orders 📦</h1>
+  </div>
+
+  <% if @orders.any? %>
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="py-3 px-4">Order #</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @orders.each do |order| %>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="py-3 px-4 font-medium">#<%= order.id %></td>
+                <td><%= order.customer.display_name %></td>
+                <td>₹<%= order.total_amount %></td>
+                <td>
+                  <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                    <%= order.status.titleize %>
+                  </span>
+                </td>
+                <td class="text-sm text-gray-500"><%= order.created_at.strftime("%d %b %Y") %></td>
+                <td class="text-right px-4">
+                  <%= link_to "View", vendor_order_path(order), class: "text-[#0d2c63] hover:underline text-sm" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-xl shadow p-12 text-center">
+      <p class="text-gray-500 text-lg">No orders assigned to you yet.</p>
+    </div>
+  <% end %>
+</div>

@@ -3,7 +3,6 @@
   <head>
     <title><%= content_for(:title) || "Puroxa Water - Admin" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -13,19 +12,26 @@
 
   <body class="bg-gray-100">
     <div class="flex">
+      <!-- SIDEBAR -->
+      <%= render "layouts/admin_sidebar" %>
 
-      <!-- Sidebar -->
-      <%= render "layouts/sidebar" %>
+      <!-- MAIN -->
+      <div class="flex-1 min-h-screen bg-gray-100 md:ml-64">
+        <!-- HEADER -->
+        <%= render "layouts/admin_topbar" %>
 
-      <!-- Main Content -->
-      <div class="flex-1">
-        <%= render "layouts/topbar" %>
-
+        <!-- CONTENT -->
         <main class="p-6">
+          <% if notice %>
+            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg"><%= notice %></div>
+          <% end %>
+          <% if alert %>
+            <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg"><%= alert %></div>
+          <% end %>
+
           <%= yield %>
         </main>
       </div>
-
     </div>
   </body>
 </html>
