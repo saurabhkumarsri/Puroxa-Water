@@ -1,32 +1,32 @@
 <% content_for :title, "My Profile" %>
 
-<div class="max-w-2xl mx-auto">
-  <h1 class="text-2xl font-bold text-gray-800 mb-6">My Profile 👤</h1>
+<div class="max-w-2xl mx-auto px-0 md:px-0">
+  <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6">My Profile 👤</h1>
 
-  <div class="bg-white rounded-xl shadow p-6 space-y-4">
+  <div class="bg-white rounded-xl shadow p-4 md:p-6 space-y-3 md:space-y-4">
     <div>
-      <p class="text-sm text-gray-500">Name</p>
-      <p class="font-medium"><%= @user.display_name %></p>
+      <p class="text-xs md:text-sm text-gray-500">Name</p>
+      <p class="font-medium text-sm md:text-base"><%= @user.display_name %></p>
     </div>
 
     <div>
-      <p class="text-sm text-gray-500">Email</p>
-      <p class="font-medium"><%= @user.email %></p>
+      <p class="text-xs md:text-sm text-gray-500">Email</p>
+      <p class="font-medium text-sm md:text-base"><%= @user.email %></p>
     </div>
 
     <div>
-      <p class="text-sm text-gray-500">Phone</p>
-      <p class="font-medium"><%= @user.contact.presence || "Not added" %></p>
+      <p class="text-xs md:text-sm text-gray-500">Phone</p>
+      <p class="font-medium text-sm md:text-base"><%= @user.contact.presence || "Not added" %></p>
     </div>
 
     <div>
-      <p class="text-sm text-gray-500">Member Since</p>
-      <p class="font-medium"><%= @user.created_at.strftime("%d %b %Y") %></p>
+      <p class="text-xs md:text-sm text-gray-500">Member Since</p>
+      <p class="font-medium text-sm md:text-base"><%= @user.created_at.strftime("%d %b %Y") %></p>
     </div>
 
-    <div class="pt-4">
+    <div class="pt-2 md:pt-4">
       <%= link_to "Edit Profile", edit_customer_profile_path,
-        class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition inline-block" %>
+        class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition inline-block text-sm md:text-base" %>
     </div>
   </div>
 </div>

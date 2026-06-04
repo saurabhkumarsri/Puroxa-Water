@@ -7,32 +7,32 @@
 
   <nav class="p-4 space-y-1 flex-1">
     <%= link_to admin_dashboard_path,
-      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'dashboards' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'dashboards' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
       📊 <span>Dashboard</span>
     <% end %>
 
     <%= link_to admin_vendors_path,
-      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'vendors' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'vendors' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
       🏪 <span>Vendors</span>
     <% end %>
 
     <%= link_to admin_customers_path,
-      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'customers' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'customers' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
       👥 <span>Customers</span>
     <% end %>
 
     <%= link_to admin_orders_path,
-      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'orders' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'orders' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
       📦 <span>Orders</span>
     <% end %>
 
     <%= link_to admin_products_path,
-      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'products' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'products' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
       🧴 <span>Products</span>
     <% end %>
 
     <%= link_to admin_subadmins_path,
-      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'subadmins' && controller.module_parent == Admin ? 'bg-gray-100 font-medium' : ''}" do %>
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'subadmins' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
       🛡️ <span>Subadmins</span>
     <% end %>
 

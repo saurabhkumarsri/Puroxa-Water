@@ -1,47 +1,47 @@
 <% content_for :title, "My Orders" %>
 
 <div class="max-w-6xl mx-auto">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">My Orders 📦</h1>
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6 gap-2">
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800">My Orders 📦</h1>
     <%= link_to "+ New Order", new_customer_order_path,
-      class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition" %>
+      class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition text-sm md:text-base" %>
   </div>
 
   <% if @orders.any? %>
     <div class="bg-white rounded-xl shadow overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left">
+        <table class="w-full text-left min-w-[600px]">
           <thead class="bg-gray-50">
-            <tr class="border-b">
-              <th class="py-3 px-4">Order #</th>
-              <th>Date</th>
-              <th>Items</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Actions</th>
+            <tr>
+              <th class="py-2 md:py-3 px-3 md:px-4 text-sm">Order #</th>
+              <th class="text-sm">Date</th>
+              <th class="text-sm">Items</th>
+              <th class="text-sm">Total</th>
+              <th class="text-sm">Status</th>
+              <th class="text-sm">Actions</th>
             </tr>
           </thead>
           <tbody>
             <% @orders.each do |order| %>
-              <tr class="border-b hover:bg-gray-50">
-                <td class="py-3 px-4 font-medium">#<%= order.id %></td>
-                <td><%= order.created_at.strftime("%d %b %Y, %I:%M %p") %></td>
-                <td><%= order.order_items.count %> items</td>
-                <td>₹<%= order.total_amount %></td>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="py-2 md:py-3 px-3 md:px-4 font-medium text-sm">#<%= order.id %></td>
+                <td class="text-sm whitespace-nowrap"><%= order.created_at.strftime("%d %b %Y") %></td>
+                <td class="text-sm"><%= order.order_items.count %> items</td>
+                <td class="text-sm">₹<%= order.total_amount %></td>
                 <td>
                   <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
                     <%= order.status.titleize %>
                   </span>
                 </td>
                 <td>
-                  <div class="flex gap-2">
+                  <div class="flex flex-wrap gap-2">
                     <%= link_to "View", customer_order_path(order),
-                      class: "text-[#0d2c63] hover:underline text-sm" %>
+                      class: "text-[#0d2c63] hover:underline text-xs md:text-sm" %>
                     <% if order.pending? %>
                       <%= button_to "Cancel", cancel_customer_order_path(order),
                         method: :patch,
                         data: { turbo_confirm: "Are you sure?" },
-                        class: "text-red-600 hover:underline text-sm" %>
+                        class: "text-red-600 hover:underline text-xs md:text-sm" %>
                     <% end %>
                   </div>
                 </td>
@@ -52,10 +52,10 @@
       </div>
     </div>
   <% else %>
-    <div class="bg-white rounded-xl shadow p-12 text-center">
-      <p class="text-gray-500 text-lg mb-4">You haven't placed any orders yet.</p>
+    <div class="bg-white rounded-xl shadow p-8 md:p-12 text-center">
+      <p class="text-gray-500 text-base md:text-lg mb-4">You haven't placed any orders yet.</p>
       <%= link_to "Order Now", new_customer_order_path,
-        class: "bg-[#0d2c63] text-white px-6 py-3 rounded-lg hover:scale-105 transition inline-block" %>
+        class: "bg-[#0d2c63] text-white px-5 md:px-6 py-2 md:py-3 rounded-lg hover:scale-105 transition inline-block" %>
     </div>
   <% end %>
 </div>

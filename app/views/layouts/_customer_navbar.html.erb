@@ -1,33 +1,80 @@
-<header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+<header class="bg-white shadow-sm px-4 md:px-6 py-3 md:py-4 flex justify-between items-center sticky top-0 z-50">
   <!-- Logo -->
-  <div class="text-2xl font-bold text-[#0d2c63]">
+  <div class="text-xl md:text-2xl font-bold text-[#0d2c63]">
     <%= link_to "Puroxa Water", root_path %>
   </div>
 
   <% if current_user && current_user.customer? %>
-    <div class="flex items-center gap-4">
-      <span class="text-gray-600 hidden sm:block">Hi, <%= current_user.display_name %></span>
+    <!-- Desktop: My Account + Logout -->
+    <div class="hidden md:flex items-center gap-4">
+      <%= link_to "My Account", customer_dashboard_path,
+        class: "text-[#0d2c63] font-medium hover:text-cyan-600 transition" %>
+      <span class="text-gray-300">|</span>
+      <span class="text-gray-600 text-sm">Hi, <%= current_user.display_name %></span>
       <%= link_to "Logout", destroy_user_session_path,
         data: { turbo_method: :delete },
-        class: "text-red-600 font-medium hover:text-red-800" %>
+        class: "text-red-600 font-medium hover:text-red-800 text-sm" %>
     </div>
+
+    <!-- Mobile: Landing page → Home icon, Other pages → Hamburger (sidebar) -->
+    <% if controller_name == "landing" && action_name == "index" %>
+      <%= link_to customer_dashboard_path, class: "md:hidden text-gray-700 p-2" do %>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+      <% end %>
+    <% else %>
+      <button class="md:hidden text-gray-700 p-2"
+        onclick="document.getElementById('mobile-sidebar-overlay').classList.remove('hidden');">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    <% end %>
+
   <% elsif current_user && current_user.vendor? %>
-    <div class="flex items-center gap-4">
-      <span class="text-gray-600 hidden sm:block">Vendor Portal</span>
+    <div class="flex items-center gap-3 md:gap-4">
+      <span class="text-gray-600 hidden sm:block text-sm">Vendor Portal</span>
       <%= link_to "Logout", vendor_logout_path,
         data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-        class: "text-red-600 font-medium hover:text-red-800" %>
+        class: "text-red-600 font-medium hover:text-red-800 text-sm md:text-base" %>
     </div>
+
   <% else %>
-    <nav class="flex items-center gap-4">
+    <!-- Mobile Hamburger -->
+    <button class="md:hidden text-gray-700 p-2"
+      onclick="document.getElementById('guest-mobile-menu').classList.toggle('hidden')">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-4">
       <%= link_to "Home", root_path, class: "hover:text-blue-600" %>
       <%= link_to "Products", customer_products_path, class: "hover:text-blue-600" %>
       <%= link_to "Vendor", vendor_login_path, class: "hover:text-blue-600" %>
       <%= link_to "Login", new_user_session_path,
         class: "px-4 py-2 border border-[#0d2c63] rounded-lg hover:bg-gray-100" %>
-
       <%= link_to "Sign up", new_user_registration_path,
         class: "px-5 py-2 bg-[#0d2c63] text-white rounded-lg shadow-md hover:scale-105 transition" %>
     </nav>
   <% end %>
 </header>
+
+<!-- Guest Mobile Menu -->
+<% unless current_user %>
+  <div id="guest-mobile-menu" class="hidden md:hidden bg-white border-b shadow-lg">
+    <nav class="flex flex-col p-4 space-y-3">
+      <%= link_to "Home", root_path, class: "block py-2 text-gray-700 hover:text-blue-600" %>
+      <%= link_to "Products", customer_products_path, class: "block py-2 text-gray-700 hover:text-blue-600" %>
+      <%= link_to "Vendor Portal", vendor_login_path, class: "block py-2 text-gray-700 hover:text-blue-600" %>
+      <hr class="border-gray-200">
+      <%= link_to "Login", new_user_session_path,
+        class: "block py-2 text-center border border-[#0d2c63] rounded-lg hover:bg-gray-100" %>
+      <%= link_to "Sign up", new_user_registration_path,
+        class: "block py-2 text-center bg-[#0d2c63] text-white rounded-lg" %>
+    </nav>
+  </div>
+<% end %>

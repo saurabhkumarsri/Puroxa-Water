@@ -1,50 +1,50 @@
 <% content_for :title, "My Dashboard" %>
 
 <div class="max-w-6xl mx-auto">
-  <h1 class="text-2xl font-bold text-gray-800 mb-6">Welcome, <%= current_user.display_name %> 👋</h1>
+  <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6">Welcome, <%= current_user.display_name %> 👋</h1>
 
   <!-- STATS -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-3xl font-bold text-[#0d2c63]"><%= @total_orders %></h3>
-      <p class="text-gray-500">Total Orders</p>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+      <h3 class="text-2xl md:text-3xl font-bold text-[#0d2c63]"><%= @total_orders %></h3>
+      <p class="text-gray-500 text-sm md:text-base">Total Orders</p>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-3xl font-bold text-yellow-500"><%= @pending_orders %></h3>
-      <p class="text-gray-500">Pending</p>
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+      <h3 class="text-2xl md:text-3xl font-bold text-yellow-500"><%= @pending_orders %></h3>
+      <p class="text-gray-500 text-sm md:text-base">Pending</p>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-3xl font-bold text-green-600"><%= @delivered_orders %></h3>
-      <p class="text-gray-500">Delivered</p>
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+      <h3 class="text-2xl md:text-3xl font-bold text-green-600"><%= @delivered_orders %></h3>
+      <p class="text-gray-500 text-sm md:text-base">Delivered</p>
     </div>
   </div>
 
   <!-- RECENT ORDERS -->
-  <div class="bg-white rounded-xl shadow p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-semibold">Recent Orders</h2>
-      <%= link_to "View All", customer_orders_path, class: "text-[#0d2c63] hover:underline" %>
+  <div class="bg-white rounded-xl shadow p-4 md:p-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+      <h2 class="text-lg md:text-xl font-semibold">Recent Orders</h2>
+      <%= link_to "View All", customer_orders_path, class: "text-[#0d2c63] hover:underline text-sm" %>
     </div>
 
     <% if @orders.any? %>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
+      <div class="overflow-x-auto -mx-4 px-4">
+        <table class="w-full text-left min-w-[500px]">
           <thead>
             <tr class="border-b">
-              <th class="py-3">Order #</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Status</th>
+              <th class="py-2 md:py-3 text-sm">Order #</th>
+              <th class="text-sm">Date</th>
+              <th class="text-sm">Total</th>
+              <th class="text-sm">Status</th>
             </tr>
           </thead>
           <tbody>
             <% @orders.each do |order| %>
               <tr class="border-b hover:bg-gray-50">
-                <td class="py-3 font-medium">#<%= order.id %></td>
-                <td><%= order.created_at.strftime("%d %b %Y") %></td>
-                <td>₹<%= order.total_amount %></td>
+                <td class="py-2 md:py-3 font-medium text-sm">#<%= order.id %></td>
+                <td class="text-sm"><%= order.created_at.strftime("%d %b %Y") %></td>
+                <td class="text-sm">₹<%= order.total_amount %></td>
                 <td>
                   <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
                     <%= order.status.titleize %>
@@ -57,9 +57,9 @@
       </div>
     <% else %>
       <div class="text-center py-8 text-gray-500">
-        <p class="text-lg mb-2">No orders yet!</p>
+        <p class="text-base md:text-lg mb-2">No orders yet!</p>
         <%= link_to "Order Now", customer_products_path,
-          class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition inline-block" %>
+          class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition inline-block text-sm" %>
       </div>
     <% end %>
   </div>

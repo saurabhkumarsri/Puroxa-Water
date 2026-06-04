@@ -1,111 +1,115 @@
-<div class="w-full overflow-x-hidden bg-[#f8faff] text-[#0d2c63]">
+<div class="w-full bg-[#f8faff] text-[#0d2c63]">
 
 <!-- HERO -->
-<section class="relative w-full h-[80vh] overflow-hidden">
+<section class="relative w-full h-[50vh] sm:h-[60vh] md:h-[80vh] overflow-hidden">
   <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
     <source src="<%= asset_path 'seawater.mp4' %>" type="video/mp4">
   </video>
   <div class="absolute inset-0 bg-black/50"></div>
-  <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-6">
-    <h1 class="text-4xl md:text-6xl font-bold mb-4">Pure Water. Pure Life.</h1>
-    <p class="text-lg md:text-xl mb-6">Premium Drinking Water for Home, Office & Events</p>
-    <div class="flex flex-col sm:flex-row gap-4">
+  <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4 sm:px-6">
+    <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 leading-tight">
+      Pure Water.<br class="sm:hidden"> Pure Life.
+    </h1>
+    <p class="text-sm sm:text-base md:text-lg lg:text-xl mb-5 md:mb-6 max-w-lg">
+      Premium Drinking Water for Home, Office & Events
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto px-2 sm:px-0">
       <%= link_to "Order Now", customer_products_path,
-        class: "bg-cyan-500 px-6 py-3 rounded-lg hover:scale-105 transition text-white font-medium text-center" %>
+        class: "bg-cyan-500 px-5 md:px-6 py-2.5 md:py-3 rounded-lg hover:scale-105 transition text-white font-medium text-sm md:text-base text-center" %>
       <%= link_to "Become a Vendor", vendor_signup_path,
-        class: "border border-white px-6 py-3 rounded-lg hover:bg-white hover:text-black transition font-medium text-center" %>
+        class: "border border-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg hover:bg-white hover:text-black transition font-medium text-sm md:text-base text-center" %>
     </div>
   </div>
 </section>
 
 <!-- PRODUCTS -->
-<section class="w-full px-6 md:px-16 py-16 text-center">
-  <h2 class="text-3xl font-bold mb-12">Our Products</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+<section class="w-full px-4 sm:px-6 lg:px-16 py-10 sm:py-14 md:py-16 text-center">
+  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-10 md:mb-12">Our Products</h2>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-8 max-w-6xl mx-auto">
     <% products = [
-      {name: "500ml Bottle", price: "₹10", img: "bottle.png"},
-      {name: "1 Litre Bottle", price: "₹20", img: "bottle.png"},
-      {name: "2 Litre Bottle", price: "₹40", img: "bottle.png"},
-      {name: "20 Litre Jar", price: "₹80", img: "bottle.png"}
+      {name: "500ml", full: "500ml Bottle", price: "₹10", img: "bottle.png"},
+      {name: "1 Litre", full: "1 Litre Bottle", price: "₹20", img: "bottle.png"},
+      {name: "2 Litre", full: "2 Litre Bottle", price: "₹40", img: "bottle.png"},
+      {name: "20 Litre", full: "20 Litre Jar", price: "₹80", img: "bottle.png"}
     ] %>
 
     <% products.each do |p| %>
-      <div class="bg-white p-6 rounded-xl shadow hover:-translate-y-2 transition duration-300">
-        <img src="<%= image_path p[:img] %>" class="h-44 mx-auto object-contain mb-4">
-        <h3 class="font-semibold text-lg"><%= p[:name] %></h3>
-        <p class="my-2 font-bold text-xl"><%= p[:price] %></p>
+      <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow hover:-translate-y-1 sm:hover:-translate-y-2 transition duration-300">
+        <img src="<%= image_path p[:img] %>" class="h-24 sm:h-36 md:h-44 mx-auto object-contain mb-3 md:mb-4" alt="<%= p[:name] %>">
+        <h3 class="font-semibold text-sm sm:text-base md:text-lg"><%= p[:full] %></h3>
+        <p class="my-1 sm:my-2 font-bold text-base sm:text-lg md:text-xl"><%= p[:price] %></p>
         <%= link_to "Buy Now", customer_products_path,
-          class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition inline-block" %>
+          class: "bg-[#0d2c63] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:scale-105 transition inline-block text-xs sm:text-sm md:text-base" %>
       </div>
     <% end %>
   </div>
 </section>
 
 <!-- FEATURES -->
-<section class="w-full bg-blue-50 py-16 text-center px-6 md:px-16">
-  <h2 class="text-3xl font-bold mb-12">Why Choose Puroxa</h2>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-    <div class="bg-white p-6 rounded-xl shadow">
-      <div class="text-3xl mb-2">💧</div>
-      <p class="font-medium">RO Purified</p>
+<section class="w-full bg-blue-50 py-10 sm:py-14 md:py-16 text-center px-4 sm:px-6 lg:px-16">
+  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-10 md:mb-12">Why Choose Puroxa</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 md:gap-8 max-w-6xl mx-auto">
+    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
+      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">💧</div>
+      <p class="font-medium text-xs sm:text-sm md:text-base">RO Purified</p>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow">
-      <div class="text-3xl mb-2">✅</div>
-      <p class="font-medium">FSSAI Certified</p>
+    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
+      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">✅</div>
+      <p class="font-medium text-xs sm:text-sm md:text-base">FSSAI Certified</p>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow">
-      <div class="text-3xl mb-2">🌱</div>
-      <p class="font-medium">Eco Friendly</p>
+    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
+      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">🌱</div>
+      <p class="font-medium text-xs sm:text-sm md:text-base">Eco Friendly</p>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow">
-      <div class="text-3xl mb-2">❄️</div>
-      <p class="font-medium">Fresh Taste</p>
+    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
+      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">❄️</div>
+      <p class="font-medium text-xs sm:text-sm md:text-base">Fresh Taste</p>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="w-full py-16 text-center px-6 md:px-16">
-  <h2 class="text-3xl font-bold mb-12">How It Works</h2>
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-    <div class="bg-white p-6 shadow rounded-xl">
-      <div class="text-4xl mb-3">1️⃣</div>
-      <h3 class="font-bold">Choose</h3>
-      <p class="text-gray-600 text-sm mt-2">Select your water bottle size</p>
+<section class="w-full py-10 sm:py-14 md:py-16 text-center px-4 sm:px-6 lg:px-16">
+  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-10 md:mb-12">How It Works</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
+    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
+      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">1️⃣</div>
+      <h3 class="font-bold text-sm sm:text-base md:text-lg">Choose</h3>
+      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Select your water bottle size</p>
     </div>
-    <div class="bg-white p-6 shadow rounded-xl">
-      <div class="text-4xl mb-3">2️⃣</div>
-      <h3 class="font-bold">Order</h3>
-      <p class="text-gray-600 text-sm mt-2">Place order with delivery address</p>
+    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
+      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">2️⃣</div>
+      <h3 class="font-bold text-sm sm:text-base md:text-lg">Order</h3>
+      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Place order with delivery address</p>
     </div>
-    <div class="bg-white p-6 shadow rounded-xl">
-      <div class="text-4xl mb-3">3️⃣</div>
-      <h3 class="font-bold">Track</h3>
-      <p class="text-gray-600 text-sm mt-2">Real-time order tracking</p>
+    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
+      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">3️⃣</div>
+      <h3 class="font-bold text-sm sm:text-base md:text-lg">Track</h3>
+      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Real-time order tracking</p>
     </div>
-    <div class="bg-white p-6 shadow rounded-xl">
-      <div class="text-4xl mb-3">4️⃣</div>
-      <h3 class="font-bold">Enjoy</h3>
-      <p class="text-gray-600 text-sm mt-2">Fresh water at your doorstep</p>
+    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
+      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">4️⃣</div>
+      <h3 class="font-bold text-sm sm:text-base md:text-lg">Enjoy</h3>
+      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Fresh water at your doorstep</p>
     </div>
   </div>
 </section>
 
 <!-- VENDOR CTA -->
-<section class="w-full bg-blue-100 py-16 text-center px-6">
-  <h2 class="text-3xl font-bold mb-6">Become a Vendor</h2>
-  <p class="mb-8 text-gray-600 max-w-xl mx-auto">
+<section class="w-full bg-blue-100 py-10 sm:py-14 md:py-16 text-center px-4">
+  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6">Become a Vendor</h2>
+  <p class="mb-5 sm:mb-6 md:mb-8 text-gray-600 max-w-xl mx-auto text-sm sm:text-base px-2">
     Grow your business with us & earn more profit. Join 500+ vendors across India.
   </p>
   <%= link_to "Join Now", vendor_signup_path,
-    class: "bg-green-600 text-white px-6 py-3 rounded-lg hover:scale-105 transition inline-block" %>
+    class: "bg-green-600 text-white px-5 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg hover:scale-105 transition inline-block text-sm sm:text-base font-medium" %>
 </section>
 
 <!-- TRUST -->
-<section class="w-full py-16 text-center px-6">
-  <div class="bg-blue-50 p-8 rounded-xl max-w-3xl mx-auto shadow">
-    <h2 class="text-2xl font-bold mb-2">Trusted by 5000+ Customers</h2>
-    <p class="mt-2 text-lg">⭐ 4.8 Rating | 1000+ Daily Orders | Pan India Delivery</p>
+<section class="w-full py-10 sm:py-14 md:py-16 text-center px-4">
+  <div class="bg-blue-50 p-5 sm:p-6 md:p-8 rounded-xl max-w-3xl mx-auto shadow mx-4 sm:mx-auto">
+    <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-2">Trusted by 5000+ Customers</h2>
+    <p class="mt-2 text-sm sm:text-base md:text-lg">⭐ 4.8 Rating | 1000+ Daily Orders | Pan India Delivery</p>
   </div>
 </section>
 

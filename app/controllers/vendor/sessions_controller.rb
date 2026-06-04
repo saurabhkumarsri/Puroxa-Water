@@ -39,8 +39,8 @@ class Vendor::SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    redirect_to root_path, notice: "Logged out successfully"
+    session.delete(:user_id)
+    redirect_to vendor_login_path, notice: "Logged out successfully"
   end
 
   private

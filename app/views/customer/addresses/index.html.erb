@@ -1,41 +1,41 @@
 <% content_for :title, "My Addresses" %>
 
-<div class="max-w-3xl mx-auto">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">My Addresses 📍</h1>
+<div class="max-w-3xl mx-auto px-0 md:px-0">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6 gap-2">
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800">My Addresses 📍</h1>
     <%= link_to "+ Add Address", new_customer_address_path,
-      class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition" %>
+      class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition text-sm md:text-base" %>
   </div>
 
   <% if @addresses.any? %>
-    <div class="grid gap-4">
+    <div class="grid gap-3 md:gap-4">
       <% @addresses.each do |address| %>
-        <div class="bg-white rounded-xl shadow p-5 relative">
+        <div class="bg-white rounded-xl shadow p-4 md:p-5 relative">
           <% if address.is_default? %>
-            <span class="absolute top-4 right-4 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
+            <span class="absolute top-3 right-3 md:top-4 md:right-4 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
               Default
             </span>
           <% end %>
 
-          <h3 class="font-semibold text-lg"><%= address.label %></h3>
-          <p class="text-gray-600 mt-1"><%= address.full_address %></p>
+          <h3 class="font-semibold text-base md:text-lg"><%= address.label %></h3>
+          <p class="text-gray-600 mt-1 text-sm md:text-base break-words"><%= address.full_address %></p>
 
-          <div class="flex gap-3 mt-4">
+          <div class="flex gap-3 mt-3 md:mt-4">
             <%= link_to "Edit", edit_customer_address_path(address),
-              class: "text-[#0d2c63] hover:underline text-sm" %>
+              class: "text-[#0d2c63] hover:underline text-xs md:text-sm" %>
             <%= button_to "Delete", customer_address_path(address),
               method: :delete,
               data: { turbo_confirm: "Delete this address?" },
-              class: "text-red-600 hover:underline text-sm" %>
+              class: "text-red-600 hover:underline text-xs md:text-sm" %>
           </div>
         </div>
       <% end %>
     </div>
   <% else %>
-    <div class="bg-white rounded-xl shadow p-12 text-center">
-      <p class="text-gray-500 text-lg mb-4">No addresses saved yet.</p>
+    <div class="bg-white rounded-xl shadow p-8 md:p-12 text-center">
+      <p class="text-gray-500 text-base md:text-lg mb-4">No addresses saved yet.</p>
       <%= link_to "Add Address", new_customer_address_path,
-        class: "bg-[#0d2c63] text-white px-6 py-2 rounded-lg hover:scale-105 transition inline-block" %>
+        class: "bg-[#0d2c63] text-white px-5 md:px-6 py-2 md:py-3 rounded-lg hover:scale-105 transition inline-block" %>
     </div>
   <% end %>
 </div>

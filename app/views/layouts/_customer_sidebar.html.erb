@@ -1,33 +1,115 @@
-<aside class="w-64 bg-[#0d2c63] text-white p-6 hidden md:flex flex-col h-screen sticky top-0">
-  <h2 class="text-xl font-bold mb-8">My Account</h2>
+<!-- Desktop Sidebar (fixed left) -->
+<aside class="hidden md:flex w-64 bg-[#0d2c63] text-white flex-col h-screen sticky top-0 overflow-y-auto">
+  <div class="p-6">
+    <h2 class="text-xl font-bold mb-8">My Account</h2>
 
-  <nav class="space-y-4 text-sm">
-    <%= link_to customer_dashboard_path, class: "block hover:text-cyan-300 py-2" do %>
-      📊 Dashboard
-    <% end %>
+    <nav class="space-y-1">
+      <%= link_to customer_dashboard_path,
+        class: "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition #{controller_name == 'dashboards' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}" do %>
+        <span class="text-lg">📊</span>
+        <span>Dashboard</span>
+      <% end %>
 
-    <%= link_to customer_orders_path, class: "block hover:text-cyan-300 py-2" do %>
-      📦 My Orders
-    <% end %>
+      <%= link_to customer_orders_path,
+        class: "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition #{controller_name == 'orders' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}" do %>
+        <span class="text-lg">📦</span>
+        <span>My Orders</span>
+      <% end %>
 
-    <%= link_to customer_products_path, class: "block hover:text-cyan-300 py-2" do %>
-      🛒 Order Water
-    <% end %>
+      <%= link_to customer_products_path,
+        class: "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition #{controller_name == 'products' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}" do %>
+        <span class="text-lg">🛒</span>
+        <span>Order Water</span>
+      <% end %>
 
-    <%= link_to customer_profile_path, class: "block hover:text-cyan-300 py-2" do %>
-      👤 Profile
-    <% end %>
+      <%= link_to customer_profile_path,
+        class: "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition #{controller_name == 'profiles' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}" do %>
+        <span class="text-lg">👤</span>
+        <span>Profile</span>
+      <% end %>
 
-    <%= link_to customer_addresses_path, class: "block hover:text-cyan-300 py-2" do %>
-      📍 Addresses
-    <% end %>
+      <%= link_to customer_addresses_path,
+        class: "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition #{controller_name == 'addresses' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}" do %>
+        <span class="text-lg">📍</span>
+        <span>Addresses</span>
+      <% end %>
 
-    <hr class="border-gray-600 my-4">
+      <hr class="border-gray-600 my-3">
 
-    <%= link_to destroy_user_session_path,
-      data: { turbo_method: :delete },
-      class: "block hover:text-red-300 py-2" do %>
-      🚪 Logout
-    <% end %>
-  </nav>
+      <%= link_to destroy_user_session_path,
+        data: { turbo_method: :delete },
+        class: "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/20 text-red-200 transition" do %>
+        <span class="text-lg">🚪</span>
+        <span>Logout</span>
+      <% end %>
+    </nav>
+  </div>
 </aside>
+
+<!-- Mobile Sidebar Overlay -->
+<div id="mobile-sidebar-overlay" class="hidden fixed inset-0 z-[60]">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/50"
+    onclick="document.getElementById('mobile-sidebar-overlay').classList.add('hidden')"></div>
+
+  <!-- Mobile Drawer -->
+  <div class="absolute left-0 top-0 bottom-0 w-[280px] max-w-[80vw] bg-[#0d2c63] text-white overflow-y-auto shadow-2xl">
+    <div class="p-5">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-lg font-bold">My Account</h2>
+        <button onclick="document.getElementById('mobile-sidebar-overlay').classList.add('hidden')"
+          class="text-white/80 hover:text-white p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="space-y-1">
+        <%= link_to customer_dashboard_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 transition #{controller_name == 'dashboards' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          <span>📊</span>
+          <span>Dashboard</span>
+        <% end %>
+
+        <%= link_to customer_orders_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 transition #{controller_name == 'orders' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          <span>📦</span>
+          <span>My Orders</span>
+        <% end %>
+
+        <%= link_to customer_products_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 transition #{controller_name == 'products' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          <span>🛒</span>
+          <span>Order Water</span>
+        <% end %>
+
+        <%= link_to customer_profile_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 transition #{controller_name == 'profiles' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          <span>👤</span>
+          <span>Profile</span>
+        <% end %>
+
+        <%= link_to customer_addresses_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 transition #{controller_name == 'addresses' && controller.class.name.start_with?('Customer::') ? 'bg-white/15 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          <span>📍</span>
+          <span>Addresses</span>
+        <% end %>
+
+        <hr class="border-gray-600 my-4">
+
+        <%= link_to destroy_user_session_path,
+          data: { turbo_method: :delete },
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-red-500/20 text-red-200 transition" do %>
+          <span>🚪</span>
+          <span>Logout</span>
+        <% end %>
+      </nav>
+    </div>
+  </div>
+</div>

@@ -46,10 +46,10 @@ end
 # Vendor User
 vendor_user = User.find_or_initialize_by(email: "vendor@puroxa.com")
 vendor_user.assign_attributes(
-  first_name: "Aman",
-  contact: "9123456789",
-  password: "password123",
-  password_confirmation: "password123",
+  first_name: "Sunil Paswan",
+  contact: "9135080893",
+  password: "123456",
+  password_confirmation: "123456",
   role: :vendor
 )
 vendor_user.save!
@@ -57,13 +57,13 @@ vendor_user.save!
 # Vendor Profile
 vendor = Vendor.find_or_initialize_by(user: vendor_user)
 vendor.assign_attributes(
-  shop_name: "Aman Water Supply",
-  contact_number: "9123456789",
-  address: "45 Market Road, Andheri West, Mumbai",
+  shop_name: "Puroxa Water Supply",
+  contact_number: "9135080893",
+  address: "45 Market Road, Andheri West, Bihar",
   approved: true
 )
 vendor.save!
-puts "Created Vendor: vendor@puroxa.com / password123"
+puts "Created Vendor: vendor@puroxa.com / 123456"
 
 # ================== PRODUCTS ==================
 products_data = [

@@ -1,53 +1,53 @@
 <% content_for :title, "Place Order" %>
 
-<div class="max-w-4xl mx-auto">
-  <div class="flex items-center gap-4 mb-6">
-    <%= link_to "← Back", customer_products_path, class: "text-[#0d2c63] hover:underline" %>
-    <h1 class="text-2xl font-bold text-gray-800">Place Order 🛒</h1>
+<div class="max-w-4xl mx-auto px-0 md:px-0">
+  <div class="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+    <%= link_to "← Back", customer_products_path, class: "text-[#0d2c63] hover:underline text-sm md:text-base" %>
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800">Place Order 🛒</h1>
   </div>
 
-  <%= form_with url: customer_orders_path, method: :post, class: "space-y-6" do |f| %>
+  <%= form_with url: customer_orders_path, method: :post, class: "space-y-4 md:space-y-6" do |f| %>
     <!-- PRODUCTS -->
-    <div class="bg-white rounded-xl shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">Select Products</h2>
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Select Products</h2>
 
       <% if @products.any? %>
-        <div class="space-y-4">
+        <div class="space-y-3 md:space-y-4">
           <% @products.each_with_index do |product, idx| %>
-            <div class="flex items-center gap-4 border rounded-lg p-4">
-              <img src="<%= image_path 'bottle.png' %>" class="w-16 h-16 object-contain">
-              <div class="flex-1">
-                <p class="font-medium"><%= product.name %></p>
-                <p class="text-sm text-gray-500"><%= product.size %> — ₹<%= product.price %> each</p>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 border rounded-lg p-3 md:p-4">
+              <img src="<%= image_path 'bottle.png' %>" class="w-12 h-12 md:w-16 md:h-16 object-contain flex-shrink-0">
+              <div class="flex-1 min-w-0">
+                <p class="font-medium text-sm md:text-base"><%= product.name %></p>
+                <p class="text-xs md:text-sm text-gray-500"><%= product.size %> — ₹<%= product.price %> each</p>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2 flex-shrink-0">
                 <%= f.number_field "order_items[][quantity]",
                   value: 0, min: 0, max: product.stock_quantity,
-                  class: "w-20 border rounded-lg px-2 py-1 text-center" %>
+                  class: "w-16 md:w-20 border rounded-lg px-2 py-1 text-center text-sm" %>
                 <%= f.hidden_field "order_items[][product_id]", value: product.id %>
               </div>
             </div>
           <% end %>
         </div>
       <% else %>
-        <p class="text-gray-500">No products available.</p>
+        <p class="text-gray-500 text-sm">No products available.</p>
       <% end %>
     </div>
 
     <!-- ADDRESS -->
-    <div class="bg-white rounded-xl shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">Delivery Address</h2>
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Delivery Address</h2>
 
       <% if @addresses.any? %>
-        <div class="space-y-2 mb-4">
+        <div class="space-y-2 mb-3 md:mb-4">
           <% @addresses.each do |addr| %>
-            <label class="flex items-start gap-3 border rounded-lg p-3 cursor-pointer hover:bg-gray-50">
+            <label class="flex items-start gap-2 md:gap-3 border rounded-lg p-2 md:p-3 cursor-pointer hover:bg-gray-50">
               <%= f.radio_button :delivery_address, addr.full_address,
                 checked: addr.is_default?,
-                class: "mt-1" %>
-              <div>
-                <p class="font-medium"><%= addr.label %> <%= "(Default)" if addr.is_default? %></p>
-                <p class="text-sm text-gray-600"><%= addr.full_address %></p>
+                class: "mt-1 flex-shrink-0" %>
+              <div class="min-w-0">
+                <p class="font-medium text-sm"><%= addr.label %> <%= "(Default)" if addr.is_default? %></p>
+                <p class="text-xs md:text-sm text-gray-600 break-words"><%= addr.full_address %></p>
               </div>
             </label>
           <% end %>
@@ -55,19 +55,19 @@
       <% end %>
 
       <%= f.text_area :delivery_address, rows: 3,
-        class: "w-full border rounded-lg px-3 py-2",
+        class: "w-full border rounded-lg px-3 py-2 text-sm",
         placeholder: "Enter delivery address if not selected above..." %>
     </div>
 
     <!-- NOTES -->
-    <div class="bg-white rounded-xl shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">Additional Notes</h2>
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Additional Notes</h2>
       <%= f.text_area :notes, rows: 2,
-        class: "w-full border rounded-lg px-3 py-2",
+        class: "w-full border rounded-lg px-3 py-2 text-sm",
         placeholder: "Any special instructions..." %>
     </div>
 
     <%= f.submit "Place Order",
-      class: "w-full bg-[#0d2c63] text-white py-3 rounded-lg hover:scale-105 transition text-lg font-medium cursor-pointer" %>
+      class: "w-full bg-[#0d2c63] text-white py-2.5 md:py-3 rounded-lg hover:scale-105 transition text-base md:text-lg font-medium cursor-pointer" %>
   <% end %>
 </div>

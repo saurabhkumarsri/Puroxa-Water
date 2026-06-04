@@ -41,4 +41,14 @@ class Order < ApplicationRecord
     self.total_amount = order_items.sum(:total_price)
     save!
   end
+
+  # Status convenience methods
+  STATUSES.each do |s|
+    define_method("#{s}?") { status == s }
+  end
+
+  # Payment status convenience methods
+  PAYMENT_STATUSES.each do |s|
+    define_method("payment_#{s}?") { payment_status == s }
+  end
 end

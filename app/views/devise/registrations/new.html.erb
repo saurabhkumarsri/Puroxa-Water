@@ -1,29 +1,52 @@
-<h2>Sign up</h2>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-cyan-50 to-gray-50 px-4">
+  <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg w-full max-w-md">
+    <div class="text-center mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold text-[#0d2c63]">Customer Sign Up</h1>
+      <p class="text-gray-500 mt-1 text-sm md:text-base">Create your account to order fresh water</p>
+    </div>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <div>
+        <%= f.label :first_name, "Full Name", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :first_name, class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Enter your name" %>
+      </div>
+
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Enter your email" %>
+      </div>
+
+      <div>
+        <%= f.label :contact, "Phone Number", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.telephone_field :contact, class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Enter your phone number" %>
+      </div>
+
+      <div>
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <% if @minimum_password_length %>
+          <span class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</span>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Create a password" %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Confirm your password" %>
+      </div>
+
+      <%= f.submit "Sign Up",
+        class: "w-full bg-[#0d2c63] text-white py-2.5 md:py-3 rounded-lg hover:scale-105 transition cursor-pointer text-sm md:text-base font-medium" %>
+    <% end %>
+
+    <div class="mt-4 text-center text-sm space-y-2">
+      <p>Already have an account?
+        <%= link_to "Login", new_user_session_path, class: "text-[#0d2c63] hover:underline font-medium" %>
+      </p>
+      <p>
+        <%= link_to "← Back to Website", root_path, class: "text-gray-500 hover:text-[#0d2c63]" %>
+      </p>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

@@ -1,72 +1,74 @@
 <% content_for :title, "Order ##{@order.id}" %>
 
-<div class="max-w-3xl mx-auto">
-  <div class="flex items-center gap-4 mb-6">
-    <%= link_to "← Back", customer_orders_path, class: "text-[#0d2c63] hover:underline" %>
-    <h1 class="text-2xl font-bold text-gray-800">Order #<%= @order.id %></h1>
+<div class="max-w-3xl mx-auto px-0 md:px-0">
+  <div class="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+    <%= link_to "← Back", customer_orders_path, class: "text-[#0d2c63] hover:underline text-sm md:text-base" %>
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800">Order #<%= @order.id %></h1>
   </div>
 
-  <div class="bg-white rounded-xl shadow p-6 mb-6">
-    <div class="flex flex-wrap gap-4 mb-6">
+  <div class="bg-white rounded-xl shadow p-4 md:p-6 mb-4 md:mb-6">
+    <div class="flex flex-wrap gap-3 md:gap-4 mb-4 md:mb-6">
       <div>
-        <p class="text-sm text-gray-500">Status</p>
-        <span class="px-3 py-1 rounded-full text-sm font-medium <%= @order.status_badge_class %>">
+        <p class="text-xs md:text-sm text-gray-500">Status</p>
+        <span class="px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium <%= @order.status_badge_class %>">
           <%= @order.status.titleize %>
         </span>
       </div>
       <div>
-        <p class="text-sm text-gray-500">Payment</p>
-        <span class="px-3 py-1 rounded-full text-sm font-medium <%= @order.payment_badge_class %>">
+        <p class="text-xs md:text-sm text-gray-500">Payment</p>
+        <span class="px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium <%= @order.payment_badge_class %>">
           <%= @order.payment_status.titleize %>
         </span>
       </div>
       <div>
-        <p class="text-sm text-gray-500">Date</p>
-        <p class="font-medium"><%= @order.created_at.strftime("%d %b %Y, %I:%M %p") %></p>
+        <p class="text-xs md:text-sm text-gray-500">Date</p>
+        <p class="font-medium text-sm md:text-base"><%= @order.created_at.strftime("%d %b %Y, %I:%M %p") %></p>
       </div>
     </div>
 
-    <h2 class="font-semibold mb-3">Items</h2>
-    <div class="border rounded-lg overflow-hidden mb-6">
-      <table class="w-full text-left">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="py-2 px-4">Product</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th class="text-right">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @order.order_items.each do |item| %>
-            <tr class="border-t">
-              <td class="py-2 px-4"><%= item.product.name %></td>
-              <td><%= item.quantity %></td>
-              <td>₹<%= item.unit_price %></td>
-              <td class="text-right px-4">₹<%= item.total_price %></td>
+    <h2 class="font-semibold mb-2 md:mb-3 text-base md:text-lg">Items</h2>
+    <div class="border rounded-lg overflow-hidden mb-4 md:mb-6">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left min-w-[400px]">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="py-2 px-3 md:px-4 text-sm">Product</th>
+              <th class="text-sm">Qty</th>
+              <th class="text-sm">Price</th>
+              <th class="text-right text-sm">Total</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @order.order_items.each do |item| %>
+              <tr class="border-t">
+                <td class="py-2 px-3 md:px-4 text-sm"><%= item.product.name %></td>
+                <td class="text-sm"><%= item.quantity %></td>
+                <td class="text-sm">₹<%= item.unit_price %></td>
+                <td class="text-right px-3 md:px-4 text-sm">₹<%= item.total_price %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="flex justify-between items-center text-lg font-bold border-t pt-4">
+    <div class="flex justify-between items-center text-base md:text-lg font-bold border-t pt-3 md:pt-4">
       <span>Grand Total</span>
       <span>₹<%= @order.total_amount %></span>
     </div>
   </div>
 
   <% if @order.delivery_address.present? %>
-    <div class="bg-white rounded-xl shadow p-6 mb-6">
-      <h2 class="font-semibold mb-2">Delivery Address</h2>
-      <p class="text-gray-600"><%= @order.delivery_address %></p>
+    <div class="bg-white rounded-xl shadow p-4 md:p-6 mb-4 md:mb-6">
+      <h2 class="font-semibold mb-2 text-base md:text-lg">Delivery Address</h2>
+      <p class="text-gray-600 text-sm md:text-base"><%= @order.delivery_address %></p>
     </div>
   <% end %>
 
   <% if @order.notes.present? %>
-    <div class="bg-white rounded-xl shadow p-6">
-      <h2 class="font-semibold mb-2">Notes</h2>
-      <p class="text-gray-600"><%= @order.notes %></p>
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="font-semibold mb-2 text-base md:text-lg">Notes</h2>
+      <p class="text-gray-600 text-sm md:text-base"><%= @order.notes %></p>
     </div>
   <% end %>
 </div>
