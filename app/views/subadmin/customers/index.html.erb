@@ -1,10 +1,11 @@
 <% content_for :page_title, "Customers" %>
 
-<div class="flex justify-between items-center mb-6">
-  <h1 class="text-2xl font-bold text-gray-800">Customers 👥</h1>
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+  <h1 class="text-xl md:text-2xl font-bold text-gray-800">Customers 👥</h1>
 </div>
 
-<div class="bg-white rounded-xl shadow overflow-hidden">
+<!-- Desktop Table -->
+<div class="hidden md:block bg-white rounded-xl shadow overflow-hidden">
   <div class="overflow-x-auto">
     <table class="w-full text-left">
       <thead class="bg-gray-50">
@@ -33,4 +34,31 @@
       </tbody>
     </table>
   </div>
+</div>
+
+<!-- Mobile Cards -->
+<div class="md:hidden space-y-3">
+  <% @customers.each do |customer| %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+      <p class="font-bold text-gray-800 mb-0.5"><%= customer.display_name %></p>
+      <p class="text-xs text-gray-500 mb-3"><%= customer.email %></p>
+      <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+        <div>
+          <p class="text-xs text-gray-400">Phone</p>
+          <p class="font-medium"><%= customer.contact.presence || "—" %></p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">Orders</p>
+          <p class="font-medium"><%= customer.orders.count %></p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">Joined</p>
+          <p class="font-medium"><%= customer.created_at.strftime("%d %b %Y") %></p>
+        </div>
+      </div>
+      <div class="pt-3 border-t border-gray-100">
+        <%= link_to "View Details", subadmin_customer_path(customer), class: "block text-center text-xs bg-[#0d2c63] text-white px-3 py-2 rounded-lg hover:opacity-90" %>
+      </div>
+    </div>
+  <% end %>
 </div>

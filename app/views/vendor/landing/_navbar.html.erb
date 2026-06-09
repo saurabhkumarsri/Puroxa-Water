@@ -23,10 +23,8 @@
   <%end%>
 
   <% if current_user %>
-  <%= link_to "Logout",
-    vendor_logout_path,
-    data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-    class: "text-red-600 font-medium" %>
+  <%= button_to "Logout", vendor_logout_path, method: :delete,
+    class: "text-red-600 font-medium bg-transparent border-0 cursor-pointer" %>
   <% end %>
 
 </header>

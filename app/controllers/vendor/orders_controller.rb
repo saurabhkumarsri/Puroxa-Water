@@ -2,16 +2,36 @@ class Vendor::OrdersController < Vendor::BaseController
   before_action :authenticate_user!
 
   def index
-    @orders = Order.where(vendor_id: current_user.id).includes(:customer, :order_items).order(created_at: :desc)
+    @orders = Order.includes(:customer, :vendor, :order_items).order(created_at: :desc)
     @orders = @orders.where(status: params[:status]) if params[:status].present?
   end
 
   def show
-    @order = Order.where(vendor_id: current_user.id).includes(:order_items, :products, :customer).find(params[:id])
+    @order = Order.includes(:order_items, :products, :customer, :vendor).find(params[:id])
+    @customer_orders = Order.where(customer_id: @order.customer_id).where.not(id: @order.id).order(created_at: :desc).limit(10)
+  end
+
+  def new
+    @products = Product.active.order(:name)
+    @customers = User.where(role: User::ROLES[:customer]).order(:first_name)
+  end
+
+  def create
+    customer = User.find(params[:customer_id])
+    result = Orders::CreateService.new(customer, order_params).call
+    if result.success?
+      result.order.update!(vendor: current_user)
+      redirect_to vendor_orders_path, notice: "Order created successfully for #{customer.display_name}!"
+    else
+      flash.now[:alert] = result.errors.join(", ")
+      @products = Product.active.order(:name)
+      @customers = User.where(role: User::ROLES[:customer]).order(:first_name)
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def update_status
-    @order = Order.where(vendor_id: current_user.id).find(params[:id])
+    @order = Order.find(params[:id])
     allowed = %w[confirmed processing shipped delivered]
     if allowed.include?(params[:status])
       @order.update!(status: params[:status])
@@ -19,5 +39,21 @@ class Vendor::OrdersController < Vendor::BaseController
     else
       redirect_to vendor_orders_path, alert: "Invalid status transition."
     end
+  end
+
+  def collect_cash
+    @order = Order.find(params[:id])
+    if @order.payment_pending?
+      @order.update!(payment_status: "paid", payment_mode: @order.payment_mode.presence || "cash")
+      redirect_to vendor_order_path(@order), notice: "Payment collected successfully! Marked as paid."
+    else
+      redirect_to vendor_order_path(@order), alert: "Payment is already #{@order.payment_status}."
+    end
+  end
+
+  private
+
+  def order_params
+    params.permit(:delivery_address, :notes, :discount_code, :payment_mode, order_items: [:product_id, :quantity])
   end
 end

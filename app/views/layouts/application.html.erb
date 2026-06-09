@@ -53,7 +53,9 @@
       </main>
     <% end %>
 
-    <!-- Footer -->
-    <%= render "layouts/customer_footer" %>
+    <% unless current_user %>
+      <!-- Footer -->
+      <%= render "layouts/customer_footer" %>
+    <% end %>
   </body>
 </html>

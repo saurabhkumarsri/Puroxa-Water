@@ -1,0 +1,79 @@
+<% content_for :page_title, "Daily Sales Report" %>
+
+<h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-6">Daily Sales Report 📈</h1>
+
+<%= render "nav" %>
+
+<div class="bg-white rounded-xl shadow p-4 md:p-6 mb-6">
+  <%= form_with url: admin_daily_sales_report_path, method: :get, class: "flex flex-col sm:flex-row items-start sm:items-end gap-4" do |f| %>
+    <div>
+      <%= f.label :date, "Select Date", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.date_field :date, value: @date, class: "border rounded-lg px-3 py-2" %>
+    </div>
+    <%= f.submit "Generate", class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition cursor-pointer text-sm font-medium" %>
+  <% end %>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-6">
+  <div class="bg-white rounded-xl shadow p-4 md:p-6">
+    <p class="text-gray-500 text-sm">Total Revenue</p>
+    <p class="text-2xl md:text-3xl font-bold text-[#0d2c63] mt-1">₹<%= number_with_precision(@total_revenue, precision: 2) %></p>
+  </div>
+  <div class="bg-white rounded-xl shadow p-4 md:p-6">
+    <p class="text-gray-500 text-sm">Total Orders</p>
+    <p class="text-2xl md:text-3xl font-bold text-purple-600 mt-1"><%= @total_orders %></p>
+  </div>
+</div>
+
+<% if @orders.any? %>
+  <!-- Desktop Table -->
+  <div class="hidden md:block bg-white rounded-xl shadow overflow-hidden mb-6">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="py-3 px-4">Order #</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each do |order| %>
+            <tr class="border-t hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium"><%= link_to "##{order.id}", admin_order_path(order), class: "text-[#0d2c63] hover:underline" %></td>
+              <td><%= order.customer.display_name %></td>
+              <td>₹<%= order.total_amount %></td>
+              <td>
+                <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>"><%= order.status.titleize %></span>
+              </td>
+              <td class="text-sm text-gray-500"><%= order.created_at.strftime("%I:%M %p") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Mobile Cards -->
+  <div class="md:hidden space-y-3 mb-6">
+    <% @orders.each do |order| %>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-medium text-sm text-[#0d2c63]"><%= link_to "##{order.id}", admin_order_path(order), class: "hover:underline" %></span>
+          <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>"><%= order.status.titleize %></span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600"><%= order.customer.display_name %></span>
+          <span class="font-medium">₹<%= order.total_amount %></span>
+        </div>
+        <p class="text-xs text-gray-400 mt-1"><%= order.created_at.strftime("%I:%M %p") %></p>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow p-8 text-center">
+    <p class="text-gray-500">No orders found for <%= @date.strftime("%d %b %Y") %>.</p>
+  </div>
+<% end %>

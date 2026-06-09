@@ -1,17 +1,107 @@
-<aside class="w-64 bg-[#0d2c63] text-white p-6 hidden md:flex flex-col h-screen sticky top-0">
-  <h2 class="text-2xl font-bold mb-10">Hi, <%= current_user.display_name %> 👋</h2>
+<!-- Desktop Sidebar -->
+<aside id="sidebar"
+  class="w-64 bg-white min-h-screen border-r border-gray-200 fixed md:static z-40 hidden md:flex md:flex-col">
 
-  <nav class="space-y-5 text-sm">
-    <%= link_to "📊 Dashboard", vendor_dashboard_path, class: "block hover:text-cyan-300 py-2" %>
-    <%= link_to "📦 Orders", vendor_orders_path, class: "block hover:text-cyan-300 py-2" %>
-    <%= link_to "👤 Profile", vendor_profile_path, class: "block hover:text-cyan-300 py-2" %>
-  </nav>
-
-  <div class="mt-auto">
-    <%= link_to vendor_logout_path,
-      data: { turbo_method: :delete, turbo_confirm: "Logout?" },
-      class: "block text-red-300 hover:text-red-100 py-2" do %>
-      🚪 Logout
-    <% end %>
+  <div class="p-6 border-b">
+    <h1 class="text-xl font-bold text-[#0d2c63]">Puroxa Water</h1>
+    <p class="text-xs text-gray-400 mt-0.5">Vendor Panel</p>
   </div>
+
+  <nav class="p-4 space-y-1 flex-1">
+    <%= link_to vendor_dashboard_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'dashboards' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}" do %>
+      📊 <span>Dashboard</span>
+    <% end %>
+
+    <%= link_to vendor_products_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'products' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}" do %>
+      🧴 <span>Products</span>
+    <% end %>
+
+    <%= link_to vendor_orders_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'orders' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}" do %>
+      📦 <span>Orders</span>
+    <% end %>
+
+    <%= link_to vendor_customers_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'customers' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}" do %>
+      👥 <span>Customers</span>
+    <% end %>
+
+    <%= link_to vendor_profile_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'profiles' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}" do %>
+      👤 <span>Profile</span>
+    <% end %>
+
+    <hr class="my-4 border-gray-200">
+
+    <%= button_to vendor_logout_path, method: :delete,
+      class: "w-full flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition text-left bg-transparent border-0 cursor-pointer" do %>
+      🚪 <span>Logout</span>
+    <% end %>
+  </nav>
 </aside>
+
+<!-- Mobile Sidebar Overlay -->
+<div id="mobile-sidebar-overlay" class="hidden fixed inset-0 z-[60]">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/50"
+    onclick="document.getElementById('mobile-sidebar-overlay').classList.add('hidden')"></div>
+
+  <!-- Mobile Drawer -->
+  <div class="absolute left-0 top-0 bottom-0 w-[280px] max-w-[80vw] bg-white border-r border-gray-200 overflow-y-auto shadow-2xl">
+    <div class="p-5">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b">
+        <div>
+          <h1 class="text-lg font-bold text-[#0d2c63]">Puroxa Water</h1>
+          <p class="text-xs text-gray-400">Vendor Panel</p>
+        </div>
+        <button onclick="document.getElementById('mobile-sidebar-overlay').classList.add('hidden')"
+          class="text-gray-500 hover:text-gray-800 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="space-y-1">
+        <%= link_to vendor_dashboard_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'dashboards' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          📊 <span>Dashboard</span>
+        <% end %>
+
+        <%= link_to vendor_products_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'products' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          🧴 <span>Products</span>
+        <% end %>
+
+        <%= link_to vendor_orders_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'orders' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          📦 <span>Orders</span>
+        <% end %>
+
+        <%= link_to vendor_customers_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'customers' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          👥 <span>Customers</span>
+        <% end %>
+
+        <%= link_to vendor_profile_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'profiles' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          👤 <span>Profile</span>
+        <% end %>
+
+        <hr class="my-4 border-gray-200">
+
+        <%= button_to vendor_logout_path, method: :delete,
+          class: "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-red-600 hover:bg-red-50 transition text-left bg-transparent border-0 cursor-pointer" do %>
+          🚪 <span>Logout</span>
+        <% end %>
+      </nav>
+    </div>
+  </div>
+</div>

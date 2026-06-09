@@ -3,11 +3,11 @@
 <div class="max-w-3xl mx-auto">
   <div class="flex items-center gap-4 mb-6">
     <%= link_to "← Back", subadmin_vendors_path, class: "text-[#0d2c63] hover:underline" %>
-    <h1 class="text-2xl font-bold text-gray-800"><%= @vendor.shop_name %></h1>
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800"><%= @vendor.shop_name %></h1>
   </div>
 
-  <div class="bg-white rounded-xl shadow p-6 mb-6">
-    <div class="grid grid-cols-2 gap-4">
+  <div class="bg-white rounded-xl shadow p-4 md:p-6 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
         <p class="text-sm text-gray-500">Owner</p>
         <p class="font-medium"><%= @vendor.user.display_name %></p>
@@ -29,7 +29,8 @@
 
   <h2 class="text-lg font-semibold mb-4">Recent Orders</h2>
   <% if @orders.any? %>
-    <div class="bg-white rounded-xl shadow overflow-hidden">
+    <!-- Desktop Table -->
+    <div class="hidden md:block bg-white rounded-xl shadow overflow-hidden">
       <table class="w-full text-left">
         <thead class="bg-gray-50">
           <tr>
@@ -54,6 +55,25 @@
           <% end %>
         </tbody>
       </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden space-y-3">
+      <% @orders.each do |order| %>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-medium text-sm">#<%= order.id %></span>
+            <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+              <%= order.status.titleize %>
+            </span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Amount</span>
+            <span class="font-medium">₹<%= order.total_amount %></span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1"><%= order.created_at.strftime("%d %b %Y") %></p>
+        </div>
+      <% end %>
     </div>
   <% else %>
     <p class="text-gray-500">No orders assigned yet.</p>

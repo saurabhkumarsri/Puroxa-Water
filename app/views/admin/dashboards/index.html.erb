@@ -1,38 +1,40 @@
 <% content_for :page_title, "Dashboard" %>
 
 <!-- STATS CARDS -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
-  <div class="bg-white p-6 rounded-xl shadow">
-    <p class="text-gray-500 text-sm">Total Customers</p>
-    <p class="text-3xl font-bold text-[#0d2c63] mt-1"><%= @total_customers %></p>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 mb-6 md:mb-8">
+  <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-xs md:text-sm">Total Customers</p>
+    <p class="text-2xl md:text-3xl font-bold text-[#0d2c63] mt-1"><%= @total_customers %></p>
   </div>
 
-  <div class="bg-white p-6 rounded-xl shadow">
-    <p class="text-gray-500 text-sm">Total Vendors</p>
-    <p class="text-3xl font-bold text-blue-600 mt-1"><%= @total_vendors %></p>
+  <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-xs md:text-sm">Total Vendors</p>
+    <p class="text-2xl md:text-3xl font-bold text-blue-600 mt-1"><%= @total_vendors %></p>
   </div>
 
-  <div class="bg-white p-6 rounded-xl shadow">
-    <p class="text-gray-500 text-sm">Total Orders</p>
-    <p class="text-3xl font-bold text-purple-600 mt-1"><%= @total_orders %></p>
+  <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-xs md:text-sm">Total Orders</p>
+    <p class="text-2xl md:text-3xl font-bold text-purple-600 mt-1"><%= @total_orders %></p>
   </div>
 
-  <div class="bg-white p-6 rounded-xl shadow">
-    <p class="text-gray-500 text-sm">Pending Orders</p>
-    <p class="text-3xl font-bold text-yellow-500 mt-1"><%= @pending_orders %></p>
+  <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+    <p class="text-gray-500 text-xs md:text-sm">Pending Orders</p>
+    <p class="text-2xl md:text-3xl font-bold text-yellow-500 mt-1"><%= @pending_orders %></p>
   </div>
 
-  <div class="bg-white p-6 rounded-xl shadow">
-    <p class="text-gray-500 text-sm">Monthly Revenue</p>
-    <p class="text-3xl font-bold text-green-600 mt-1">₹<%= @monthly_revenue %></p>
+  <div class="bg-white p-4 md:p-6 rounded-xl shadow col-span-2 md:col-span-1">
+    <p class="text-gray-500 text-xs md:text-sm">Monthly Revenue</p>
+    <p class="text-2xl md:text-3xl font-bold text-green-600 mt-1">₹<%= @monthly_revenue %></p>
   </div>
 </div>
 
 <!-- CHART + RECENT ORDERS -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow">
+  <div class="lg:col-span-2 bg-white p-4 md:p-6 rounded-xl shadow">
     <h2 class="font-semibold mb-4">Recent Orders</h2>
-    <div class="overflow-x-auto">
+
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
       <table class="w-full text-left">
         <thead>
           <tr class="border-b text-gray-500 text-sm">
@@ -60,9 +62,28 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden space-y-3">
+      <% @recent_orders.each do |order| %>
+        <div class="border border-gray-100 rounded-lg p-3 bg-gray-50">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-medium text-sm">#<%= order.id %></span>
+            <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+              <%= order.status.titleize %>
+            </span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600"><%= order.customer.display_name %></span>
+            <span class="font-medium">₹<%= order.total_amount %></span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1"><%= order.created_at.strftime("%d %b") %></p>
+        </div>
+      <% end %>
+    </div>
   </div>
 
-  <div class="bg-white p-6 rounded-xl shadow">
+  <div class="bg-white p-4 md:p-6 rounded-xl shadow">
     <h2 class="font-semibold mb-4">Quick Actions</h2>
     <div class="space-y-3">
       <%= link_to admin_vendors_path, class: "block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition" do %>

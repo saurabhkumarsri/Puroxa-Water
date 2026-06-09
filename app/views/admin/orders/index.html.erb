@@ -1,53 +1,108 @@
 <% content_for :page_title, "Orders" %>
 
-<div class="flex justify-between items-center mb-6">
-  <h1 class="text-2xl font-bold text-gray-800">All Orders 📦</h1>
-  <div class="flex gap-2">
-    <%= link_to "All", admin_orders_path, class: "px-3 py-1 rounded border hover:bg-gray-50 #{params[:status].blank? ? 'bg-gray-100 font-medium' : ''}" %>
-    <%= link_to "Pending", admin_orders_path(status: "pending"), class: "px-3 py-1 rounded border hover:bg-gray-50 #{params[:status] == 'pending' ? 'bg-yellow-100 font-medium' : ''}" %>
-    <%= link_to "Delivered", admin_orders_path(status: "delivered"), class: "px-3 py-1 rounded border hover:bg-gray-50 #{params[:status] == 'delivered' ? 'bg-green-100 font-medium' : ''}" %>
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+  <h1 class="text-xl md:text-2xl font-bold text-gray-800">All Orders 📦</h1>
+  <div class="flex flex-wrap gap-2">
+    <%= link_to "All", admin_orders_path, class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:status].blank? ? 'bg-gray-100 font-medium' : ''}" %>
+    <%= link_to "Pending", admin_orders_path(status: "pending"), class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:status] == 'pending' ? 'bg-yellow-100 font-medium' : ''}" %>
+    <%= link_to "Delivered", admin_orders_path(status: "delivered"), class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:status] == 'delivered' ? 'bg-green-100 font-medium' : ''}" %>
   </div>
 </div>
 
-<div class="bg-white rounded-xl shadow overflow-hidden">
-  <div class="overflow-x-auto">
-    <table class="w-full text-left">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="py-3 px-4">Order #</th>
-          <th>Customer</th>
-          <th>Vendor</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Payment</th>
-          <th>Date</th>
-          <th class="text-right">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @orders.each do |order| %>
-          <tr class="border-t hover:bg-gray-50">
-            <td class="py-3 px-4 font-medium">#<%= order.id %></td>
-            <td><%= order.customer.display_name %></td>
-            <td><%= order.vendor&.display_name || "—" %></td>
-            <td>₹<%= order.total_amount %></td>
-            <td>
-              <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
-                <%= order.status.titleize %>
-              </span>
-            </td>
-            <td>
-              <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.payment_badge_class %>">
-                <%= order.payment_status.titleize %>
-              </span>
-            </td>
-            <td class="text-sm text-gray-500"><%= order.created_at.strftime("%d %b %Y") %></td>
-            <td class="text-right px-4">
-              <%= link_to "View", admin_order_path(order), class: "text-[#0d2c63] hover:underline text-sm" %>
-            </td>
+<% if @orders.any? %>
+  <!-- Desktop Table -->
+  <div class="hidden md:block bg-white rounded-xl shadow overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="py-3 px-4">Order #</th>
+            <th>Customer</th>
+            <th>Vendor</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Mode</th>
+            <th>Date</th>
+            <th class="text-right">Actions</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @orders.each do |order| %>
+            <tr class="border-t hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium">#<%= order.id %></td>
+              <td><%= order.customer.display_name %></td>
+              <td><%= order.vendor&.display_name || "—" %></td>
+              <td>₹<%= order.total_amount %></td>
+              <td>
+                <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                  <%= order.status.titleize %>
+                </span>
+              </td>
+              <td>
+                <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.payment_badge_class %>">
+                  <%= order.payment_status.titleize %>
+                </span>
+              </td>
+              <td class="text-xs text-gray-500 uppercase"><%= order.payment_mode %></td>
+              <td class="text-sm text-gray-500"><%= order.created_at.strftime("%d %b %Y") %></td>
+              <td class="text-right px-4">
+                <%= link_to "View", admin_order_path(order), class: "text-[#0d2c63] hover:underline text-sm" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+
+  <!-- Mobile Cards -->
+  <div class="md:hidden space-y-3">
+    <% @orders.each do |order| %>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div class="flex justify-between items-start mb-3">
+          <div>
+            <p class="font-bold text-[#0d2c63]">#<%= order.id %></p>
+            <p class="text-xs text-gray-400 mt-0.5"><%= order.created_at.strftime("%d %b %Y") %></p>
+          </div>
+          <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+            <%= order.status.titleize %>
+          </span>
+        </div>
+        <div class="space-y-1.5 text-sm mb-3">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Customer</span>
+            <span class="font-medium"><%= order.customer.display_name %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Vendor</span>
+            <span class="font-medium"><%= order.vendor&.display_name || "—" %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Amount</span>
+            <span class="font-bold">₹<%= order.total_amount %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Payment</span>
+            <span class="px-2 py-0.5 rounded-full text-xs font-medium <%= order.payment_badge_class %>">
+              <%= order.payment_status.titleize %>
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Mode</span>
+            <span class="text-xs text-gray-600 uppercase font-medium"><%= order.payment_mode %></span>
+          </div>
+        </div>
+        <div class="pt-3 border-t border-gray-100 text-right">
+          <%= link_to "View Details →", admin_order_path(order),
+            class: "text-sm font-medium text-[#0d2c63] hover:text-cyan-600 transition" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow p-10 md:p-16 text-center">
+    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">📦</div>
+    <p class="text-gray-500 text-lg">No orders found.</p>
+  </div>
+<% end %>

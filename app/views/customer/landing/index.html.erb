@@ -26,20 +26,17 @@
 <section class="w-full px-4 sm:px-6 lg:px-16 py-10 sm:py-14 md:py-16 text-center">
   <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-10 md:mb-12">Our Products</h2>
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-8 max-w-6xl mx-auto">
-    <% products = [
-      {name: "500ml", full: "500ml Bottle", price: "₹10", img: "bottle.png"},
-      {name: "1 Litre", full: "1 Litre Bottle", price: "₹20", img: "bottle.png"},
-      {name: "2 Litre", full: "2 Litre Bottle", price: "₹40", img: "bottle.png"},
-      {name: "20 Litre", full: "20 Litre Jar", price: "₹80", img: "bottle.png"}
-    ] %>
-
-    <% products.each do |p| %>
+    <% @products.each do |product| %>
       <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow hover:-translate-y-1 sm:hover:-translate-y-2 transition duration-300">
-        <img src="<%= image_path p[:img] %>" class="h-24 sm:h-36 md:h-44 mx-auto object-contain mb-3 md:mb-4" alt="<%= p[:name] %>">
-        <h3 class="font-semibold text-sm sm:text-base md:text-lg"><%= p[:full] %></h3>
-        <p class="my-1 sm:my-2 font-bold text-base sm:text-lg md:text-xl"><%= p[:price] %></p>
+        <% if product.image.present? %>
+          <img src="<%= product.image %>" class="h-24 sm:h-36 md:h-44 mx-auto object-contain mb-3 md:mb-4" alt="<%= product.name %>">
+        <% else %>
+          <img src="<%= image_path 'bottle.png' %>" class="h-24 sm:h-36 md:h-44 mx-auto object-contain mb-3 md:mb-4" alt="<%= product.name %>">
+        <% end %>
+        <h3 class="font-semibold text-sm sm:text-base md:text-lg"><%= product.name %></h3>
+        <p class="text-xs text-gray-500 mt-1"><%= product.pack_display %></p>
         <%= link_to "Buy Now", customer_products_path,
-          class: "bg-[#0d2c63] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:scale-105 transition inline-block text-xs sm:text-sm md:text-base" %>
+          class: "bg-[#0d2c63] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:scale-105 transition inline-block text-xs sm:text-sm md:text-base mt-2" %>
       </div>
     <% end %>
   </div>

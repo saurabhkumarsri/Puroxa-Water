@@ -1,0 +1,52 @@
+<% content_for :page_title, "Edit Discount" %>
+
+<div class="max-w-xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Discount ✏️</h1>
+
+  <%= form_with model: [:admin, @discount], class: "bg-white rounded-xl shadow p-6 space-y-4" do |f| %>
+    <div>
+      <%= f.label :code, "Coupon Code", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :code, class: "w-full border rounded-lg px-3 py-2 uppercase" %>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :discount_type, "Type", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.select :discount_type, [["Percentage (%)", "percentage"], ["Fixed Amount (₹)", "fixed"]], {}, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div>
+        <%= f.label :value, "Value", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :value, step: 0.01, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :min_order_amount, "Min Order (₹)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :min_order_amount, step: 0.01, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div>
+        <%= f.label :usage_limit, "Usage Limit", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :usage_limit, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :expiry_date, "Expiry Date", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.date_field :expiry_date, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div class="flex items-center gap-2 pt-6">
+        <%= f.check_box :active %>
+        <%= f.label :active, "Active", class: "text-sm" %>
+      </div>
+    </div>
+
+    <div class="flex gap-3 pt-2">
+      <%= f.submit "Update Discount",
+        class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition cursor-pointer" %>
+      <%= link_to "Cancel", admin_discounts_path,
+        class: "px-4 py-2 border rounded hover:bg-gray-50" %>
+    </div>
+  <% end %>
+</div>

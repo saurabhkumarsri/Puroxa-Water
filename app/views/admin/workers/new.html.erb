@@ -1,0 +1,96 @@
+<% content_for :page_title, "New Worker" %>
+
+<div class="max-w-xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Add Worker ➕</h1>
+
+  <%= form_with model: [:admin, @worker], class: "bg-white rounded-xl shadow p-6 space-y-4" do |f| %>
+    <% if @worker.errors.any? %>
+      <div class="bg-red-50 text-red-700 p-4 rounded-lg mb-4">
+        <ul class="list-disc list-inside text-sm">
+          <% @worker.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :name, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div>
+        <%= f.label :phone, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.telephone_field :phone, class: "w-full border rounded-lg px-3 py-2", placeholder: "10-12 digits" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.email_field :email, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div>
+        <%= f.label :emergency_contact, "Emergency Contact", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.telephone_field :emergency_contact, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :address, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_area :address, rows: 2, class: "w-full border rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :identity_type, "Identity Type", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.select :identity_type, Worker::IDENTITY_TYPES, {}, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div>
+        <%= f.label :identity_number, "Identity Number", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :identity_number, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :joining_date, "Joining Date", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.date_field :joining_date, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div>
+        <%= f.label :salary, "Monthly Salary (₹)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :salary, step: 0.01, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :status, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.select :status, Worker::STATUSES, {}, class: "w-full border rounded-lg px-3 py-2" %>
+      </div>
+      <div>
+        <%= f.label :document, "Upload Document", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.file_field :document, class: "w-full border rounded-lg px-3 py-2 text-sm" %>
+        <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (max 5MB)</p>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :profile_picture, "Profile Picture", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.file_field :profile_picture, accept: "image/*", class: "w-full border rounded-lg px-3 py-2 text-sm" %>
+      <p class="text-xs text-gray-500 mt-1">JPG, PNG (max 2MB)</p>
+    </div>
+
+    <div>
+      <%= f.label :notes, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_area :notes, rows: 2, class: "w-full border rounded-lg px-3 py-2", placeholder: "Any additional notes..." %>
+    </div>
+
+    <div class="flex gap-3 pt-2">
+      <%= f.submit "Create Worker",
+        class: "bg-[#0d2c63] text-white px-4 py-2 rounded hover:scale-105 transition cursor-pointer" %>
+      <%= link_to "Cancel", admin_workers_path,
+        class: "px-4 py-2 border rounded hover:bg-gray-50" %>
+    </div>
+  <% end %>
+</div>

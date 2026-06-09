@@ -1,0 +1,218 @@
+<% content_for :page_title, "Workers" %>
+
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Workers 👷</h1>
+  <%= link_to "+ Add Worker", new_admin_worker_path,
+    class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition" %>
+</div>
+
+<% if @workers.any? %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+    <% @workers.each do |worker| %>
+      <div class="bg-white rounded-xl shadow p-5 hover:shadow-lg transition">
+        <div class="flex justify-between items-start mb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-[#0d2c63] text-white flex items-center justify-center text-lg font-bold overflow-hidden shrink-0">
+              <% if worker.profile_picture.attached? %>
+                <img src="<%= url_for(worker.profile_picture) %>" class="w-full h-full object-cover" alt="<%= worker.name %>">
+              <% else %>
+                <%= worker.name[0].upcase %>
+              <% end %>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-800"><%= worker.name %></p>
+              <span class="text-xs px-2 py-0.5 rounded-full font-medium <%= worker.identity_badge_class %>">
+                <%= worker.identity_type %>
+              </span>
+            </div>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full font-medium <%= worker.status_badge_class %>">
+            <%= worker.status %>
+          </span>
+        </div>
+
+        <div class="space-y-2 text-sm text-gray-600 mb-4">
+          <p><span class="text-gray-400">📞</span> <%= worker.phone %></p>
+          <p><span class="text-gray-400">🆔</span> <%= worker.identity_number %></p>
+          <p><span class="text-gray-400">📅</span> Joined: <%= worker.joining_date&.strftime("%d %b %Y") || "—" %></p>
+          <p><span class="text-gray-400">💰</span> Salary: ₹<%= worker.salary || "—" %></p>
+        </div>
+
+        <% if worker.document.attached? %>
+          <p class="text-xs text-green-600 mb-3 flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Document Uploaded
+          </p>
+        <% else %>
+          <p class="text-xs text-gray-400 mb-3">No Document</p>
+        <% end %>
+
+        <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
+          <button onclick="document.getElementById('idcard-worker-<%= worker.id %>').classList.remove('hidden')"
+            class="text-xs font-medium bg-[#0d2c63] text-white px-3 py-1.5 rounded-lg hover:bg-blue-800 transition">
+            🪪 ID Card
+          </button>
+          <%= link_to "View", admin_worker_path(worker),
+            class: "text-xs bg-[#0d2c63] text-white px-3 py-1.5 rounded hover:bg-blue-800 transition" %>
+          <%= link_to "Edit", edit_admin_worker_path(worker),
+            class: "text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition" %>
+          <%= button_to "Delete", admin_worker_path(worker),
+            method: :delete,
+            data: { turbo_confirm: "Are you sure?" },
+            class: "text-xs bg-red-600 text-white px-3 py-1.5 rounded hover:bg-red-700 transition" %>
+        </div>
+      </div>
+
+      <!-- Worker ID Card Modal -->
+      <div id="idcard-worker-<%= worker.id %>" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-3 overflow-y-auto"
+        onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm min-h-full"></div>
+
+        <div class="relative">
+          <!-- Actual ID Card -->
+          <div id="idcard-inner-worker-<%= worker.id %>" class="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-w-xs w-full my-auto" style="border: 6px solid #0d2c63;">
+            <!-- Top holographic strip -->
+            <div class="h-1.5 bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400"></div>
+
+            <!-- ID Card Header -->
+            <div class="px-4 pt-4 pb-3 text-white text-center relative" style="background-color:#0d2c63;">
+              <div class="absolute top-2 right-2 z-10">
+                <button onclick="document.getElementById('idcard-worker-<%= worker.id %>').classList.add('hidden')"
+                  class="text-white/80 hover:text-white transition">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+
+              <img src="<%=image_path("logo.png")%>"
+                class="h-12 object-contain mx-auto mb-1 drop-shadow-md"
+                alt="Puroxa Water"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <p class="text-[11px] text-blue-200 uppercase tracking-[0.2em] font-semibold hidden">Puroxa Water</p>
+              <p class="text-[10px] text-blue-200 uppercase tracking-widest font-semibold">Employee Identity Card</p>
+            </div>
+
+            <!-- ID Card Body -->
+            <div class="px-5 pt-5 pb-4 text-center bg-gradient-to-b from-white to-gray-50">
+              <div class="w-24 h-24 rounded-full bg-white text-[#0d2c63] flex items-center justify-center text-4xl font-bold mx-auto mb-3 ring-[5px] ring-[#0d2c63] shadow-lg overflow-hidden">
+                <% if worker.profile_picture.attached? %>
+                  <img src="<%= url_for(worker.profile_picture) %>" class="w-full h-full object-cover" alt="<%= worker.name %>">
+                <% else %>
+                  <%= worker.name[0].upcase %>
+                <% end %>
+              </div>
+
+              <h2 class="text-base font-bold text-gray-900 tracking-tight"><%= worker.name %></h2>
+              <p class="text-xs text-gray-500 mb-4 font-medium">EMP ID: <%= worker.id.to_s.rjust(5, '0') %></p>
+
+              <div class="space-y-2 text-left bg-white rounded-xl p-3.5 border border-gray-200 shadow-sm">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 text-sm shrink-0">📞</div>
+                  <div class="min-w-0">
+                    <p class="text-[10px] text-gray-400 uppercase font-semibold">Phone</p>
+                    <p class="text-xs font-medium text-gray-800"><%= worker.phone %></p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 text-sm shrink-0">📧</div>
+                  <div class="min-w-0">
+                    <p class="text-[10px] text-gray-400 uppercase font-semibold">Email</p>
+                    <p class="text-xs font-medium text-gray-800 truncate"><%= worker.email.presence || "—" %></p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center text-teal-600 text-sm shrink-0">📅</div>
+                  <div class="min-w-0">
+                    <p class="text-[10px] text-gray-400 uppercase font-semibold">Joined</p>
+                    <p class="text-xs font-medium text-gray-800"><%= worker.joining_date&.strftime("%d %b %Y") || "—" %></p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center text-rose-600 text-sm shrink-0 mt-0.5">📍</div>
+                  <div class="min-w-0">
+                    <p class="text-[10px] text-gray-400 uppercase font-semibold">Address</p>
+                    <p class="text-xs font-medium text-gray-800 break-words"><%= worker.address.presence || "—" %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ID Card Footer -->
+            <div class="px-4 py-3 text-center" style="background-color:#0d2c63;">
+              <p class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Puroxa Water Pvt. Ltd.</p>
+            </div>
+          </div>
+
+          <!-- Download button below card in modal -->
+          <div class="mt-3 flex justify-center">
+            <button onclick="downloadIdCard('idcard-inner-worker-<%= worker.id %>','<%= worker.name.parameterize %>-idcard')"
+              class="flex items-center gap-1.5 text-xs font-semibold bg-white text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition shadow-lg">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              Download ID Card as Image
+            </button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow p-12 text-center">
+    <p class="text-gray-500 text-lg mb-4">No workers added yet.</p>
+    <%= link_to "Add Worker", new_admin_worker_path,
+      class: "bg-[#0d2c63] text-white px-6 py-2 rounded-lg hover:scale-105 transition inline-block" %>
+  </div>
+<% end %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  async function downloadIdCard(elementId, fileName) {
+    const el = document.getElementById(elementId);
+    if (!el) { alert('ID Card element not found.'); return; }
+
+    const btn = document.activeElement;
+    if (btn) { btn.disabled = true; btn.innerHTML = '⏳ Please wait...'; }
+
+    try {
+      const imgs = el.querySelectorAll('img');
+      await Promise.all(Array.from(imgs).map(img => new Promise((resolve) => {
+        if (!img.src || img.complete) { resolve(); return; }
+        img.crossOrigin = 'anonymous';
+        img.onload = resolve;
+        img.onerror = resolve;
+      })));
+
+      await new Promise(r => setTimeout(r, 300));
+
+      const canvas = await html2canvas(el, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        imageTimeout: 0,
+        onclone: function(clonedDoc) {
+          const nodes = clonedDoc.querySelectorAll('[style*="background-color:#0d2c63"], [style*="background-color: #0d2c63"]');
+          nodes.forEach(function(node) {
+            node.style.backgroundColor = '#0d2c63';
+          });
+        }
+      });
+
+      const link = document.createElement('a');
+      link.download = fileName + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (err) {
+      console.error('Screenshot failed:', err);
+      alert('Image download failed due to browser security. Falling back to Print...\n\nPrint dialog me "Save as PDF" select karein.');
+      window.print();
+    } finally {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Download ID Card as Image'; }
+    }
+  }
+</script>

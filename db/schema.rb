@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_03_094716) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "addresses", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -31,6 +59,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_094716) do
     t.string "name"
     t.text "address"
     t.string "gst_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "discounts", force: :cascade do |t|
+    t.string "code"
+    t.string "discount_type"
+    t.decimal "value"
+    t.decimal "min_order_amount"
+    t.date "expiry_date"
+    t.integer "usage_limit"
+    t.integer "usage_count"
+    t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -57,8 +98,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_094716) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "discount_id"
+    t.decimal "discounted_amount"
+    t.string "payment_mode", default: "cash"
     t.index ["created_at"], name: "index_orders_on_created_at"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["discount_id"], name: "index_orders_on_discount_id"
     t.index ["status"], name: "index_orders_on_status"
     t.index ["vendor_id"], name: "index_orders_on_vendor_id"
   end
@@ -73,7 +118,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_094716) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "bottles_per_pack", default: 1, null: false
     t.index ["active"], name: "index_products_on_active"
+  end
+
+  create_table "raw_materials", force: :cascade do |t|
+    t.string "name"
+    t.string "category"
+    t.integer "quantity"
+    t.string "unit"
+    t.integer "min_stock_level"
+    t.decimal "cost_per_unit"
+    t.string "supplier_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -103,9 +161,28 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_094716) do
     t.index ["user_id"], name: "index_vendors_on_user_id"
   end
 
+  create_table "workers", force: :cascade do |t|
+    t.string "name"
+    t.string "phone"
+    t.string "email"
+    t.text "address"
+    t.string "identity_type"
+    t.string "identity_number"
+    t.date "joining_date"
+    t.decimal "salary"
+    t.string "status"
+    t.string "emergency_contact"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "discounts"
   add_foreign_key "orders", "users", column: "customer_id"
   add_foreign_key "orders", "users", column: "vendor_id"
   add_foreign_key "vendors", "users"

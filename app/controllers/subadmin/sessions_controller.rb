@@ -15,6 +15,6 @@ class Subadmin::SessionsController < Devise::SessionsController
   def destroy
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
     set_flash_message! :notice, :signed_out if signed_out
-    redirect_to subadmin_login_path, notice: "Logged out successfully"
+    redirect_to subadmin_login_path, notice: "Logged out successfully", status: :see_other
   end
 end

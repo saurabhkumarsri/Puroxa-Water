@@ -1,0 +1,117 @@
+<% content_for :title, "Customer Details" %>
+
+<div class="max-w-3xl mx-auto">
+  <div class="flex items-center gap-4 mb-6">
+    <%= link_to "← Back", vendor_customers_path, class: "text-[#0d2c63] hover:underline" %>
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800"><%= @customer.display_name %></h1>
+  </div>
+
+  <div class="bg-white rounded-xl shadow p-4 md:p-6 mb-6">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-14 h-14 rounded-full bg-[#0d2c63] text-white flex items-center justify-center text-xl font-bold shrink-0">
+        <%= @customer.display_name.first.upcase %>
+      </div>
+      <div>
+        <p class="font-bold text-gray-800"><%= @customer.display_name %></p>
+        <p class="text-xs text-gray-500">Customer since <%= @customer.created_at.strftime("%b %Y") %></p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+      <div>
+        <p class="text-xs text-gray-400 uppercase mb-0.5">Email</p>
+        <p class="font-medium"><%= @customer.email %></p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-400 uppercase mb-0.5">Phone</p>
+        <p class="font-medium"><%= @customer.contact.presence || "—" %></p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-400 uppercase mb-0.5">Total Orders</p>
+        <p class="font-medium"><%= @customer.orders.count %></p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-400 uppercase mb-0.5">Member Since</p>
+        <p class="font-medium"><%= @customer.created_at.strftime("%d %b %Y") %></p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-lg font-semibold mb-4">Recent Orders</h2>
+  <% if @orders.any? %>
+    <!-- Desktop Table -->
+    <div class="hidden md:block bg-white rounded-xl shadow overflow-hidden">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="py-2 px-4">Order #</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Mode</th>
+            <th>Date</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each do |order| %>
+            <tr class="border-t hover:bg-gray-50">
+              <td class="py-2 px-4 font-medium">#<%= order.id %></td>
+              <td>₹<%= order.total_amount %></td>
+              <td>
+                <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                  <%= order.status.titleize %>
+                </span>
+              </td>
+              <td>
+                <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.payment_badge_class %>">
+                  <%= order.payment_status.titleize %>
+                </span>
+              </td>
+              <td class="text-xs text-gray-500 uppercase"><%= order.payment_mode %></td>
+              <td class="text-sm text-gray-500"><%= order.created_at.strftime("%d %b %Y") %></td>
+              <td class="text-right px-4">
+                <%= link_to "View", vendor_order_path(order), class: "text-[#0d2c63] hover:underline text-sm" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden space-y-3">
+      <% @orders.each do |order| %>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-medium text-sm">#<%= order.id %></span>
+            <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+              <%= order.status.titleize %>
+            </span>
+          </div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-500">Amount</span>
+            <span class="font-medium">₹<%= order.total_amount %></span>
+          </div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-500">Payment</span>
+            <span class="px-2 py-0.5 rounded-full text-xs font-medium <%= order.payment_badge_class %>">
+              <%= order.payment_status.titleize %>
+            </span>
+          </div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-500">Mode</span>
+            <span class="text-xs text-gray-600 uppercase font-medium"><%= order.payment_mode %></span>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-gray-100 mt-2">
+            <span class="text-xs text-gray-400"><%= order.created_at.strftime("%d %b %Y") %></span>
+            <%= link_to "View →", vendor_order_path(order), class: "text-xs font-medium text-[#0d2c63]" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+      <p class="text-gray-500">No orders yet.</p>
+    </div>
+  <% end %>
+</div>

@@ -4,35 +4,45 @@
 admin = User.find_or_initialize_by(email: "admin@puroxa.com")
 admin.assign_attributes(
   first_name: "Admin",
-  password: "password123",
-  password_confirmation: "password123",
+  password: "123456",
+  password_confirmation: "123456",
   role: :admin
 )
 admin.save!
-puts "Created Admin: admin@puroxa.com / password123"
+puts "Created Admin: admin@puroxa.com / 123456"
 
 # Subadmin
 subadmin = User.find_or_initialize_by(email: "subadmin@puroxa.com")
 subadmin.assign_attributes(
   first_name: "Sub Admin",
-  password: "password123",
-  password_confirmation: "password123",
+  password: "123456",
+  password_confirmation: "123456",
   role: :subadmin
 )
 subadmin.save!
-puts "Created Subadmin: subadmin@puroxa.com / password123"
+puts "Created Subadmin: subadmin@puroxa.com / 123456"
 
 # Customer
 customer = User.find_or_initialize_by(email: "customer@puroxa.com")
 customer.assign_attributes(
   first_name: "Rahul",
   contact: "9876543210",
-  password: "password123",
-  password_confirmation: "password123",
+  password: "123456",
+  password_confirmation: "123456",
   role: :customer
 )
 customer.save!
-puts "Created Customer: customer@puroxa.com / password123"
+puts "Created Customer: customer@puroxa.com / 123456"
+
+customer = User.find_or_initialize_by(email: "saurabh@gmail.com")
+customer.assign_attributes(
+  first_name: "saurabh",
+  contact: "9876543210",
+  password: "123456",
+  password_confirmation: "123456",
+  role: :customer
+)
+customer.save!
 
 # Customer Address
 Address.find_or_create_by!(user: customer, label: "Home") do |addr|

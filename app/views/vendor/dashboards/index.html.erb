@@ -1,40 +1,60 @@
 <% content_for :title, "Vendor Dashboard" %>
 
 <div class="max-w-6xl mx-auto">
-  <h1 class="text-2xl font-bold mb-6">Welcome, <%= current_user.display_name %> 🏪</h1>
+  <h1 class="text-xl md:text-2xl font-bold mb-4 md:mb-6">Welcome, <%= current_user.display_name %> 🏪</h1>
 
   <!-- STATS -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-2xl font-bold"><%= @total_orders %></h3>
-      <p class="text-gray-500">Total Orders</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-10">
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+      <h3 class="text-xl md:text-2xl font-bold"><%= @total_orders %></h3>
+      <p class="text-gray-500 text-sm">Total Orders</p>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-2xl font-bold text-yellow-500"><%= @pending_orders %></h3>
-      <p class="text-gray-500">Pending</p>
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+      <h3 class="text-xl md:text-2xl font-bold text-yellow-500"><%= @pending_orders %></h3>
+      <p class="text-gray-500 text-sm">Pending</p>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-2xl font-bold text-green-600"><%= @delivered_orders %></h3>
-      <p class="text-gray-500">Delivered</p>
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+      <h3 class="text-xl md:text-2xl font-bold text-green-600"><%= @delivered_orders %></h3>
+      <p class="text-gray-500 text-sm">Delivered</p>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-2xl font-bold text-cyan-600"><%= @todays_orders %></h3>
-      <p class="text-gray-500">Today</p>
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow">
+      <h3 class="text-xl md:text-2xl font-bold text-cyan-600"><%= @todays_orders %></h3>
+      <p class="text-gray-500 text-sm">Today</p>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="bg-white rounded-xl shadow p-4 md:p-6 mb-6">
+    <h2 class="text-lg md:text-xl font-semibold mb-4">Quick Actions</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <%= link_to vendor_products_path, class: "block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition text-center" do %>
+        <p class="text-2xl mb-1">🧴</p>
+        <p class="font-medium text-sm">Manage Products</p>
+      <% end %>
+      <%= link_to vendor_orders_path, class: "block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition text-center" do %>
+        <p class="text-2xl mb-1">📦</p>
+        <p class="font-medium text-sm">View Orders</p>
+      <% end %>
+      <%= link_to vendor_profile_path, class: "block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition text-center" do %>
+        <p class="text-2xl mb-1">👤</p>
+        <p class="font-medium text-sm">Profile</p>
+      <% end %>
     </div>
   </div>
 
   <!-- RECENT ORDERS -->
-  <div class="bg-white rounded-xl shadow p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-semibold">Recent Orders</h2>
-      <%= link_to "View All", vendor_orders_path, class: "text-[#0d2c63] hover:underline" %>
+  <div class="bg-white rounded-xl shadow p-4 md:p-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+      <h2 class="text-lg md:text-xl font-semibold">Recent Orders</h2>
+      <%= link_to "View All", vendor_orders_path, class: "text-[#0d2c63] hover:underline text-sm" %>
     </div>
 
     <% if @recent_orders.any? %>
-      <div class="overflow-x-auto">
+      <!-- Desktop Table -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left">
           <thead>
             <tr class="border-b">
@@ -61,6 +81,25 @@
             <% end %>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div class="md:hidden space-y-3">
+        <% @recent_orders.each do |order| %>
+          <div class="border border-gray-100 rounded-lg p-3 bg-gray-50">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-medium text-sm">#<%= order.id %></span>
+              <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
+                <%= order.status.titleize %>
+              </span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600"><%= order.customer.display_name %></span>
+              <span class="font-medium">₹<%= order.total_amount %></span>
+            </div>
+            <p class="text-xs text-gray-400 mt-1"><%= order.created_at.strftime("%d %b %Y") %></p>
+          </div>
+        <% end %>
       </div>
     <% else %>
       <div class="text-center py-8 text-gray-500">

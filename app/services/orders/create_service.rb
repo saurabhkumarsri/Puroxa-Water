@@ -12,6 +12,7 @@ module Orders
         order = create_order
         create_order_items(order)
         order.calculate_total!
+        apply_discount(order)
         success(order)
       end
     rescue ActiveRecord::RecordInvalid => e
@@ -27,6 +28,7 @@ module Orders
         customer: @customer,
         status: "pending",
         payment_status: "pending",
+        payment_mode: @params[:payment_mode].presence || "cash",
         delivery_address: @params[:delivery_address],
         notes: @params[:notes]
       )
@@ -51,6 +53,24 @@ module Orders
 
         product.decrement!(:stock_quantity, item[:quantity].to_i)
       end
+    end
+
+    def apply_discount(order)
+      code = @params[:discount_code].to_s.strip.presence
+      return unless code
+
+      discount = Discount.find_valid(code)
+      return unless discount
+
+      discount_amount = discount.apply(order.total_amount)
+      return if discount_amount <= 0
+
+      order.update!(
+        discount: discount,
+        discounted_amount: discount_amount,
+        total_amount: order.total_amount - discount_amount
+      )
+      discount.increment!(:usage_count)
     end
 
     def success(order)

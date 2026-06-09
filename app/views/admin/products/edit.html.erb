@@ -20,20 +20,25 @@
         <%= f.select :size, Product::SIZES, {}, class: "w-full border rounded-lg px-3 py-2" %>
       </div>
       <div>
-        <%= f.label :price, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.label :price, "Price per Pack (₹)", class: "block text-sm font-medium text-gray-700 mb-1" %>
         <%= f.number_field :price, step: 0.01, class: "w-full border rounded-lg px-3 py-2" %>
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <%= f.label :stock_quantity, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.number_field :stock_quantity, class: "w-full border rounded-lg px-3 py-2" %>
+        <%= f.label :bottles_per_pack, "Bottles per Pack", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :bottles_per_pack, min: 1, class: "w-full border rounded-lg px-3 py-2" %>
       </div>
       <div>
-        <%= f.label :image, "Image URL", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :image, class: "w-full border rounded-lg px-3 py-2" %>
+        <%= f.label :stock_quantity, "Stock (Packs)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :stock_quantity, class: "w-full border rounded-lg px-3 py-2" %>
       </div>
+    </div>
+
+    <div>
+      <%= f.label :image, "Image URL", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :image, class: "w-full border rounded-lg px-3 py-2" %>
     </div>
 
     <div class="flex items-center gap-2">

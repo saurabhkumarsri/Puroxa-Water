@@ -1,0 +1,10 @@
+<div class="flex flex-wrap gap-2 mb-6">
+  <%= link_to "Daily Sales", admin_daily_sales_report_path(date: params[:date]),
+    class: "px-4 py-2 rounded-lg border hover:bg-gray-50 #{controller.action_name == 'daily_sales' ? 'bg-[#0d2c63] text-white hover:bg-[#0d2c63]' : ''}" %>
+  <%= link_to "Monthly Sales", admin_monthly_sales_report_path(month: params[:month]),
+    class: "px-4 py-2 rounded-lg border hover:bg-gray-50 #{controller.action_name == 'monthly_sales' ? 'bg-[#0d2c63] text-white hover:bg-[#0d2c63]' : ''}" %>
+  <%= link_to "Product Wise", admin_product_wise_report_path(start_date: params[:start_date], end_date: params[:end_date]),
+    class: "px-4 py-2 rounded-lg border hover:bg-gray-50 #{controller.action_name == 'product_wise' ? 'bg-[#0d2c63] text-white hover:bg-[#0d2c63]' : ''}" %>
+  <%= link_to "Customer Wise", admin_customer_wise_report_path(start_date: params[:start_date], end_date: params[:end_date]),
+    class: "px-4 py-2 rounded-lg border hover:bg-gray-50 #{controller.action_name == 'customer_wise' ? 'bg-[#0d2c63] text-white hover:bg-[#0d2c63]' : ''}" %>
+</div>

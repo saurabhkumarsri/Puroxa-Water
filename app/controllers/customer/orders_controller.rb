@@ -37,6 +37,6 @@ class Customer::OrdersController < Customer::BaseController
   private
 
   def order_params
-    params.permit(:delivery_address, :notes, order_items: [:product_id, :quantity])
+    params.permit(:delivery_address, :notes, :discount_code, :payment_mode, order_items: [:product_id, :quantity])
   end
 end

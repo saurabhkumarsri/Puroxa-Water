@@ -40,7 +40,7 @@ class Vendor::SessionsController < ApplicationController
 
   def destroy
     session.delete(:user_id)
-    redirect_to vendor_login_path, notice: "Logged out successfully"
+    redirect_to vendor_login_path, notice: "Logged out successfully", status: :see_other
   end
 
   private

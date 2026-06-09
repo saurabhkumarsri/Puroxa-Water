@@ -25,9 +25,8 @@ Rails.application.configure do
     config.action_controller.perform_caching = false
   end
 
-      config.hosts << "dc12-2405-201-4019-61c8-9914-f1ee-58b5-d538.ngrok-free.app"
-    config.hosts << "dc12-2405-201-4019-61c8-9914-f1ee-58b5-d538.ngrok-free.app"
-
+     config.hosts << "5fe1-2405-201-4019-61c8-5f53-aa56-b9fd-954a.ngrok-free.app"
+    config.hosts << "5fe1-2405-201-4019-61c8-5f53-aa56-b9fd-954a.ngrok-free.app"
   # Change to :null_store to avoid any caching.
   config.cache_store = :memory_store
 

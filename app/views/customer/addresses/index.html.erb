@@ -1,41 +1,75 @@
 <% content_for :title, "My Addresses" %>
 
-<div class="max-w-3xl mx-auto px-0 md:px-0">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6 gap-2">
-    <h1 class="text-xl md:text-2xl font-bold text-gray-800">My Addresses 📍</h1>
+<div class="max-w-3xl mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-3">
+    <div>
+      <h1 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
+        <span class="w-1 h-6 bg-[#0d2c63] rounded-full"></span>
+        My Addresses 📍
+      </h1>
+      <p class="text-gray-500 text-sm mt-1">Manage your delivery locations</p>
+    </div>
     <%= link_to "+ Add Address", new_customer_address_path,
-      class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:scale-105 transition text-sm md:text-base" %>
+      class: "bg-[#0d2c63] text-white px-5 py-2.5 rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition text-sm font-medium shrink-0" %>
   </div>
 
   <% if @addresses.any? %>
-    <div class="grid gap-3 md:gap-4">
+    <div class="grid gap-4">
       <% @addresses.each do |address| %>
-        <div class="bg-white rounded-xl shadow p-4 md:p-5 relative">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6 relative hover:shadow-md transition">
           <% if address.is_default? %>
-            <span class="absolute top-3 right-3 md:top-4 md:right-4 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
-              Default
-            </span>
+            <div class="absolute top-4 right-4">
+              <span class="inline-flex items-center gap-1 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-100">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Default
+              </span>
+            </div>
           <% end %>
 
-          <h3 class="font-semibold text-base md:text-lg"><%= address.label %></h3>
-          <p class="text-gray-600 mt-1 text-sm md:text-base break-words"><%= address.full_address %></p>
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 mt-1">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold text-gray-800 mb-1"><%= address.label %></h3>
+              <p class="text-gray-500 text-sm leading-relaxed"><%= address.full_address %></p>
+            </div>
+          </div>
 
-          <div class="flex gap-3 mt-3 md:mt-4">
-            <%= link_to "Edit", edit_customer_address_path(address),
-              class: "text-[#0d2c63] hover:underline text-xs md:text-sm" %>
-            <%= button_to "Delete", customer_address_path(address),
+          <div class="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+            <%= link_to edit_customer_address_path(address),
+              class: "inline-flex items-center gap-1.5 text-sm font-medium text-[#0d2c63] hover:text-cyan-600 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg transition" do %>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+              </svg>
+              Edit
+            <% end %>
+            <%= button_to customer_address_path(address),
               method: :delete,
               data: { turbo_confirm: "Delete this address?" },
-              class: "text-red-600 hover:underline text-xs md:text-sm" %>
+              class: "inline-flex items-center gap-1.5 text-sm font-medium text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg transition bg-transparent border-0 cursor-pointer" do %>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+              Delete
+            <% end %>
           </div>
         </div>
       <% end %>
     </div>
   <% else %>
-    <div class="bg-white rounded-xl shadow p-8 md:p-12 text-center">
-      <p class="text-gray-500 text-base md:text-lg mb-4">No addresses saved yet.</p>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 md:p-16 text-center">
+      <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">📍</div>
+      <p class="text-gray-500 text-lg mb-2">No addresses saved yet.</p>
+      <p class="text-gray-400 text-sm mb-6">Add an address for faster checkout.</p>
       <%= link_to "Add Address", new_customer_address_path,
-        class: "bg-[#0d2c63] text-white px-5 md:px-6 py-2 md:py-3 rounded-lg hover:scale-105 transition inline-block" %>
+        class: "bg-[#0d2c63] text-white px-8 py-3 rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition inline-block font-medium" %>
     </div>
   <% end %>
 </div>

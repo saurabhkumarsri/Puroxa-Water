@@ -19,10 +19,16 @@ Rails.application.routes.draw do
     post "signup", to: "sessions#create"
 
     get "dashboard", to: "dashboards#index"
-    resources :orders, only: [:index, :show] do
-      member { patch :update_status }
+    resources :products
+    resources :orders, only: [:index, :show, :new, :create] do
+      member do
+        patch :update_status
+        patch :collect_cash
+      end
     end
+    resources :customers, only: [:index, :show]
     resource :profile, only: [:show, :edit, :update]
+    get "invoices/:id", to: "invoices#show", as: :invoice
   end
 
   # ================== ADMIN AUTH + PORTAL ==================
@@ -34,6 +40,13 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get "dashboard", to: "dashboards#index"
+    resources :workers
+    resources :raw_materials
+    resources :discounts
+    get "reports/daily_sales", to: "reports#daily_sales", as: :daily_sales_report
+    get "reports/monthly_sales", to: "reports#monthly_sales", as: :monthly_sales_report
+    get "reports/product_wise", to: "reports#product_wise", as: :product_wise_report
+    get "reports/customer_wise", to: "reports#customer_wise", as: :customer_wise_report
     resources :vendors, only: [:index, :show, :destroy] do
       member do
         patch :approve
@@ -49,6 +62,7 @@ Rails.application.routes.draw do
         patch :assign_vendor
       end
     end
+    get "invoices/:id", to: "invoices#show", as: :invoice
   end
 
   # ================== SUBADMIN AUTH + PORTAL ==================
@@ -78,6 +92,7 @@ Rails.application.routes.draw do
     resources :orders, only: [:index, :show, :new, :create] do
       member { patch :cancel }
     end
+    get "invoices/:id", to: "invoices#show", as: :invoice
     resource :profile, only: [:show, :edit, :update]
     resources :addresses, except: [:show]
   end

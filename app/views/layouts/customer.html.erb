@@ -10,32 +10,54 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-50 min-h-screen flex flex-col">
-    <!-- Customer Navbar -->
-    <%= render "layouts/customer_navbar" %>
+  <% if current_user && current_user.customer? %>
+    <!-- Logged-in Customer: Admin-style layout -->
+    <body class="bg-gray-100">
+      <!-- Mobile Header -->
+      <div class="md:hidden bg-[#0d2c63] text-white px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+        <button onclick="document.getElementById('mobile-sidebar-overlay').classList.remove('hidden')"
+          class="text-white p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <span class="font-semibold"><%= content_for(:title) || "Customer Panel" %></span>
+        <%= button_to destroy_user_session_path, method: :delete,
+          class: "text-red-300 hover:text-red-100 text-sm bg-transparent border-0 cursor-pointer" do %>
+          🚪
+        <% end %>
+      </div>
 
-    <% if current_user && current_user.customer? %>
-      <!-- Logged-in: Sidebar + Content -->
-      <div class="flex flex-1">
+      <div class="flex">
+        <!-- SIDEBAR -->
         <%= render "layouts/customer_sidebar" %>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-4 md:p-6">
-          <!-- Flash Messages -->
-          <% if notice %>
-            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg"><%= notice %></div>
-          <% end %>
-          <% if alert %>
-            <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg"><%= alert %></div>
-          <% end %>
+        <!-- MAIN -->
+        <div class="flex-1 min-h-screen bg-gray-100">
+          <!-- HEADER -->
+          <%= render "layouts/customer_topbar" %>
 
-          <%= yield %>
-        </main>
+          <!-- CONTENT -->
+          <main class="p-4 md:p-6">
+            <% if notice %>
+              <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg"><%= notice %></div>
+            <% end %>
+            <% if alert %>
+              <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg"><%= alert %></div>
+            <% end %>
+
+            <%= yield %>
+          </main>
+        </div>
       </div>
-    <% else %>
-      <!-- Not logged in: Just Content -->
+    </body>
+  <% else %>
+    <!-- Guest / Non-customer: Original layout with navbar -->
+    <body class="bg-gray-50 min-h-screen flex flex-col">
+      <!-- Customer Navbar -->
+      <%= render "layouts/customer_navbar" %>
+
       <main class="flex-1 p-0">
-        <!-- Flash Messages -->
         <% if notice %>
           <div class="p-4 bg-green-100 text-green-800 rounded-lg mx-4 mt-4"><%= notice %></div>
         <% end %>
@@ -45,9 +67,11 @@
 
         <%= yield %>
       </main>
-    <% end %>
 
-    <!-- Footer -->
-    <%= render "layouts/customer_footer" %>
-  </body>
+      <% unless current_user %>
+        <!-- Footer -->
+        <%= render "layouts/customer_footer" %>
+      <% end %>
+    </body>
+  <% end %>
 </html>

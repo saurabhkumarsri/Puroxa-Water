@@ -1,14 +1,17 @@
 class Order < ApplicationRecord
   belongs_to :customer, class_name: "User", foreign_key: "customer_id"
   belongs_to :vendor, class_name: "User", foreign_key: "vendor_id", optional: true
+  belongs_to :discount, optional: true
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
 
   STATUSES = %w[pending confirmed processing shipped delivered cancelled].freeze
   PAYMENT_STATUSES = %w[pending paid failed refunded].freeze
+  PAYMENT_MODES = %w[cash online].freeze
 
   validates :status, inclusion: { in: STATUSES }
   validates :payment_status, inclusion: { in: PAYMENT_STATUSES }
+  validates :payment_mode, inclusion: { in: PAYMENT_MODES }
   validates :total_amount, numericality: { greater_than_or_equal_to: 0 }
 
   scope :pending, -> { where(status: "pending") }

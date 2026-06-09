@@ -1,0 +1,121 @@
+<% content_for :title, "Create Order" %>
+
+<div class="max-w-4xl mx-auto px-0 md:px-0">
+  <div class="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+    <%= link_to "← Back", vendor_orders_path, class: "text-[#0d2c63] hover:underline text-sm md:text-base" %>
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800">Create Order for Customer 🛒</h1>
+  </div>
+
+  <%= form_with url: vendor_orders_path, method: :post, class: "space-y-4 md:space-y-6" do |f| %>
+    <!-- CUSTOMER -->
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Select Customer</h2>
+      <%= f.select :customer_id,
+        @customers.map { |c| ["#{c.display_name} (#{c.email})", c.id] },
+        { prompt: "Choose a customer..." },
+        class: "w-full border rounded-lg px-3 py-2 text-sm" %>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Select Products</h2>
+
+      <% if @products.any? %>
+        <div class="space-y-3 md:space-y-4">
+          <% @products.each_with_index do |product, idx| %>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 border rounded-lg p-3 md:p-4" data-product-id="<%= product.id %>">
+              <img src="<%= image_path 'bottle.png' %>" class="w-12 h-12 md:w-16 md:h-16 object-contain flex-shrink-0">
+              <div class="flex-1 min-w-0">
+                <p class="font-medium text-sm md:text-base"><%= product.name %></p>
+                <p class="text-xs md:text-sm text-gray-500"><%= product.pack_display %></p>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button type="button"
+                  class="qty-decrease w-8 h-8 md:w-9 md:h-9 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-300 transition font-bold text-sm"
+                  data-max="<%= product.stock_quantity %>">-</button>
+                <%= f.number_field "order_items[][quantity]",
+                  value: 0, min: 0, max: product.stock_quantity,
+                  class: "qty-input w-12 md:w-14 border rounded-lg px-1 py-1 text-center text-sm",
+                  readonly: true %>
+                <button type="button"
+                  class="qty-increase w-8 h-8 md:w-9 md:h-9 bg-[#0d2c63] text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition font-bold text-sm"
+                  data-max="<%= product.stock_quantity %>">+</button>
+                <%= f.hidden_field "order_items[][product_id]", value: product.id %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-500 text-sm">No products available.</p>
+      <% end %>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.qty-decrease').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var input = this.parentElement.querySelector('.qty-input');
+            var val = parseInt(input.value) || 0;
+            if (val > 0) {
+              input.value = val - 1;
+            }
+          });
+        });
+        document.querySelectorAll('.qty-increase').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var input = this.parentElement.querySelector('.qty-input');
+            var max = parseInt(this.dataset.max) || 999;
+            var val = parseInt(input.value) || 0;
+            if (val < max) {
+              input.value = val + 1;
+            }
+          });
+        });
+      });
+    </script>
+
+    <!-- DISCOUNT CODE -->
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Discount Code</h2>
+      <%= f.text_field :discount_code,
+        class: "w-full sm:w-64 border rounded-lg px-3 py-2 text-sm uppercase",
+        placeholder: "e.g. PUROXA20" %>
+      <p class="text-xs text-gray-500 mt-1">Enter a valid coupon code to get discount.</p>
+    </div>
+
+    <!-- PAYMENT MODE -->
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Payment Mode</h2>
+      <div class="flex gap-3">
+        <label class="flex items-center gap-2 border rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-50 transition flex-1">
+          <%= f.radio_button :payment_mode, "cash", checked: true, class: "accent-[#0d2c63]" %>
+          <span class="text-sm font-medium">💵 Cash on Delivery</span>
+        </label>
+        <label class="flex items-center gap-2 border rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-50 transition flex-1">
+          <%= f.radio_button :payment_mode, "online", class: "accent-[#0d2c63]" %>
+          <span class="text-sm font-medium">💳 Online Payment</span>
+        </label>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">Choose how the customer will pay. You can collect cash later or mark online payments as received.</p>
+    </div>
+
+    <!-- DELIVERY ADDRESS -->
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Delivery Address</h2>
+      <%= f.text_area :delivery_address, rows: 3,
+        class: "w-full border rounded-lg px-3 py-2 text-sm",
+        placeholder: "Enter delivery address..." %>
+    </div>
+
+    <!-- NOTES -->
+    <div class="bg-white rounded-xl shadow p-4 md:p-6">
+      <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Additional Notes</h2>
+      <%= f.text_area :notes, rows: 2,
+        class: "w-full border rounded-lg px-3 py-2 text-sm",
+        placeholder: "Any special instructions..." %>
+    </div>
+
+    <%= f.submit "Place Order",
+      class: "w-full bg-[#0d2c63] text-white py-2.5 md:py-3 rounded-lg hover:scale-105 transition text-base md:text-lg font-medium cursor-pointer" %>
+  <% end %>
+</div>

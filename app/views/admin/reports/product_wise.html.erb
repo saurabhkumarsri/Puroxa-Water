@@ -1,0 +1,73 @@
+<% content_for :page_title, "Product Wise Report" %>
+
+<h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-6">Product Wise Sales Report 📈</h1>
+
+<%= render "nav" %>
+
+<div class="bg-white rounded-xl shadow p-4 md:p-6 mb-6">
+  <%= form_with url: admin_product_wise_report_path, method: :get, class: "flex flex-col sm:flex-row items-start sm:items-end gap-4" do |f| %>
+    <div>
+      <%= f.label :start_date, "From", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.date_field :start_date, value: @start_date, class: "border rounded-lg px-3 py-2" %>
+    </div>
+    <div>
+      <%= f.label :end_date, "To", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.date_field :end_date, value: @end_date, class: "border rounded-lg px-3 py-2" %>
+    </div>
+    <%= f.submit "Generate", class: "bg-[#0d2c63] text-white px-4 py-2 rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition cursor-pointer text-sm font-medium" %>
+  <% end %>
+</div>
+
+<% if @order_items.any? %>
+  <!-- Desktop Table -->
+  <div class="hidden md:block bg-white rounded-xl shadow overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="py-3 px-4">Product</th>
+            <th>Size</th>
+            <th>Pack Size</th>
+            <th>Total Qty</th>
+            <th class="text-right">Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order_items.each do |item| %>
+            <tr class="border-t hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium"><%= item.name %></td>
+              <td><%= item.size %></td>
+              <td><%= item.bottles_per_pack %> bottles</td>
+              <td><%= item.total_qty %> packs</td>
+              <td class="text-right px-4 font-bold">₹<%= number_with_precision(item.total_revenue, precision: 2) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Mobile Cards -->
+  <div class="md:hidden space-y-3">
+    <% @order_items.each do |item| %>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <p class="font-bold text-gray-800 mb-0.5"><%= item.name %></p>
+        <p class="text-xs text-gray-500 mb-3"><%= item.size %> · <%= item.bottles_per_pack %> bottles/pack</p>
+        <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+          <div>
+            <p class="text-xs text-gray-400">Total Qty</p>
+            <p class="font-medium"><%= item.total_qty %> packs</p>
+          </div>
+        </div>
+        <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+          <span class="text-xs text-gray-500">Revenue</span>
+          <span class="font-bold text-[#0d2c63]">₹<%= number_with_precision(item.total_revenue, precision: 2) %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow p-8 text-center">
+    <p class="text-gray-500">No sales data found for the selected period.</p>
+  </div>
+<% end %>
