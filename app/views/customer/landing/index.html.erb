@@ -196,12 +196,7 @@
               <% end %>
             </div>
             <h3 class="font-bold text-gray-800 text-sm md:text-base text-center"><%= product.name %></h3>
-            <p class="text-xs text-gray-400 text-center mt-1"><%= product.pack_display %></p>
-            <div class="text-center mt-3">
-              <span class="text-lg font-extrabold text-[#0d2c63]">₹<%= product.price %></span>
-              <span class="text-xs text-gray-400">/pack</span>
-            </div>
-            <%= link_to customer_products_path, class: "block mt-4 text-center text-xs md:text-sm font-semibold text-[#0d2c63] bg-blue-50 hover:bg-[#0d2c63] hover:text-white py-2 rounded-lg transition-colors" do %>
+            <%= link_to customer_products_path, class: "block mt-3 text-center text-xs md:text-sm font-semibold text-[#0d2c63] bg-blue-50 hover:bg-[#0d2c63] hover:text-white py-2 rounded-lg transition-colors" do %>
               Buy Now →
             <% end %>
           </div>

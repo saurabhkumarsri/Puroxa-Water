@@ -81,11 +81,14 @@
 
 <!-- Guest Mobile Menu -->
 <% unless current_user %>
-  <div id="guest-mobile-menu" class="hidden md:hidden bg-white border-b shadow-lg">
-    <nav class="flex flex-col p-4 space-y-2">
-      <%= link_to "Home", root_path, class: "block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition" %>
+  <!-- Backdrop -->
+  <div id="guest-mobile-backdrop" class="hidden fixed inset-0 bg-black/30 z-40 md:hidden"
+    onclick="document.getElementById('guest-mobile-menu').classList.add('hidden'); this.classList.add('hidden'); document.body.style.overflow='';"
+  ></div>
+
+  <div id="guest-mobile-menu" class="hidden md:hidden fixed left-0 right-0 top-[60px] z-50 bg-white border-b shadow-xl max-h-[calc(100vh-60px)] overflow-y-auto">
+    <nav class="flex flex-col p-4 space-y-3">
       <%= link_to "Products", customer_products_path, class: "block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition" %>
-      <%= link_to "Vendor Portal", vendor_login_path, class: "block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition" %>
       <hr class="border-gray-100">
       <%= link_to "Login", new_user_session_path,
         class: "block py-3 text-center border-2 border-[#0d2c63] rounded-lg hover:bg-[#0d2c63] hover:text-white transition font-medium text-[#0d2c63]" %>
@@ -93,4 +96,46 @@
         class: "block py-3 text-center bg-[#0d2c63] text-white rounded-lg font-medium" %>
     </nav>
   </div>
+
+  <script>
+    (function() {
+      var menu = document.getElementById('guest-mobile-menu');
+      var backdrop = document.getElementById('guest-mobile-backdrop');
+
+      function closeMenu() {
+        menu.classList.add('hidden');
+        backdrop.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      function openMenu() {
+        menu.classList.remove('hidden');
+        backdrop.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function toggleMenu(e) {
+        if (e) e.stopPropagation();
+        if (menu.classList.contains('hidden')) { openMenu(); } else { closeMenu(); }
+      }
+
+      // Attach to hamburger button
+      var btn = document.querySelector('button[onclick*="guest-mobile-menu"]');
+      if (btn) { btn.onclick = toggleMenu; }
+
+      // Close on scroll
+      var scrollTimer;
+      window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function() {
+          if (!menu.classList.contains('hidden')) closeMenu();
+        }, 200);
+      }, { passive: true });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+    })();
+  </script>
 <% end %>
