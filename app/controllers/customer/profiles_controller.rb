@@ -19,6 +19,6 @@ class Customer::ProfilesController < Customer::BaseController
   private
 
   def profile_params
-    params.require(:user).permit(:first_name, :email, :contact)
+    params.require(:user).permit(:first_name, :email, :contact, :shop_name, :area, :gst_number)
   end
 end

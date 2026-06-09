@@ -2,11 +2,16 @@
 
 <div class="max-w-6xl mx-auto">
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-    <h1 class="text-xl md:text-2xl font-bold">All Orders 📦</h1>
+    <h1 class="text-xl md:text-2xl font-bold">Orders 📦</h1>
     <div class="flex flex-wrap gap-2">
-      <%= link_to "All", vendor_orders_path, class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:status].blank? ? 'bg-gray-100 font-medium' : ''}" %>
-      <%= link_to "Pending", vendor_orders_path(status: "pending"), class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:status] == 'pending' ? 'bg-yellow-100 font-medium' : ''}" %>
-      <%= link_to "Delivered", vendor_orders_path(status: "delivered"), class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:status] == 'delivered' ? 'bg-green-100 font-medium' : ''}" %>
+      <%= link_to "Active (#{@active_count})", vendor_orders_path(tab: "active"),
+        class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:tab].blank? || params[:tab] == 'active' ? 'bg-[#0d2c63] text-white font-medium border-[#0d2c63]' : ''}" %>
+      <%= link_to "Delivered (#{@delivered_count})", vendor_orders_path(tab: "delivered"),
+        class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:tab] == 'delivered' ? 'bg-green-600 text-white font-medium border-green-600' : ''}" %>
+      <%= link_to "Cancelled (#{@cancelled_count})", vendor_orders_path(tab: "cancelled"),
+        class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:tab] == 'cancelled' ? 'bg-red-600 text-white font-medium border-red-600' : ''}" %>
+      <%= link_to "All (#{@all_count})", vendor_orders_path(tab: "all"),
+        class: "px-3 py-1.5 rounded-lg border text-sm hover:bg-gray-50 transition #{params[:tab] == 'all' ? 'bg-gray-600 text-white font-medium border-gray-600' : ''}" %>
     </div>
   </div>
 
@@ -50,6 +55,11 @@
                 <td class="text-right px-4">
                   <div class="flex gap-2 justify-end">
                     <%= link_to "View", vendor_order_path(order), class: "text-[#0d2c63] hover:underline text-sm" %>
+                    <% if %w[processing shipped].include?(order.status) %>
+                      <%= button_to "Deliver", update_status_vendor_order_path(order, status: "delivered"), method: :patch,
+                        data: { turbo_confirm: "Mark order ##{order.id} as Delivered?" },
+                        class: "text-xs bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 bg-transparent border-0 cursor-pointer" %>
+                    <% end %>
                     <% if order.payment_pending? %>
                       <%= button_to "Collect", collect_cash_vendor_order_path(order), method: :patch,
                         data: { turbo_confirm: "Mark ₹#{order.total_amount} as collected via #{order.payment_mode}?" },
@@ -99,6 +109,11 @@
           </div>
           <div class="flex gap-2 pt-3 border-t border-gray-100">
             <%= link_to "View", vendor_order_path(order), class: "flex-1 text-center text-xs bg-[#0d2c63] text-white px-3 py-2 rounded-lg hover:opacity-90" %>
+            <% if %w[processing shipped].include?(order.status) %>
+              <%= button_to "Deliver", update_status_vendor_order_path(order, status: "delivered"), method: :patch,
+                data: { turbo_confirm: "Mark order ##{order.id} as Delivered?" },
+                class: "flex-1 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 bg-transparent border-0 cursor-pointer" %>
+            <% end %>
             <% if order.payment_pending? %>
               <%= button_to "Collect", collect_cash_vendor_order_path(order), method: :patch,
                 data: { turbo_confirm: "Mark ₹#{order.total_amount} as collected via #{order.payment_mode}?" },

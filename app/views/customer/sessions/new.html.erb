@@ -7,8 +7,8 @@
 
     <%= form_with url: user_session_path, method: :post, class: "space-y-4" do |f| %>
       <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.email_field :user_email, name: "user[email]", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true %>
+        <%= f.label :email, "Email or Mobile Number", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :user_email, name: "user[email]", placeholder: "email@example.com or 9876543210", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true %>
       </div>
 
       <div>

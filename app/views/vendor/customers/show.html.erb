@@ -9,14 +9,18 @@
   <div class="bg-white rounded-xl shadow p-4 md:p-6 mb-6">
     <div class="flex items-center gap-4 mb-4">
       <div class="w-14 h-14 rounded-full bg-[#0d2c63] text-white flex items-center justify-center text-xl font-bold shrink-0">
-        <%= @customer.display_name.first.upcase %>
+        <%= (@customer.shop_name || @customer.display_name).first.upcase %>
       </div>
       <div>
-        <p class="font-bold text-gray-800"><%= @customer.display_name %></p>
-        <p class="text-xs text-gray-500">Customer since <%= @customer.created_at.strftime("%b %Y") %></p>
+        <p class="font-bold text-gray-800"><%= @customer.shop_name.presence || @customer.display_name %></p>
+        <p class="text-xs text-gray-500"><%= @customer.area.presence || "—" %> · Customer since <%= @customer.created_at.strftime("%b %Y") %></p>
       </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+      <div>
+        <p class="text-xs text-gray-400 uppercase mb-0.5">Owner</p>
+        <p class="font-medium"><%= @customer.first_name.presence || "—" %></p>
+      </div>
       <div>
         <p class="text-xs text-gray-400 uppercase mb-0.5">Email</p>
         <p class="font-medium"><%= @customer.email %></p>

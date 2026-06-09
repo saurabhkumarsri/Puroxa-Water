@@ -30,6 +30,6 @@ class Admin::CustomersController < Admin::BaseController
   private
 
   def customer_params
-    params.require(:user).permit(:first_name, :email, :contact)
+    params.require(:user).permit(:first_name, :email, :contact, :shop_name, :area, :gst_number, :credit_limit)
   end
 end

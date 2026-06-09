@@ -28,6 +28,11 @@
       👥 <span>Customers</span>
     <% end %>
 
+    <%= link_to vendor_daily_collection_report_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'reports' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}" do %>
+      💰 <span>Daily Collection</span>
+    <% end %>
+
     <%= link_to vendor_profile_path,
       class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'profiles' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}" do %>
       👤 <span>Profile</span>
@@ -87,6 +92,12 @@
           class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'customers' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
           onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
           👥 <span>Customers</span>
+        <% end %>
+
+        <%= link_to vendor_daily_collection_report_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'reports' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          💰 <span>Daily Collection</span>
         <% end %>
 
         <%= link_to vendor_profile_path,

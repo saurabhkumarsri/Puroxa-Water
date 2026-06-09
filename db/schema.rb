@@ -101,6 +101,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
     t.bigint "discount_id"
     t.decimal "discounted_amount"
     t.string "payment_mode", default: "cash"
+    t.datetime "paid_at"
     t.index ["created_at"], name: "index_orders_on_created_at"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["discount_id"], name: "index_orders_on_discount_id"
@@ -146,6 +147,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
     t.string "first_name"
     t.string "contact"
     t.string "image"
+    t.string "shop_name"
+    t.string "area"
+    t.string "gst_number"
+    t.decimal "credit_limit", precision: 10, scale: 2, default: "0.0"
+    t.index ["contact"], name: "index_users_on_contact", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

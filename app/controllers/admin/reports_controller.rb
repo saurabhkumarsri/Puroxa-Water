@@ -37,6 +37,15 @@ class Admin::ReportsController < Admin::BaseController
                      .order("total_spent DESC")
   end
 
+  def daily_collection
+    @date = parse_date(params[:date], Date.current)
+    @orders = Order.where(paid_at: @date.beginning_of_day..@date.end_of_day, payment_status: "paid")
+    @cash_total = @orders.where(payment_mode: "cash").sum(:total_amount)
+    @online_total = @orders.where(payment_mode: "online").sum(:total_amount)
+    @total_collected = @orders.sum(:total_amount)
+    @vendor_summary = @orders.joins(:vendor).group("users.id", "users.first_name").select("users.id, users.first_name, SUM(orders.total_amount) as total, COUNT(orders.id) as count, orders.payment_mode")
+  end
+
   private
 
   def parse_date(param, default)

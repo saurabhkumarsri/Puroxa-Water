@@ -13,8 +13,8 @@
             <%= customer.display_name.first.upcase %>
           </div>
           <div class="min-w-0">
-            <p class="font-bold text-gray-800 truncate"><%= customer.display_name %></p>
-            <p class="text-xs text-gray-400">Customer since <%= customer.created_at.strftime("%b %Y") %></p>
+            <p class="font-bold text-gray-800 truncate"><%= customer.shop_name.presence || customer.display_name %></p>
+            <p class="text-xs text-gray-400"><%= customer.area.presence || "No area" %> · <%= customer.created_at.strftime("%b %Y") %></p>
           </div>
         </div>
 

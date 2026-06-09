@@ -1,113 +1,547 @@
-<div class="w-full bg-[#f8faff] text-[#0d2c63]">
+<% content_for :title, "Puroxa Water — Pure Drinking Water Delivery for Shops & Homes" %>
 
-<!-- HERO -->
-<section class="relative w-full h-[50vh] sm:h-[60vh] md:h-[80vh] overflow-hidden">
-  <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
-    <source src="<%= asset_path 'seawater.mp4' %>" type="video/mp4">
-  </video>
-  <div class="absolute inset-0 bg-black/50"></div>
-  <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4 sm:px-6">
-    <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 leading-tight">
-      Pure Water.<br class="sm:hidden"> Pure Life.
-    </h1>
-    <p class="text-sm sm:text-base md:text-lg lg:text-xl mb-5 md:mb-6 max-w-lg">
-      Premium Drinking Water for Home, Office & Events
-    </p>
-    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto px-2 sm:px-0">
-      <%= link_to "Order Now", customer_products_path,
-        class: "bg-cyan-500 px-5 md:px-6 py-2.5 md:py-3 rounded-lg hover:scale-105 transition text-white font-medium text-sm md:text-base text-center" %>
-      <%= link_to "Become a Vendor", vendor_signup_path,
-        class: "border border-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg hover:bg-white hover:text-black transition font-medium text-sm md:text-base text-center" %>
-    </div>
-  </div>
-</section>
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes wave {
+    0% { transform: translateX(0) translateZ(0) scaleY(1); }
+    50% { transform: translateX(-25%) translateZ(0) scaleY(0.55); }
+    100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+  }
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-float-delay { animation: float 6s ease-in-out 2s infinite; }
+  .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+  .animate-slide-up {
+    opacity: 0;
+    animation: slide-up 0.8s ease-out forwards;
+  }
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-400 { animation-delay: 0.4s; }
+  .delay-500 { animation-delay: 0.5s; }
+  .wave-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 88.7"%3e<path d="M800 56.9c-155.5 0-204.9-50-405.5-49.9-200 0-250 49.9-394.5 49.9v31.8h800v-.2-31.6z" fill="%23ffffff"/%3e</svg>');
+    background-size: 800px 100px;
+    animation: wave 12s linear infinite;
+    opacity: 0.3;
+  }
+  .glass-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+  }
+</style>
 
-<!-- PRODUCTS -->
-<section class="w-full px-4 sm:px-6 lg:px-16 py-10 sm:py-14 md:py-16 text-center">
-  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-10 md:mb-12">Our Products</h2>
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-8 max-w-6xl mx-auto">
-    <% @products.each do |product| %>
-      <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow hover:-translate-y-1 sm:hover:-translate-y-2 transition duration-300">
-        <% if product.image.present? %>
-          <img src="<%= product.image %>" class="h-24 sm:h-36 md:h-44 mx-auto object-contain mb-3 md:mb-4" alt="<%= product.name %>">
-        <% else %>
-          <img src="<%= image_path 'bottle.png' %>" class="h-24 sm:h-36 md:h-44 mx-auto object-contain mb-3 md:mb-4" alt="<%= product.name %>">
-        <% end %>
-        <h3 class="font-semibold text-sm sm:text-base md:text-lg"><%= product.name %></h3>
-        <p class="text-xs text-gray-500 mt-1"><%= product.pack_display %></p>
-        <%= link_to "Buy Now", customer_products_path,
-          class: "bg-[#0d2c63] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:scale-105 transition inline-block text-xs sm:text-sm md:text-base mt-2" %>
+<!-- ==================== HERO ==================== -->
+<section class="relative w-full min-h-[85vh] overflow-hidden bg-[#0d2c63] flex items-center">
+  <!-- Animated background blobs -->
+  <div class="hero-blob w-72 h-72 bg-cyan-400 top-10 left-10 animate-float-slow"></div>
+  <div class="hero-blob w-96 h-96 bg-blue-400 bottom-20 right-10 animate-float-delay"></div>
+  <div class="hero-blob w-64 h-64 bg-teal-400 top-1/3 left-1/2 animate-float"></div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <!-- Left Content -->
+      <div class="text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-cyan-300 text-sm font-medium mb-6 animate-slide-up">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          Trusted by <span class="text-white font-bold"><%= @total_customers + 50 %>+</span> shops across Bihar
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6 animate-slide-up delay-100">
+          Pure Water
+          <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-200">Pure Trust</span>
+        </h1>
+
+        <p class="text-lg md:text-xl text-blue-100 mb-8 max-w-xl mx-auto lg:mx-0 animate-slide-up delay-200">
+          Premium packaged drinking water delivered straight to your shop, office & home. FSSAI certified. Daily fresh supply.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up delay-300">
+          <%= link_to customer_products_path, class: "group px-8 py-4 bg-gradient-to-r from-cyan-400 to-teal-400 text-[#0d2c63] font-bold rounded-xl hover:shadow-cyan-400/40 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 text-center flex items-center justify-center gap-2" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            Order Now
+          <% end %>
+          <%= link_to vendor_signup_path, class: "group px-8 py-4 bg-white/10 backdrop-blur text-white font-semibold rounded-xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 border border-white/20 text-center flex items-center justify-center gap-2" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            Become a Vendor
+          <% end %>
+        </div>
+
+        <!-- Mini trust badges -->
+        <div class="flex items-center gap-6 mt-10 justify-center lg:justify-start animate-slide-up delay-400">
+          <div class="flex items-center gap-2 text-blue-200 text-sm">
+            <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+              <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            FSSAI Certified
+          </div>
+          <div class="flex items-center gap-2 text-blue-200 text-sm">
+            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            Same Day Delivery
+          </div>
+          <div class="flex items-center gap-2 text-blue-200 text-sm">
+            <div class="w-8 h-8 rounded-full bg-teal-500/20 flex items-center justify-center">
+              <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            100% Safe
+          </div>
+        </div>
       </div>
-    <% end %>
+
+      <!-- Right Visual -->
+      <div class="hidden lg:flex justify-center items-center relative animate-slide-up delay-300">
+        <div class="relative">
+          <!-- Glowing circle behind bottle -->
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/30 to-blue-500/30 rounded-full blur-3xl scale-110"></div>
+          <!-- Bottle image with float animation -->
+          <img src="<%= image_path 'bottle.png' %>" alt="Puroxa Water Bottle"
+            class="relative z-10 h-80 xl:h-96 object-contain animate-float drop-shadow-2xl"
+            onerror="this.style.display='none'">
+          <!-- Floating price tag -->
+          <div class="absolute -top-4 -right-4 bg-white text-[#0d2c63] px-4 py-2 rounded-xl shadow-xl font-bold text-sm animate-float-slow">
+            Starting @ ₹5
+          </div>
+          <!-- Floating freshness badge -->
+          <div class="absolute -bottom-4 -left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-xl shadow-xl font-semibold text-xs animate-float-delay">
+            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            4.8 Rating
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom wave -->
+  <div class="wave-bg"></div>
+</section>
+
+
+<!-- ==================== TRUST BAR ==================== -->
+<section class="bg-white py-8 border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="group">
+        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition"><%= @total_customers + 50 %>+</p>
+        <p class="text-gray-500 text-sm mt-1">Happy Shops</p>
+      </div>
+      <div class="group">
+        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition"><%= @total_vendors + 10 %>+</p>
+        <p class="text-gray-500 text-sm mt-1">Delivery Partners</p>
+      </div>
+      <div class="group">
+        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition"><%= @total_orders + 500 %>+</p>
+        <p class="text-gray-500 text-sm mt-1">Orders Delivered</p>
+      </div>
+      <div class="group">
+        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition">4.8</p>
+        <p class="text-gray-500 text-sm mt-1">Star Rating</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="w-full bg-blue-50 py-10 sm:py-14 md:py-16 text-center px-4 sm:px-6 lg:px-16">
-  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-10 md:mb-12">Why Choose Puroxa</h2>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 md:gap-8 max-w-6xl mx-auto">
-    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
-      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">💧</div>
-      <p class="font-medium text-xs sm:text-sm md:text-base">RO Purified</p>
+
+<!-- ==================== PRODUCTS ==================== -->
+<section class="py-16 md:py-24 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Our Products</p>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+        Water for Every Need
+      </h2>
+      <p class="text-gray-500 mt-3 max-w-xl mx-auto">From small cups to 20L jars — we deliver fresh, purified drinking water in all sizes.</p>
     </div>
-    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
-      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">✅</div>
-      <p class="font-medium text-xs sm:text-sm md:text-base">FSSAI Certified</p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+      <% @products.each do |product| %>
+        <div class="group bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+          <!-- Hover glow -->
+          <div class="absolute inset-0 bg-gradient-to-t from-cyan-50/50 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+
+          <div class="relative z-10">
+            <div class="h-28 md:h-36 flex items-center justify-center mb-4">
+              <% if product.image.present? %>
+                <img src="<%= product.image %>" alt="<%= product.name %>" class="h-full object-contain group-hover:scale-110 transition-transform duration-300">
+              <% else %>
+                <img src="<%= image_path 'bottle.png' %>" alt="<%= product.name %>" class="h-full object-contain group-hover:scale-110 transition-transform duration-300">
+              <% end %>
+            </div>
+            <h3 class="font-bold text-gray-800 text-sm md:text-base text-center"><%= product.name %></h3>
+            <p class="text-xs text-gray-400 text-center mt-1"><%= product.pack_display %></p>
+            <div class="text-center mt-3">
+              <span class="text-lg font-extrabold text-[#0d2c63]">₹<%= product.price %></span>
+              <span class="text-xs text-gray-400">/pack</span>
+            </div>
+            <%= link_to customer_products_path, class: "block mt-4 text-center text-xs md:text-sm font-semibold text-[#0d2c63] bg-blue-50 hover:bg-[#0d2c63] hover:text-white py-2 rounded-lg transition-colors" do %>
+              Buy Now →
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
-    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
-      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">🌱</div>
-      <p class="font-medium text-xs sm:text-sm md:text-base">Eco Friendly</p>
-    </div>
-    <div class="bg-white p-3 sm:p-5 md:p-6 rounded-xl shadow">
-      <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">❄️</div>
-      <p class="font-medium text-xs sm:text-sm md:text-base">Fresh Taste</p>
+
+    <div class="text-center mt-10">
+      <%= link_to customer_products_path, class: "inline-flex items-center gap-2 px-6 py-3 border-2 border-[#0d2c63] text-[#0d2c63] font-semibold rounded-xl hover:bg-[#0d2c63] hover:text-white transition" do %>
+        View All Products
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      <% end %>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="w-full py-10 sm:py-14 md:py-16 text-center px-4 sm:px-6 lg:px-16">
-  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-10 md:mb-12">How It Works</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
-    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
-      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">1️⃣</div>
-      <h3 class="font-bold text-sm sm:text-base md:text-lg">Choose</h3>
-      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Select your water bottle size</p>
+
+<!-- ==================== WHY CHOOSE ==================== -->
+<section class="py-16 md:py-24 bg-white relative overflow-hidden">
+  <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-50 to-transparent"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Why Puroxa</p>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Built for Quality</h2>
+      <p class="text-gray-500 mt-3 max-w-xl mx-auto">Every drop goes through multi-stage purification before reaching your shop.</p>
     </div>
-    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
-      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">2️⃣</div>
-      <h3 class="font-bold text-sm sm:text-base md:text-lg">Order</h3>
-      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Place order with delivery address</p>
-    </div>
-    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
-      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">3️⃣</div>
-      <h3 class="font-bold text-sm sm:text-base md:text-lg">Track</h3>
-      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Real-time order tracking</p>
-    </div>
-    <div class="bg-white p-4 sm:p-5 md:p-6 shadow rounded-xl">
-      <div class="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3">4️⃣</div>
-      <h3 class="font-bold text-sm sm:text-base md:text-lg">Enjoy</h3>
-      <p class="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2">Fresh water at your doorstep</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <!-- Feature 1 -->
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-cyan-200">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-800 mb-2">RO + UV + UF Purified</h3>
+        <p class="text-gray-500 text-sm">7-stage purification removes 99.9% impurities, bacteria & viruses.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-green-200">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-800 mb-2">FSSAI Certified</h3>
+        <p class="text-gray-500 text-sm">Government approved. Every batch tested for TDS, pH & purity.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-amber-200">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-800 mb-2">Same Day Delivery</h3>
+        <p class="text-gray-500 text-sm">Order before 2 PM and get fresh water delivered the same evening.</p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-violet-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-purple-200">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-800 mb-2">Eco Friendly Bottles</h3>
+        <p class="text-gray-500 text-sm">BPA-free, food-grade PET bottles. Recyclable & safe for reuse.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- VENDOR CTA -->
-<section class="w-full bg-blue-100 py-10 sm:py-14 md:py-16 text-center px-4">
-  <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6">Become a Vendor</h2>
-  <p class="mb-5 sm:mb-6 md:mb-8 text-gray-600 max-w-xl mx-auto text-sm sm:text-base px-2">
-    Grow your business with us & earn more profit. Join 500+ vendors across India.
-  </p>
-  <%= link_to "Join Now", vendor_signup_path,
-    class: "bg-green-600 text-white px-5 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg hover:scale-105 transition inline-block text-sm sm:text-base font-medium" %>
-</section>
 
-<!-- TRUST -->
-<section class="w-full py-10 sm:py-14 md:py-16 text-center px-4">
-  <div class="bg-blue-50 p-5 sm:p-6 md:p-8 rounded-xl max-w-3xl mx-auto shadow mx-4 sm:mx-auto">
-    <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-2">Trusted by 5000+ Customers</h2>
-    <p class="mt-2 text-sm sm:text-base md:text-lg">⭐ 4.8 Rating | 1000+ Daily Orders | Pan India Delivery</p>
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="py-16 md:py-24 bg-[#0d2c63] relative overflow-hidden">
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-cyan-400 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="text-cyan-300 font-semibold text-sm uppercase tracking-wider mb-2">Simple Process</p>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">How It Works</h2>
+      <p class="text-blue-200 mt-3 max-w-xl mx-auto">Get fresh water delivered in 4 simple steps.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 relative">
+      <!-- Connecting line (desktop only) -->
+      <div class="hidden lg:block absolute top-16 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-cyan-400/0 via-cyan-400/50 to-cyan-400/0"></div>
+
+      <% steps = [
+        { num: "01", title: "Choose", desc: "Pick your bottle size & quantity", icon: "M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" },
+        { num: "02", title: "Order", desc: "Place order with your shop address", icon: "M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" },
+        { num: "03", title: "Track", desc: "Real-time status via your dashboard", icon: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7" },
+        { num: "04", title: "Enjoy", desc: "Fresh water delivered to your shop", icon: "M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" }
+      ] %>
+
+      <% steps.each do |step| %>
+        <div class="text-center group">
+          <div class="w-20 h-20 mx-auto bg-gradient-to-br from-cyan-400 to-teal-400 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-cyan-900/30 group-hover:scale-110 transition-transform duration-300 relative z-10">
+            <svg class="w-8 h-8 text-[#0d2c63]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="<%= step[:icon] %>"/></svg>
+          </div>
+          <p class="text-cyan-300 font-bold text-sm mb-1">STEP <%= step[:num] %></p>
+          <h3 class="text-xl font-bold text-white mb-2"><%= step[:title] %></h3>
+          <p class="text-blue-200 text-sm"><%= step[:desc] %></p>
+        </div>
+      <% end %>
+    </div>
   </div>
 </section>
 
-</div>
+
+<!-- ==================== B2B WHOLESALE ==================== -->
+<section class="py-16 md:py-24 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <!-- Left Content -->
+      <div class="order-2 lg:order-1">
+        <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">B2B Wholesale</p>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-5">
+          Built for Kirana Stores, <span class="text-[#0d2c63]">Cool Points & Offices</span>
+        </h2>
+        <p class="text-gray-500 mb-8 text-lg">
+          We understand dukan walo ki zaroorat. Bulk orders, credit limit, daily supply, and easy payment tracking — sab kuchh ek jagah.
+        </p>
+
+        <div class="space-y-4">
+          <% features = [
+            { icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z", text: "Credit Limit up to ₹10,000 for trusted shops" },
+            { icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01", text: "Daily challan / bill with previous balance tracking" },
+            { icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z", text: "Cash & Online payment — vendor collects on spot" },
+            { icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z", text: "Delivery across Patna, Gandhi Road, Station Road & more" }
+          ] %>
+
+          <% features.each do |f| %>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-[#0d2c63]/10 rounded-lg flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-[#0d2c63]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="<%= f[:icon] %>"/></svg>
+              </div>
+              <p class="text-gray-700 font-medium"><%= f[:text] %></p>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-8">
+          <%= link_to new_user_registration_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-[#0d2c63] text-white font-semibold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+            Register Your Shop
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Right Visual -->
+      <div class="order-1 lg:order-2 flex justify-center">
+        <div class="relative">
+          <div class="absolute inset-0 bg-gradient-to-br from-[#0d2c63]/10 to-cyan-400/10 rounded-3xl blur-2xl"></div>
+          <div class="relative bg-white rounded-3xl shadow-2xl p-6 md:p-8 w-full max-w-md border border-gray-100">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+              <div class="w-10 h-10 bg-[#0d2c63] rounded-lg flex items-center justify-center text-white font-bold">P</div>
+              <div>
+                <p class="font-bold text-gray-800">Puroxa Water</p>
+                <p class="text-xs text-gray-400">Daily Supply Challan</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 mb-6">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Customer</span>
+                <span class="font-medium text-gray-800">Gupta Kirana Store</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-500">20L Jars × 5</span>
+                <span class="font-medium text-gray-800">₹400</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-500">1L Bottles × 12 packs</span>
+                <span class="font-medium text-gray-800">₹240</span>
+              </div>
+              <div class="border-t border-dashed border-gray-200 pt-3"></div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Previous Balance</span>
+                <span class="font-medium text-gray-800">₹1,200</span>
+              </div>
+              <div class="flex justify-between text-lg font-bold text-[#0d2c63]">
+                <span>Total Due</span>
+                <span>₹1,840</span>
+              </div>
+            </div>
+
+            <div class="bg-green-50 rounded-xl p-4 border border-green-100">
+              <div class="flex items-center gap-2 text-green-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="font-semibold text-sm">Cash Collected — Paid</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== DELIVERY AREAS ==================== -->
+<section class="py-16 md:py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10 md:mb-12">
+      <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Coverage</p>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900">We Deliver Here</h2>
+      <p class="text-gray-500 mt-3 max-w-xl mx-auto">Currently serving major commercial areas of Patna & nearby.</p>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+      <% @areas.each do |area| %>
+        <div class="px-5 py-3 bg-gray-50 hover:bg-[#0d2c63] hover:text-white rounded-xl font-medium text-gray-700 transition-all duration-300 cursor-default">
+          <svg class="w-4 h-4 inline mr-1.5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <%= area %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== TESTIMONIALS ==================== -->
+<section class="py-16 md:py-24 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Testimonials</p>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Dukan Walo Ka Bharosa</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      <% testimonials = [
+        { name: "Rahul Gupta", shop: "Gupta Kirana Store", area: "Main Market", text: "Daily 20L jar ki supply bilkul time par aati hai. Pichhle 6 mahine se Puroxa se liye bina koi problem. Credit limit bhi mil gayi." },
+        { name: "Saurabh Sharma", shop: "Sharma General Store", area: "Gandhi Road", text: "Sabse achhi baat hai daily challan aur balance tracking. Pata rehta hai kitna dena hai aur kitna liya hai." },
+        { name: "Priya Devi", shop: "Priya Departmental Store", area: "Station Road", text: "Customer ko cold water chahiye hota hai aur Puroxa ka taste sabse fresh lagta hai. Sales badh gaye hain." }
+      ] %>
+
+      <% testimonials.each do |t| %>
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <div class="flex items-center gap-1 mb-4">
+            <% 5.times do %>
+              <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <% end %>
+          </div>
+          <p class="text-gray-600 italic mb-6">"<%= t[:text] %>"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-[#0d2c63] rounded-full flex items-center justify-center text-white font-bold">
+              <%= t[:name].first %>
+            </div>
+            <div>
+              <p class="font-bold text-gray-800 text-sm"><%= t[:name] %></p>
+              <p class="text-gray-400 text-xs"><%= t[:shop] %> · <%= t[:area] %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== VENDOR CTA ==================== -->
+<section class="py-16 md:py-24 bg-[#0d2c63] relative overflow-hidden">
+  <div class="absolute inset-0">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-72 h-72 bg-teal-400/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+    <p class="text-cyan-300 font-semibold text-sm uppercase tracking-wider mb-3">Earn With Us</p>
+    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+      Apni Dukan Badhayein, Puroxa Ke Saath
+    </h2>
+    <p class="text-blue-200 text-lg max-w-2xl mx-auto mb-8">
+      Join <%= @total_vendors + 10 %>+ vendors delivering fresh water daily. Earn commission on every order. Low investment, high returns.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <%= link_to vendor_signup_path, class: "group px-8 py-4 bg-gradient-to-r from-cyan-400 to-teal-400 text-[#0d2c63] font-bold rounded-xl hover:shadow-cyan-400/30 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 inline-flex items-center justify-center gap-2" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        Become a Vendor
+      <% end %>
+      <%= link_to vendor_login_path, class: "px-8 py-4 bg-white/10 backdrop-blur text-white font-semibold rounded-xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 border border-white/20 inline-flex items-center justify-center gap-2" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+        Vendor Login
+      <% end %>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== FAQ ==================== -->
+<section class="py-16 md:py-24 bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10 md:mb-12">
+      <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">FAQ</p>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Common Questions</h2>
+    </div>
+
+    <% faqs = [
+      { q: "Minimum kitne bottles order kar sakte hain?", a: "Koi minimum limit nahi hai. Chahe 1 pack ho ya 100 packs — sab deliver ho jayega. Bulk orders par discount bhi milta hai." },
+      { q: "Payment kaise karna hai?", a: "Aap cash ya online dono tarah se payment kar sakte hain. Vendor daily collection report bana ke deta hai. Credit limit wale customers ko weekly payment bhi chalta hai." },
+      { q: "Delivery kitne time mein hoti hai?", a: "Same day delivery available hai agar order 2 PM se pehle diya jaye. Regular customers ki daily fixed time delivery bhi hoti hai." },
+      { q: "Quality certification hai?", a: "Ha, Puroxa fully FSSAI certified hai. RO + UV + UF se 7-stage purification hota hai. Har batch ka TDS & pH check kiya jata hai." },
+      { q: "Vendor kaise ban sakte hain?", a: "Register karein apni dukaan ki details ke saath. Team contact karegi. Approved hone ke baad aap bhi delivery shuru kar sakte hain aur commission earn kar sakte hain." }
+    ] %>
+
+    <div class="space-y-3">
+      <% faqs.each_with_index do |faq, idx| %>
+        <div class="border border-gray-200 rounded-xl overflow-hidden">
+          <button onclick="document.getElementById('faq-<%= idx %>').classList.toggle('hidden'); this.querySelector('svg').classList.toggle('rotate-180')"
+            class="w-full flex items-center justify-between p-4 md:p-5 text-left hover:bg-gray-50 transition">
+            <span class="font-semibold text-gray-800 pr-4"><%= faq[:q] %></span>
+            <svg class="w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="faq-<%= idx %>" class="hidden px-4 md:px-5 pb-4 md:pb-5">
+            <p class="text-gray-500 text-sm leading-relaxed"><%= faq[:a] %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== FINAL CTA ==================== -->
+<section class="py-12 md:py-16 bg-gray-50 border-t border-gray-200">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+      Ready for Fresh Water?
+    </h2>
+    <p class="text-gray-500 mb-8">Aaj hi register karein aur kal se fresh water supply shuru karein.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <%= link_to new_user_registration_path, class: "px-8 py-4 bg-[#0d2c63] text-white font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition inline-flex items-center justify-center gap-2" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+        Register Your Shop Free
+      <% end %>
+      <%= link_to customer_products_path, class: "px-8 py-4 border-2 border-[#0d2c63] text-[#0d2c63] font-bold rounded-xl hover:bg-[#0d2c63] hover:text-white transition inline-flex items-center justify-center gap-2" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        Browse Products
+      <% end %>
+    </div>
+  </div>
+</section>

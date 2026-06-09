@@ -11,7 +11,7 @@
     <div class="bg-white rounded-xl shadow p-4 md:p-6">
       <h2 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Select Customer</h2>
       <%= f.select :customer_id,
-        @customers.map { |c| ["#{c.display_name} (#{c.email})", c.id] },
+        @customers.map { |c| ["#{c.shop_display} (#{c.email})", c.id] },
         { prompt: "Choose a customer..." },
         class: "w-full border rounded-lg px-3 py-2 text-sm" %>
     </div>

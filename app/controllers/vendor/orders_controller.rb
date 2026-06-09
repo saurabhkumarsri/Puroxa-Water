@@ -2,8 +2,23 @@ class Vendor::OrdersController < Vendor::BaseController
   before_action :authenticate_user!
 
   def index
-    @orders = Order.includes(:customer, :vendor, :order_items).order(created_at: :desc)
-    @orders = @orders.where(status: params[:status]) if params[:status].present?
+    base_orders = Order.includes(:customer, :vendor, :order_items).order(created_at: :desc)
+
+    @active_count     = base_orders.where(status: %w[pending confirmed processing shipped]).count
+    @delivered_count  = base_orders.where(status: "delivered").count
+    @cancelled_count  = base_orders.where(status: "cancelled").count
+    @all_count        = base_orders.count
+
+    @orders = case params[:tab]
+              when "delivered"
+                base_orders.where(status: "delivered")
+              when "cancelled"
+                base_orders.where(status: "cancelled")
+              when "all"
+                base_orders
+              else
+                base_orders.where(status: %w[pending confirmed processing shipped])
+              end
   end
 
   def show
@@ -35,19 +50,19 @@ class Vendor::OrdersController < Vendor::BaseController
     allowed = %w[confirmed processing shipped delivered]
     if allowed.include?(params[:status])
       @order.update!(status: params[:status])
-      redirect_to vendor_orders_path, notice: "Order status updated to #{params[:status]}."
+      redirect_back fallback_location: vendor_orders_path, notice: "Order status updated to #{params[:status]}."
     else
-      redirect_to vendor_orders_path, alert: "Invalid status transition."
+      redirect_back fallback_location: vendor_orders_path, alert: "Invalid status transition."
     end
   end
 
   def collect_cash
     @order = Order.find(params[:id])
     if @order.payment_pending?
-      @order.update!(payment_status: "paid", payment_mode: @order.payment_mode.presence || "cash")
-      redirect_to vendor_order_path(@order), notice: "Payment collected successfully! Marked as paid."
+      @order.update!(payment_status: "paid", payment_mode: @order.payment_mode.presence || "cash", paid_at: Time.current)
+      redirect_back fallback_location: vendor_order_path(@order), notice: "Payment collected successfully! Marked as paid."
     else
-      redirect_to vendor_order_path(@order), alert: "Payment is already #{@order.payment_status}."
+      redirect_back fallback_location: vendor_order_path(@order), alert: "Payment is already #{@order.payment_status}."
     end
   end
 

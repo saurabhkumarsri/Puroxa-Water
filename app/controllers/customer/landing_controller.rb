@@ -2,7 +2,11 @@ class Customer::LandingController < ApplicationController
   before_action :redirect_if_authenticated
 
   def index
-    @products = Product.active.limit(4)
+    @products = Product.active.limit(6)
+    @total_customers = User.where(role: User::ROLES[:customer]).count
+    @total_vendors    = User.where(role: User::ROLES[:vendor]).count
+    @total_orders     = Order.count
+    @areas            = User.where.not(area: nil).where.not(area: "").distinct.pluck(:area).first(8)
   end
 
   private

@@ -1,0 +1,110 @@
+<% content_for :title, "Daily Collection" %>
+
+<div class="max-w-5xl mx-auto">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800">Daily Cash Collection 💰</h1>
+  </div>
+
+  <!-- Date Picker -->
+  <%= form_with url: vendor_daily_collection_report_path, method: :get, class: "bg-white rounded-xl shadow p-4 mb-6 flex flex-col sm:flex-row gap-3 items-end" do %>
+    <div class="flex-1 w-full">
+      <%= label_tag :date, "Select Date", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= date_field_tag :date, @date, class: "w-full border rounded-lg px-3 py-2 text-sm" %>
+    </div>
+    <%= submit_tag "Show Report", class: "bg-[#0d2c63] text-white px-5 py-2 rounded-lg hover:opacity-90 text-sm font-medium cursor-pointer" %>
+  <% end %>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 text-xl">💵</div>
+      <div>
+        <p class="text-sm text-gray-400 font-medium">Cash Collected</p>
+        <p class="text-2xl font-bold text-green-600">₹<%= number_with_precision(@cash_total, precision: 2) %></p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 text-xl">📱</div>
+      <div>
+        <p class="text-sm text-gray-400 font-medium">Online / QR</p>
+        <p class="text-2xl font-bold text-blue-600">₹<%= number_with_precision(@online_total, precision: 2) %></p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-[#0d2c63] text-white flex items-center justify-center text-xl">💰</div>
+      <div>
+        <p class="text-sm text-gray-400 font-medium">Total Collected</p>
+        <p class="text-2xl font-bold text-[#0d2c63]">₹<%= number_with_precision(@total_collected, precision: 2) %></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders List -->
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <h2 class="font-semibold text-gray-800">Paid Orders on <%= @date.strftime("%d %b %Y") %></h2>
+      <span class="text-sm text-gray-500"><%= @order_count %> orders</span>
+    </div>
+
+    <% if @orders.any? %>
+      <!-- Desktop -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="py-2 px-4">Order #</th>
+              <th>Customer</th>
+              <th>Vendor</th>
+              <th>Amount</th>
+              <th>Mode</th>
+              <th>Paid At</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @orders.each do |order| %>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="py-2 px-4 font-medium">#<%= order.id %></td>
+                <td><%= order.customer&.display_name %></td>
+                <td><%= order.vendor&.display_name || "—" %></td>
+                <td class="font-bold">₹<%= order.total_amount %></td>
+                <td>
+                  <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.payment_mode == 'cash' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' %>">
+                    <%= order.payment_mode.upcase %>
+                  </span>
+                </td>
+                <td class="text-sm text-gray-500"><%= order.paid_at&.strftime("%I:%M %p") || "—" %></td>
+                <td class="text-right px-4">
+                  <%= link_to "View", vendor_order_path(order), class: "text-[#0d2c63] hover:underline text-sm" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div class="md:hidden space-y-3 p-4">
+        <% @orders.each do |order| %>
+          <div class="border border-gray-100 rounded-xl p-3 bg-gray-50">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-medium text-sm">#<%= order.id %></span>
+              <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.payment_mode == 'cash' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' %>">
+                <%= order.payment_mode.upcase %>
+              </span>
+            </div>
+            <p class="text-sm text-gray-600 mb-1"><%= order.customer&.display_name %></p>
+            <div class="flex justify-between text-sm">
+              <span class="font-bold text-gray-800">₹<%= order.total_amount %></span>
+              <span class="text-gray-400"><%= order.paid_at&.strftime("%I:%M %p") || "—" %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="p-10 text-center">
+        <p class="text-gray-500">No payments collected on this date.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

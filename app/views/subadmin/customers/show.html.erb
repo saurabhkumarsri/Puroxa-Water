@@ -9,8 +9,16 @@
   <div class="bg-white rounded-xl shadow p-4 md:p-6 mb-6">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
-        <p class="text-sm text-gray-500">Email</p>
-        <p class="font-medium"><%= @customer.email %></p>
+        <p class="text-sm text-gray-500">Shop Name</p>
+        <p class="font-medium"><%= @customer.shop_name.presence || "—" %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Owner</p>
+        <p class="font-medium"><%= @customer.first_name.presence || "—" %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Area</p>
+        <p class="font-medium"><%= @customer.area.presence || "—" %></p>
       </div>
       <div>
         <p class="text-sm text-gray-500">Phone</p>

@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     end
     resources :customers, only: [:index, :show]
     resource :profile, only: [:show, :edit, :update]
+    get "reports/daily_collection", to: "reports#daily_collection", as: :daily_collection_report
     get "invoices/:id", to: "invoices#show", as: :invoice
   end
 
@@ -47,6 +48,7 @@ Rails.application.routes.draw do
     get "reports/monthly_sales", to: "reports#monthly_sales", as: :monthly_sales_report
     get "reports/product_wise", to: "reports#product_wise", as: :product_wise_report
     get "reports/customer_wise", to: "reports#customer_wise", as: :customer_wise_report
+    get "reports/daily_collection", to: "reports#daily_collection", as: :daily_collection_report
     resources :vendors, only: [:index, :show, :destroy] do
       member do
         patch :approve

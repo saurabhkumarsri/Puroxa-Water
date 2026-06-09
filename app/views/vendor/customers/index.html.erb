@@ -44,14 +44,18 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-10 h-10 rounded-full bg-[#0d2c63] text-white flex items-center justify-center font-bold text-sm shrink-0">
-              <%= customer.display_name.first.upcase %>
+              <%= (customer.shop_name || customer.display_name).first.upcase %>
             </div>
             <div class="min-w-0">
-              <p class="font-bold text-gray-800 truncate"><%= customer.display_name %></p>
-              <p class="text-xs text-gray-500 truncate"><%= customer.email %></p>
+              <p class="font-bold text-gray-800 truncate"><%= customer.shop_name.presence || customer.display_name %></p>
+              <p class="text-xs text-gray-500 truncate"><%= customer.area.presence || "—" %> · <%= customer.email %></p>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+            <div>
+              <p class="text-xs text-gray-400">Owner</p>
+              <p class="font-medium"><%= customer.first_name.presence || "—" %></p>
+            </div>
             <div>
               <p class="text-xs text-gray-400">Phone</p>
               <p class="font-medium"><%= customer.contact.presence || "—" %></p>
