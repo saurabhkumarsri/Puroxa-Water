@@ -55,6 +55,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
     t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
+  create_table "app_settings", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_app_settings_on_key", unique: true
+  end
+
   create_table "companies", force: :cascade do |t|
     t.string "name"
     t.text "address"
@@ -102,6 +110,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
     t.decimal "discounted_amount"
     t.string "payment_mode", default: "cash"
     t.datetime "paid_at"
+    t.integer "online_discount_percent", default: 0, null: false
+    t.decimal "online_discount_amount", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["created_at"], name: "index_orders_on_created_at"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["discount_id"], name: "index_orders_on_discount_id"

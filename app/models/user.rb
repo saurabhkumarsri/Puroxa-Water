@@ -59,4 +59,8 @@ class User < ApplicationRecord
   def default_address
     addresses.find_by(is_default: true) || addresses.first
   end
+
+  def pending_amount
+    orders.where(payment_status: "pending").sum(:total_amount).to_f
+  end
 end

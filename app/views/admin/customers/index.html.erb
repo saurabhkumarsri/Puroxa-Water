@@ -22,6 +22,12 @@
           <p class="truncate"><span class="text-gray-400">📧</span> <%= customer.email %></p>
           <p><span class="text-gray-400">📞</span> <%= customer.contact.presence || "—" %></p>
           <p><span class="text-gray-400">📦</span> <%= customer.orders.count %> orders</p>
+          <% pending = customer.pending_amount %>
+          <% if pending > 0 %>
+            <p class="font-semibold text-amber-600"><span class="text-gray-400">💰</span> ₹<%= number_with_precision(pending, precision: 2) %> pending</p>
+          <% else %>
+            <p class="text-emerald-600 font-medium"><span class="text-gray-400">💰</span> All Paid ✅</p>
+          <% end %>
         </div>
 
         <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">

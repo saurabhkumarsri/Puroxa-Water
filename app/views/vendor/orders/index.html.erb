@@ -58,12 +58,21 @@
                     <% if %w[processing shipped].include?(order.status) %>
                       <%= button_to "Deliver", update_status_vendor_order_path(order, status: "delivered"), method: :patch,
                         data: { turbo_confirm: "Mark order ##{order.id} as Delivered?" },
-                        class: "text-xs bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 bg-transparent border-0 cursor-pointer" %>
+                        class: "text-xs bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 border-0 cursor-pointer" %>
                     <% end %>
                     <% if order.payment_pending? %>
-                      <%= button_to "Collect", collect_cash_vendor_order_path(order), method: :patch,
-                        data: { turbo_confirm: "Mark ₹#{order.total_amount} as collected via #{order.payment_mode}?" },
-                        class: "text-xs bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 bg-transparent border-0 cursor-pointer" %>
+                      <% if order.payment_mode == "online" %>
+                        <%= button_to "Cash", collect_cash_vendor_order_path(order), method: :patch,
+                          data: { turbo_confirm: "Collect ₹#{order.total_amount} cash (no discount)?" },
+                          class: "text-xs bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 border-0 cursor-pointer" %>
+                        <%= button_to "Online", confirm_online_vendor_order_path(order), method: :patch,
+                          data: { turbo_confirm: "Confirm ₹#{order.total_with_online_discount} online payment (discount applied)?" },
+                          class: "text-xs bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 border-0 cursor-pointer" %>
+                      <% else %>
+                        <%= button_to "Collect", collect_cash_vendor_order_path(order), method: :patch,
+                          data: { turbo_confirm: "Mark ₹#{order.total_amount} as collected via #{order.payment_mode}?" },
+                          class: "text-xs bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 border-0 cursor-pointer" %>
+                      <% end %>
                     <% end %>
                   </div>
                 </td>
@@ -112,12 +121,21 @@
             <% if %w[processing shipped].include?(order.status) %>
               <%= button_to "Deliver", update_status_vendor_order_path(order, status: "delivered"), method: :patch,
                 data: { turbo_confirm: "Mark order ##{order.id} as Delivered?" },
-                class: "flex-1 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 bg-transparent border-0 cursor-pointer" %>
+                class: "flex-1 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 border-0 cursor-pointer" %>
             <% end %>
             <% if order.payment_pending? %>
-              <%= button_to "Collect", collect_cash_vendor_order_path(order), method: :patch,
-                data: { turbo_confirm: "Mark ₹#{order.total_amount} as collected via #{order.payment_mode}?" },
-                class: "flex-1 text-xs bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 bg-transparent border-0 cursor-pointer" %>
+              <% if order.payment_mode == "online" %>
+                <%= button_to "Cash", collect_cash_vendor_order_path(order), method: :patch,
+                  data: { turbo_confirm: "Collect ₹#{order.total_amount} cash (no discount)?" },
+                  class: "flex-1 text-xs bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 border-0 cursor-pointer" %>
+                <%= button_to "Online", confirm_online_vendor_order_path(order), method: :patch,
+                  data: { turbo_confirm: "Confirm ₹#{order.total_with_online_discount} online payment (discount applied)?" },
+                  class: "flex-1 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 border-0 cursor-pointer" %>
+              <% else %>
+                <%= button_to "Collect", collect_cash_vendor_order_path(order), method: :patch,
+                  data: { turbo_confirm: "Mark ₹#{order.total_amount} as collected via #{order.payment_mode}?" },
+                  class: "flex-1 text-xs bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 border-0 cursor-pointer" %>
+              <% end %>
             <% end %>
           </div>
         </div>

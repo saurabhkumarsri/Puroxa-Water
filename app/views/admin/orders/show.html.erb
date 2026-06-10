@@ -26,14 +26,20 @@
           <span class="text-gray-500">Payment Mode</span>
           <span class="font-medium uppercase"><%= @order.payment_mode %></span>
         </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Subtotal</span>
+          <span>₹<%= @order.final_subtotal %></span>
+        </div>
         <% if @order.discount.present? %>
-          <div class="flex justify-between">
-            <span class="text-gray-500">Subtotal</span>
-            <span>₹<%= @order.order_items.sum(:total_price) %></span>
-          </div>
           <div class="flex justify-between text-green-600">
-            <span>Discount (<%= @order.discount.code %> — <%= @order.discount.display_value %>)</span>
+            <span>Coupon (<%= @order.discount.code %> — <%= @order.discount.display_value %>)</span>
             <span>-₹<%= @order.discounted_amount %></span>
+          </div>
+        <% end %>
+        <% if @order.online_discount_percent.to_i > 0 %>
+          <div class="flex justify-between text-cyan-600">
+            <span>Online Discount (<%= @order.online_discount_percent %>%)</span>
+            <span>-₹<%= @order.online_discount_amount %></span>
           </div>
         <% end %>
         <div class="flex justify-between">

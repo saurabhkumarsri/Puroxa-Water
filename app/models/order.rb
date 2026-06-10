@@ -41,7 +41,48 @@ class Order < ApplicationRecord
   end
 
   def calculate_total!
-    self.total_amount = order_items.sum(:total_price)
+    subtotal = order_items.sum(:total_price)
+
+    # Online discount is calculated but NOT auto-applied to total_amount
+    # It is only applied when payment is actually collected online.
+    if online_discount_percent.to_i > 0
+      self.online_discount_amount = (subtotal * online_discount_percent / 100.0).round(2)
+    else
+      self.online_discount_amount = 0.0
+    end
+
+    # total_amount = subtotal minus coupon discount only (online discount excluded)
+    existing_discount = discounted_amount.to_f
+    self.total_amount = [subtotal - existing_discount, 0].max
+    save!
+  end
+
+  # Total if online discount were applied (shown on Pay page)
+  def total_with_online_discount
+    [total_amount - online_discount_amount.to_f, 0].max
+  end
+
+  def final_subtotal
+    order_items.sum(:total_price)
+  end
+
+  # Apply online discount to total_amount (called when online payment is confirmed)
+  def apply_online_discount!
+    return unless payment_mode == "online"
+    return if online_discount_percent.to_i == 0
+
+    subtotal = final_subtotal
+    self.online_discount_amount = (subtotal * online_discount_percent / 100.0).round(2)
+    existing_discount = discounted_amount.to_f
+    self.total_amount = [subtotal - existing_discount - online_discount_amount, 0].max
+    save!
+  end
+
+  # Remove online discount (called when cash is collected for an online-mode order)
+  def remove_online_discount!
+    self.online_discount_amount = 0.0
+    existing_discount = discounted_amount.to_f
+    self.total_amount = [final_subtotal - existing_discount, 0].max
     save!
   end
 

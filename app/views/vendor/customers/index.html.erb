@@ -16,6 +16,7 @@
               <th>Email</th>
               <th>Phone</th>
               <th>Orders</th>
+              <th>Pending Amount</th>
               <th>Joined</th>
               <th class="text-right">Actions</th>
             </tr>
@@ -27,6 +28,16 @@
                 <td><%= customer.email %></td>
                 <td><%= customer.contact.presence || "—" %></td>
                 <td><%= customer.orders.count %></td>
+                <td>
+                  <% pending = customer.pending_amount %>
+                  <% if pending > 0 %>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                      ₹<%= number_with_precision(pending, precision: 2) %>
+                    </span>
+                  <% else %>
+                    <span class="text-xs text-emerald-600 font-medium">All Paid ✅</span>
+                  <% end %>
+                </td>
                 <td class="text-sm text-gray-500"><%= customer.created_at.strftime("%d %b %Y") %></td>
                 <td class="text-right px-4">
                   <%= link_to "View", vendor_customer_path(customer), class: "text-[#0d2c63] hover:underline text-sm" %>
@@ -65,8 +76,15 @@
               <p class="font-medium"><%= customer.orders.count %></p>
             </div>
             <div>
-              <p class="text-xs text-gray-400">Joined</p>
-              <p class="font-medium"><%= customer.created_at.strftime("%d %b %Y") %></p>
+              <p class="text-xs text-gray-400">Pending Amt</p>
+              <p class="font-medium">
+                <% pending = customer.pending_amount %>
+                <% if pending > 0 %>
+                  <span class="text-amber-600">₹<%= number_with_precision(pending, precision: 2) %></span>
+                <% else %>
+                  <span class="text-emerald-600">All Paid ✅</span>
+                <% end %>
+              </p>
             </div>
           </div>
           <div class="pt-3 border-t border-gray-100">

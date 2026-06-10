@@ -38,7 +38,16 @@
                 </td>
                 <td class="text-sm text-gray-500 whitespace-nowrap"><%= order.created_at.strftime("%d %b %Y") %></td>
                 <td class="text-sm text-gray-600"><%= order.order_items.count %> items</td>
-                <td class="text-sm font-bold text-gray-800">₹<%= order.total_amount %></td>
+                <td class="text-sm font-bold text-gray-800">
+                  <% if order.payment_status == "paid" %>
+                    ₹<%= order.total_amount %>
+                  <% else %>
+                    ₹<%= order.total_amount %>
+                    <% if order.payment_mode == "online" && order.online_discount_percent.to_i > 0 %>
+                      <div class="text-xs font-medium text-emerald-600">Save <%= order.online_discount_percent %>% → ₹<%= order.total_with_online_discount %></div>
+                    <% end %>
+                  <% end %>
+                </td>
                 <td>
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold <%= order.status_badge_class %>">
                     <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
@@ -56,6 +65,12 @@
                     <%= link_to customer_order_path(order),
                       class: "inline-flex items-center gap-1 text-xs font-medium text-[#0d2c63] hover:text-cyan-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition" do %>
                       View
+                    <% end %>
+                    <% if order.payment_status != "paid" && order.payment_mode == "online" %>
+                      <%= link_to pay_customer_order_path(order),
+                        class: "inline-flex items-center gap-1 text-xs font-medium text-white bg-[#0d2c63] hover:bg-[#0a1f4a] px-3 py-1.5 rounded-lg transition" do %>
+                        Pay
+                      <% end %>
                     <% end %>
                     <% if order.pending? %>
                       <%= button_to cancel_customer_order_path(order),
@@ -99,10 +114,18 @@
             <span class="text-xs font-semibold text-gray-400 uppercase">Mode</span>
             <span class="text-xs font-semibold text-gray-800 uppercase"><%= order.payment_mode %></span>
           </div>
-          <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-            <span class="text-sm font-bold text-gray-800">₹<%= order.total_amount %></span>
+          <div class="flex justify-between items-start pt-3 border-t border-gray-100">
+            <div>
+              <span class="text-sm font-bold text-gray-800">₹<%= order.total_amount %></span>
+              <% if order.payment_mode == "online" && order.payment_status != "paid" && order.online_discount_percent.to_i > 0 %>
+                <div class="text-xs font-medium text-emerald-600">Online: ₹<%= order.total_with_online_discount %></div>
+              <% end %>
+            </div>
             <div class="flex gap-2">
               <%= link_to "View", customer_order_path(order), class: "text-xs font-medium text-[#0d2c63] bg-blue-50 px-3 py-1.5 rounded-lg" %>
+              <% if order.payment_status != "paid" && order.payment_mode == "online" %>
+                <%= link_to "Pay", pay_customer_order_path(order), class: "text-xs font-medium text-white bg-[#0d2c63] px-3 py-1.5 rounded-lg" %>
+              <% end %>
               <% if order.pending? %>
                 <%= button_to "Cancel", cancel_customer_order_path(order),
                   method: :patch,

@@ -59,10 +59,27 @@ class Vendor::OrdersController < Vendor::BaseController
   def collect_cash
     @order = Order.find(params[:id])
     if @order.payment_pending?
-      @order.update!(payment_status: "paid", payment_mode: @order.payment_mode.presence || "cash", paid_at: Time.current)
-      redirect_back fallback_location: vendor_order_path(@order), notice: "Payment collected successfully! Marked as paid."
+      # If vendor collects cash for an order that was originally "online" mode,
+      # remove the online discount because cash payment gets no online discount.
+      if @order.payment_mode == "online"
+        @order.remove_online_discount!
+      end
+
+      @order.update!(payment_status: "paid", paid_at: Time.current)
+      redirect_back fallback_location: vendor_order_path(@order), notice: "Payment collected successfully! Cash collected — online discount removed."
     else
       redirect_back fallback_location: vendor_order_path(@order), alert: "Payment is already #{@order.payment_status}."
+    end
+  end
+
+  def confirm_online
+    @order = Order.find(params[:id])
+    if @order.payment_pending? && @order.payment_mode == "online"
+      @order.apply_online_discount!
+      @order.update!(payment_status: "paid", paid_at: Time.current)
+      redirect_back fallback_location: vendor_order_path(@order), notice: "Online payment confirmed. Discount applied."
+    else
+      redirect_back fallback_location: vendor_order_path(@order), alert: "Cannot confirm online payment for this order."
     end
   end
 

@@ -34,6 +34,26 @@ class Customer::OrdersController < Customer::BaseController
     end
   end
 
+  def pay
+    @order = current_user.orders.includes(:order_items, :products).find(params[:id])
+
+    if @order.payment_status == "paid"
+      redirect_to customer_order_path(@order), alert: "This order is already paid."
+      return
+    end
+
+    amount   = @order.total_with_online_discount.to_s
+    txn_note = "Order #{@order.id} - #{MERCHANT_NAME}"
+    pn       = MERCHANT_NAME.gsub(" ", "+")
+
+    @upi_links = {
+      phonepe: "phonepe://pay?pa=#{MERCHANT_UPI_IDS[:phonepe]}&pn=#{pn}&am=#{amount}&cu=INR&tn=#{URI.encode_www_form_component(txn_note)}",
+      gpay:    "tez://upi/pay?pa=#{MERCHANT_UPI_IDS[:gpay]}&pn=#{pn}&am=#{amount}&cu=INR&tn=#{URI.encode_www_form_component(txn_note)}",
+      paytm:   "paytmmp://pay?pa=#{MERCHANT_UPI_IDS[:paytm]}&pn=#{pn}&am=#{amount}&cu=INR&tn=#{URI.encode_www_form_component(txn_note)}",
+      generic: "upi://pay?pa=#{MERCHANT_UPI_IDS[:paytm]}&pn=#{pn}&am=#{amount}&cu=INR&tn=#{URI.encode_www_form_component(txn_note)}"
+    }
+  end
+
   private
 
   def order_params

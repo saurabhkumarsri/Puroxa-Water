@@ -106,6 +106,7 @@
     </div>
 
     <!-- PAYMENT MODE -->
+    <% online_discount = AppSetting.get_int('online_payment_discount_percent', 0) %>
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50">
         <h2 class="font-semibold text-gray-800 flex items-center gap-2">
@@ -118,14 +119,20 @@
             <%= f.radio_button :payment_mode, "cash", checked: true, class: "accent-[#0d2c63]" %>
             <div>
               <p class="font-semibold text-sm text-gray-800">💵 Cash on Delivery</p>
-              <p class="text-xs text-gray-500">Pay when you receive</p>
+              <p class="text-xs text-gray-500">Pay when vendor delivers</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 border border-gray-200 rounded-xl p-4 cursor-pointer hover:bg-blue-50/50 hover:border-blue-200 transition flex-1">
+          <label class="flex items-center gap-3 border-2 border-emerald-200 rounded-xl p-4 cursor-pointer hover:bg-emerald-50/50 hover:border-emerald-300 transition flex-1 relative overflow-hidden">
+            <% if online_discount > 0 %>
+              <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">SAVE <%= online_discount %>%</div>
+            <% end %>
             <%= f.radio_button :payment_mode, "online", class: "accent-[#0d2c63]" %>
             <div>
               <p class="font-semibold text-sm text-gray-800">💳 Online Payment</p>
-              <p class="text-xs text-gray-500">Pay now via UPI/Card</p>
+              <p class="text-xs text-gray-500">Pay via Google Pay / PhonePe / Paytm</p>
+              <% if online_discount > 0 %>
+                <p class="text-xs text-emerald-600 font-semibold mt-0.5">✅ Get <%= online_discount %>% off instantly!</p>
+              <% end %>
             </div>
           </label>
         </div>

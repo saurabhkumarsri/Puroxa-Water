@@ -33,7 +33,12 @@
               <td class="py-3 px-4 font-medium">#<%= order.id %></td>
               <td><%= order.customer.display_name %></td>
               <td><%= order.vendor&.display_name || "—" %></td>
-              <td>₹<%= order.total_amount %></td>
+              <td>
+                ₹<%= order.total_amount %>
+                <% if order.payment_mode == "online" && order.payment_status == "pending" && order.online_discount_percent.to_i > 0 %>
+                  <div class="text-xs text-cyan-600">Online: ₹<%= order.total_with_online_discount %></div>
+                <% end %>
+              </td>
               <td>
                 <span class="px-2 py-1 rounded-full text-xs font-medium <%= order.status_badge_class %>">
                   <%= order.status.titleize %>
@@ -80,7 +85,12 @@
           </div>
           <div class="flex justify-between">
             <span class="text-gray-500">Amount</span>
-            <span class="font-bold">₹<%= order.total_amount %></span>
+            <div class="text-right">
+              <span class="font-bold">₹<%= order.total_amount %></span>
+              <% if order.payment_mode == "online" && order.payment_status == "pending" && order.online_discount_percent.to_i > 0 %>
+                <div class="text-xs text-cyan-600">Online: ₹<%= order.total_with_online_discount %></div>
+              <% end %>
+            </div>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-500">Payment</span>

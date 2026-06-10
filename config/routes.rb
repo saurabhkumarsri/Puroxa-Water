@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       member do
         patch :update_status
         patch :collect_cash
+        patch :confirm_online
       end
     end
     resources :customers, only: [:index, :show]
@@ -49,6 +50,8 @@ Rails.application.routes.draw do
     get "reports/product_wise", to: "reports#product_wise", as: :product_wise_report
     get "reports/customer_wise", to: "reports#customer_wise", as: :customer_wise_report
     get "reports/daily_collection", to: "reports#daily_collection", as: :daily_collection_report
+    get "settings", to: "settings#edit", as: :settings
+    patch "settings", to: "settings#update"
     resources :vendors, only: [:index, :show, :destroy] do
       member do
         patch :approve
@@ -92,7 +95,10 @@ Rails.application.routes.draw do
     get 'landing', to: 'landing#index'
     resources :products, only: [:index]
     resources :orders, only: [:index, :show, :new, :create] do
-      member { patch :cancel }
+      member do
+        patch :cancel
+        get :pay
+      end
     end
     get "invoices/:id", to: "invoices#show", as: :invoice
     resource :profile, only: [:show, :edit, :update]

@@ -24,13 +24,21 @@ module Orders
     private
 
     def create_order
+      payment_mode = @params[:payment_mode].presence || "cash"
+
+      online_discount = 0
+      if payment_mode == "online"
+        online_discount = AppSetting.get_int('online_payment_discount_percent', 0)
+      end
+
       Order.create!(
         customer: @customer,
         status: "pending",
         payment_status: "pending",
-        payment_mode: @params[:payment_mode].presence || "cash",
+        payment_mode: payment_mode,
         delivery_address: @params[:delivery_address],
-        notes: @params[:notes]
+        notes: @params[:notes],
+        online_discount_percent: online_discount
       )
     end
 
@@ -67,9 +75,9 @@ module Orders
 
       order.update!(
         discount: discount,
-        discounted_amount: discount_amount,
-        total_amount: order.total_amount - discount_amount
+        discounted_amount: discount_amount
       )
+      order.calculate_total! # recalculate with both coupon + online discount
       discount.increment!(:usage_count)
     end
 

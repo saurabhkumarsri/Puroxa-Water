@@ -39,17 +39,39 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
       <p class="text-xs text-gray-400 font-medium uppercase tracking-wider mb-1">Total</p>
       <p class="font-bold text-lg text-[#0d2c63]">₹<%= @order.total_amount %></p>
+      <% if @order.payment_mode == "online" && @order.payment_status == "pending" && @order.online_discount_percent.to_i > 0 %>
+        <p class="text-[10px] text-emerald-600 mt-0.5">
+          Pay online & save ₹<%= @order.online_discount_amount %> (<%= @order.online_discount_percent %>%)
+        </p>
+      <% end %>
     </div>
   </div>
 
-  <!-- Invoice CTA -->
-  <div class="mb-6">
+  <!-- Actions -->
+  <div class="mb-6 flex flex-wrap gap-3">
     <%= link_to customer_invoice_path(@order),
       class: "inline-flex items-center gap-2 text-sm bg-emerald-600 text-white px-5 py-2.5 rounded-xl hover:bg-emerald-700 hover:shadow-lg hover:-translate-y-0.5 transition font-medium" do %>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
       </svg>
       Download Invoice
+    <% end %>
+
+    <% if @order.payment_status != "paid" && @order.payment_mode == "online" %>
+      <%= link_to pay_customer_order_path(@order),
+        class: "inline-flex items-center gap-2 text-sm bg-[#0d2c63] text-white px-5 py-2.5 rounded-xl hover:bg-[#0a1f4a] hover:shadow-lg hover:-translate-y-0.5 transition font-medium" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        Pay Online
+      <% end %>
+    <% elsif @order.payment_status != "paid" && @order.payment_mode == "cash" %>
+      <div class="inline-flex items-center gap-2 text-sm bg-amber-50 text-amber-700 px-5 py-2.5 rounded-xl border border-amber-100">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Pay Cash to Vendor
+      </div>
     <% end %>
   </div>
 
@@ -104,20 +126,29 @@
 
     <!-- Totals -->
     <div class="px-5 py-4 border-t border-gray-100 bg-gray-50/30 space-y-2">
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-500">Subtotal</span>
+        <span class="font-medium text-gray-700">₹<%= @order.final_subtotal %></span>
+      </div>
       <% if @order.discount.present? %>
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-500">Subtotal</span>
-          <span class="font-medium text-gray-700">₹<%= @order.order_items.sum(:total_price) %></span>
-        </div>
         <div class="flex justify-between text-sm text-emerald-600">
-          <span>Discount (<%= @order.discount.code %> — <%= @order.discount.display_value %>)</span>
+          <span>Coupon Discount (<%= @order.discount.code %> — <%= @order.discount.display_value %>)</span>
           <span class="font-medium">-₹<%= @order.discounted_amount %></span>
         </div>
       <% end %>
       <div class="flex justify-between items-center pt-2 border-t border-gray-200">
-        <span class="font-semibold text-gray-800">Grand Total</span>
+        <span class="font-semibold text-gray-800">Amount Due</span>
         <span class="text-xl font-bold text-[#0d2c63]">₹<%= @order.total_amount %></span>
       </div>
+      <% if @order.payment_mode == "online" && @order.payment_status == "pending" && @order.online_discount_percent.to_i > 0 %>
+        <div class="flex justify-between items-center text-sm text-emerald-600 bg-emerald-50 rounded-lg px-3 py-2">
+          <span class="flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Pay online & save <%= @order.online_discount_percent %>%
+          </span>
+          <span class="font-bold">Final: ₹<%= @order.total_with_online_discount %></span>
+        </div>
+      <% end %>
     </div>
   </div>
 

@@ -1,6 +1,6 @@
 class Admin::CustomersController < Admin::BaseController
   def index
-    @customers = User.where(role: User::ROLES[:customer]).order(created_at: :desc)
+    @customers = User.where(role: User::ROLES[:customer]).includes(:orders).order(created_at: :desc)
   end
 
   def show

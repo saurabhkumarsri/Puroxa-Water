@@ -116,8 +116,11 @@
             data: { turbo_confirm: "Confirm cash collection of ₹#{@order.total_amount} from #{@order.customer.display_name}?" },
             class: "flex-1 text-sm bg-green-600 text-white px-5 py-3 rounded-xl hover:bg-green-700 transition font-medium" %>
         <% elsif @order.payment_mode == "online" %>
-          <%= button_to "Mark as Online Paid", collect_cash_vendor_order_path(@order), method: :patch,
-            data: { turbo_confirm: "Confirm online payment of ₹#{@order.total_amount} received?" },
+          <%= button_to "Collect Cash (₹#{@order.total_amount})", collect_cash_vendor_order_path(@order), method: :patch,
+            data: { turbo_confirm: "Customer chose online but is paying cash. Collect ₹#{@order.total_amount} — no online discount?" },
+            class: "flex-1 text-sm bg-green-600 text-white px-5 py-3 rounded-xl hover:bg-green-700 transition font-medium" %>
+          <%= button_to "Confirm Online Paid (₹#{@order.total_with_online_discount})", confirm_online_vendor_order_path(@order), method: :patch,
+            data: { turbo_confirm: "Confirm online payment received of ₹#{@order.total_with_online_discount} (includes #{@order.online_discount_percent}% discount)?" },
             class: "flex-1 text-sm bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 transition font-medium" %>
         <% else %>
           <%= button_to "Collect Cash (₹#{@order.total_amount})", collect_cash_vendor_order_path(@order), method: :patch,
