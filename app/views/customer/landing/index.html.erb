@@ -13,34 +13,50 @@
     0% { transform: scale(0.8); opacity: 0.5; }
     100% { transform: scale(1.4); opacity: 0; }
   }
-  @keyframes slide-up {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
   @keyframes wave {
     0% { transform: translateX(0) translateZ(0) scaleY(1); }
     50% { transform: translateX(-25%) translateZ(0) scaleY(0.55); }
     100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
   }
-  .animate-float { animation: float 6s ease-in-out infinite; }
-  .animate-float-delay { animation: float 6s ease-in-out 2s infinite; }
-  .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
-  .animate-slide-up {
-    opacity: 0;
-    animation: slide-up 0.8s ease-out forwards;
+  @keyframes blob-morph {
+    0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
   }
-  .delay-100 { animation-delay: 0.1s; }
-  .delay-200 { animation-delay: 0.2s; }
-  .delay-300 { animation-delay: 0.3s; }
-  .delay-400 { animation-delay: 0.4s; }
-  .delay-500 { animation-delay: 0.5s; }
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+  }
+  @keyframes count-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slide-in-left {
+    from { opacity: 0; transform: translateX(-40px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .animate-float        { animation: float 6s ease-in-out infinite; }
+  .animate-float-delay  { animation: float 6s ease-in-out 2s infinite; }
+  .animate-float-slow   { animation: float-slow 8s ease-in-out infinite; }
+  .animate-blob-morph   { animation: blob-morph 8s ease-in-out infinite; }
+  .animate-shimmer      { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); background-size: 1000px 100%; animation: shimmer 3s infinite linear; }
+
   .wave-bg {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 200%;
     height: 100px;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 88.7"%3e<path d="M800 56.9c-155.5 0-204.9-50-405.5-49.9-200 0-250 49.9-394.5 49.9v31.8h800v-.2-31.6z" fill="%23ffffff"/%3e</svg>');
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 88.7"%3e<path d="M800 56.9c-155.5 0-204.9-50-405.5-49.9-200 0-250 49.9-394.5 49.9v31.8h800v-.2-31.6z" fill="%23ffffff"/%3e</svg%3e');
     background-size: 800px 100px;
     animation: wave 12s linear infinite;
     opacity: 0.3;
@@ -56,46 +72,130 @@
     filter: blur(60px);
     opacity: 0.4;
   }
+
+  /* Scroll-triggered reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.92);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-scale.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* Scroll-to-top button */
+  #scrollTop {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    transform: translateY(20px);
+  }
+  #scrollTop.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* Sticky mobile CTA */
+  @media (max-width: 767px) {
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      padding: 0.75rem 1rem;
+      display: flex;
+      gap: 0.75rem;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    }
+    .has-sticky-cta { padding-bottom: 80px; }
+  }
+  @media (min-width: 768px) {
+    .sticky-cta { display: none; }
+  }
+
+  /* Counter animation helper */
+  .counter-value { font-variant-numeric: tabular-nums; }
 </style>
 
 <!-- ==================== HERO ==================== -->
-<section class="relative w-full min-h-[85vh] overflow-hidden bg-[#0d2c63] flex items-center">
+<section class="relative w-full min-h-[92vh] overflow-hidden bg-[#0d2c63] flex items-center">
   <!-- Animated background blobs -->
-  <div class="hero-blob w-72 h-72 bg-cyan-400 top-10 left-10 animate-float-slow"></div>
-  <div class="hero-blob w-96 h-96 bg-blue-400 bottom-20 right-10 animate-float-delay"></div>
-  <div class="hero-blob w-64 h-64 bg-teal-400 top-1/3 left-1/2 animate-float"></div>
+  <div class="hero-blob w-72 h-72 bg-cyan-400 top-10 left-10 animate-float-slow animate-blob-morph"></div>
+  <div class="hero-blob w-96 h-96 bg-blue-500 bottom-10 right-10 animate-float-delay animate-blob-morph" style="animation-delay: 2s;"></div>
+  <div class="hero-blob w-56 h-56 bg-teal-400 top-1/3 left-1/3 animate-float animate-blob-morph" style="animation-delay: 4s;"></div>
+  <div class="hero-blob w-80 h-80 bg-indigo-500 bottom-1/4 left-1/4 animate-float-slow animate-blob-morph" style="animation-delay: 1s; opacity: 0.2;"></div>
+
+  <!-- Subtle grid pattern overlay -->
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
 
   <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
     <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
       <!-- Left Content -->
       <div class="text-center lg:text-left">
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-cyan-300 text-sm font-medium mb-6 animate-slide-up">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-cyan-300 text-sm font-medium mb-6 animate-shimmer overflow-hidden">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          Trusted by <span class="text-white font-bold"><%= @total_customers + 50 %>+</span> shops across Bihar
+          Trusted by <span class="text-white font-bold"><span class="counter-value" data-target="<%= @total_customers + 50 %>">0</span>+</span> shops across Bihar
         </div>
 
-        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6 animate-slide-up delay-100">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-6">
           Pure Water
           <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-200">Pure Trust</span>
         </h1>
 
-        <p class="text-lg md:text-xl text-blue-100 mb-8 max-w-xl mx-auto lg:mx-0 animate-slide-up delay-200">
+        <p class="text-lg md:text-xl text-blue-100/90 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
           Premium packaged drinking water delivered straight to your shop, office & home. FSSAI certified. Daily fresh supply.
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up delay-300">
-          <%= link_to customer_products_path, class: "group px-8 py-4 bg-gradient-to-r from-cyan-400 to-teal-400 text-[#0d2c63] font-bold rounded-xl hover:shadow-cyan-400/40 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 text-center flex items-center justify-center gap-2" do %>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <%= link_to customer_products_path, class: "group px-8 py-4 bg-gradient-to-r from-cyan-400 to-teal-400 text-[#0d2c63] font-bold rounded-xl hover:shadow-cyan-400/40 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 text-center flex items-center justify-center gap-2 text-lg" do %>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             Order Now
           <% end %>
-          <%= link_to vendor_signup_path, class: "group px-8 py-4 bg-white/10 backdrop-blur text-white font-semibold rounded-xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 border border-white/20 text-center flex items-center justify-center gap-2" do %>
+          <%= link_to vendor_signup_path, class: "group px-8 py-4 bg-white/10 backdrop-blur text-white font-semibold rounded-xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 border border-white/20 text-center flex items-center justify-center gap-2 text-lg" do %>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             Become a Vendor
           <% end %>
         </div>
 
         <!-- Mini trust badges -->
-        <div class="flex items-center gap-6 mt-10 justify-center lg:justify-start animate-slide-up delay-400">
+        <div class="flex flex-wrap items-center gap-4 sm:gap-6 mt-10 justify-center lg:justify-start">
           <div class="flex items-center gap-2 text-blue-200 text-sm">
             <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
               <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -118,22 +218,30 @@
       </div>
 
       <!-- Right Visual -->
-      <div class="hidden lg:flex justify-center items-center relative animate-slide-up delay-300">
+      <div class="hidden lg:flex justify-center items-center relative">
         <div class="relative">
           <!-- Glowing circle behind bottle -->
-          <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/30 to-blue-500/30 rounded-full blur-3xl scale-110"></div>
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/30 to-blue-500/30 rounded-full blur-3xl scale-110 animate-pulse"></div>
+          <!-- Rotating ring -->
+          <div class="absolute inset-0 border-2 border-cyan-400/20 rounded-full scale-125 animate-[spin_20s_linear_infinite]"></div>
+          <div class="absolute inset-0 border border-white/10 rounded-full scale-110 animate-[spin_15s_linear_infinite_reverse]"></div>
           <!-- Bottle image with float animation -->
           <img src="<%= image_path 'bottle.png' %>" alt="Puroxa Water Bottle"
             class="relative z-10 h-80 xl:h-96 object-contain animate-float drop-shadow-2xl"
             onerror="this.style.display='none'">
           <!-- Floating price tag -->
-          <div class="absolute -top-4 -right-4 bg-white text-[#0d2c63] px-4 py-2 rounded-xl shadow-xl font-bold text-sm animate-float-slow">
-            Starting @ ₹5
+          <div class="absolute -top-4 -right-4 bg-white text-[#0d2c63] px-4 py-2.5 rounded-xl shadow-xl font-bold text-sm animate-float-slow">
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/></svg>
+              Starting @ ₹5
+            </div>
           </div>
           <!-- Floating freshness badge -->
-          <div class="absolute -bottom-4 -left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-xl shadow-xl font-semibold text-xs animate-float-delay">
-            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            4.8 Rating
+          <div class="absolute -bottom-4 -left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2.5 rounded-xl shadow-xl font-semibold text-xs animate-float-delay">
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              4.8 Rating
+            </div>
           </div>
         </div>
       </div>
@@ -146,24 +254,24 @@
 
 
 <!-- ==================== TRUST BAR ==================== -->
-<section class="bg-white py-8 border-b border-gray-100">
+<section class="bg-white py-8 md:py-10 border-b border-gray-100 reveal">
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <div class="group">
-        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition"><%= @total_customers + 50 %>+</p>
-        <p class="text-gray-500 text-sm mt-1">Happy Shops</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
+      <div class="group reveal reveal-delay-1">
+        <p class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition duration-300 counter-value" data-target="<%= @total_customers + 50 %>">0</p>
+        <p class="text-gray-500 text-sm mt-1 font-medium">Happy Shops</p>
       </div>
-      <div class="group">
-        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition"><%= @total_vendors + 10 %>+</p>
-        <p class="text-gray-500 text-sm mt-1">Delivery Partners</p>
+      <div class="group reveal reveal-delay-2">
+        <p class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition duration-300 counter-value" data-target="<%= @total_vendors + 10 %>">0</p>
+        <p class="text-gray-500 text-sm mt-1 font-medium">Delivery Partners</p>
       </div>
-      <div class="group">
-        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition"><%= @total_orders + 500 %>+</p>
-        <p class="text-gray-500 text-sm mt-1">Orders Delivered</p>
+      <div class="group reveal reveal-delay-3">
+        <p class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition duration-300 counter-value" data-target="<%= @total_orders + 500 %>">0</p>
+        <p class="text-gray-500 text-sm mt-1 font-medium">Orders Delivered</p>
       </div>
-      <div class="group">
-        <p class="text-3xl md:text-4xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition">4.8</p>
-        <p class="text-gray-500 text-sm mt-1">Star Rating</p>
+      <div class="group reveal reveal-delay-4">
+        <p class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0d2c63] group-hover:scale-110 transition duration-300">4.8</p>
+        <p class="text-gray-500 text-sm mt-1 font-medium">Star Rating</p>
       </div>
     </div>
   </div>
@@ -173,7 +281,7 @@
 <!-- ==================== PRODUCTS ==================== -->
 <section class="py-16 md:py-24 bg-gray-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12 md:mb-16">
+    <div class="text-center mb-12 md:mb-16 reveal">
       <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Our Products</p>
       <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
         Water for Every Need
@@ -182,10 +290,12 @@
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-      <% @products.each do |product| %>
-        <div class="group bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+      <% @products.each_with_index do |product, idx| %>
+        <div class="group bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-xl hover:-translate-y-2 hover:border-cyan-200 transition-all duration-300 relative overflow-hidden reveal reveal-delay-<%= [1,2,3,4,5,6][idx] %>">
           <!-- Hover glow -->
-          <div class="absolute inset-0 bg-gradient-to-t from-cyan-50/50 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-cyan-50/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+          <!-- Shine effect on hover -->
+          <div class="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shimmer"></div>
 
           <div class="relative z-10">
             <div class="h-28 md:h-36 flex items-center justify-center mb-4">
@@ -196,7 +306,8 @@
               <% end %>
             </div>
             <h3 class="font-bold text-gray-800 text-sm md:text-base text-center"><%= product.name %></h3>
-            <%= link_to customer_products_path, class: "block mt-3 text-center text-xs md:text-sm font-semibold text-[#0d2c63] bg-blue-50 hover:bg-[#0d2c63] hover:text-white py-2 rounded-lg transition-colors" do %>
+            <p class="text-center text-gray-400 text-xs mt-1"><%= product.pack_display %> · ₹<%= product.price %></p>
+            <%= link_to customer_products_path, class: "block mt-3 text-center text-xs md:text-sm font-semibold text-[#0d2c63] bg-blue-50 hover:bg-[#0d2c63] hover:text-white py-2.5 rounded-lg transition-colors" do %>
               Buy Now →
             <% end %>
           </div>
@@ -204,8 +315,8 @@
       <% end %>
     </div>
 
-    <div class="text-center mt-10">
-      <%= link_to customer_products_path, class: "inline-flex items-center gap-2 px-6 py-3 border-2 border-[#0d2c63] text-[#0d2c63] font-semibold rounded-xl hover:bg-[#0d2c63] hover:text-white transition" do %>
+    <div class="text-center mt-12 reveal">
+      <%= link_to customer_products_path, class: "inline-flex items-center gap-2 px-8 py-3.5 border-2 border-[#0d2c63] text-[#0d2c63] font-semibold rounded-xl hover:bg-[#0d2c63] hover:text-white transition shadow-sm hover:shadow-lg hover:-translate-y-0.5" do %>
         View All Products
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       <% end %>
@@ -217,9 +328,12 @@
 <!-- ==================== WHY CHOOSE ==================== -->
 <section class="py-16 md:py-24 bg-white relative overflow-hidden">
   <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-50 to-transparent"></div>
+  <!-- Decorative blur blobs -->
+  <div class="absolute top-20 right-0 w-96 h-96 bg-cyan-100/40 rounded-full blur-3xl -z-10"></div>
+  <div class="absolute bottom-20 left-0 w-72 h-72 bg-blue-100/40 rounded-full blur-3xl -z-10"></div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="text-center mb-12 md:mb-16">
+    <div class="text-center mb-12 md:mb-16 reveal">
       <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Why Puroxa</p>
       <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Built for Quality</h2>
       <p class="text-gray-500 mt-3 max-w-xl mx-auto">Every drop goes through multi-stage purification before reaching your shop.</p>
@@ -227,39 +341,39 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
       <!-- Feature 1 -->
-      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-        <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-cyan-200">
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 hover:border-cyan-200 transition-all duration-300 reveal reveal-delay-1 group">
+        <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-cyan-200 group-hover:scale-110 transition-transform">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
         </div>
         <h3 class="font-bold text-lg text-gray-800 mb-2">RO + UV + UF Purified</h3>
-        <p class="text-gray-500 text-sm">7-stage purification removes 99.9% impurities, bacteria & viruses.</p>
+        <p class="text-gray-500 text-sm leading-relaxed">7-stage purification removes 99.9% impurities, bacteria & viruses.</p>
       </div>
 
       <!-- Feature 2 -->
-      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-        <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-green-200">
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 hover:border-green-200 transition-all duration-300 reveal reveal-delay-2 group">
+        <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-green-200 group-hover:scale-110 transition-transform">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
         </div>
         <h3 class="font-bold text-lg text-gray-800 mb-2">FSSAI Certified</h3>
-        <p class="text-gray-500 text-sm">Government approved. Every batch tested for TDS, pH & purity.</p>
+        <p class="text-gray-500 text-sm leading-relaxed">Government approved. Every batch tested for TDS, pH & purity.</p>
       </div>
 
       <!-- Feature 3 -->
-      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-        <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-amber-200">
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 hover:border-amber-200 transition-all duration-300 reveal reveal-delay-3 group">
+        <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-amber-200 group-hover:scale-110 transition-transform">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
         <h3 class="font-bold text-lg text-gray-800 mb-2">Same Day Delivery</h3>
-        <p class="text-gray-500 text-sm">Order before 2 PM and get fresh water delivered the same evening.</p>
+        <p class="text-gray-500 text-sm leading-relaxed">Order before 2 PM and get fresh water delivered the same evening.</p>
       </div>
 
       <!-- Feature 4 -->
-      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-        <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-violet-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-purple-200">
+      <div class="glass-card p-6 md:p-8 rounded-2xl hover:shadow-xl hover:-translate-y-1 hover:border-purple-200 transition-all duration-300 reveal reveal-delay-4 group">
+        <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-violet-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
         <h3 class="font-bold text-lg text-gray-800 mb-2">Eco Friendly Bottles</h3>
-        <p class="text-gray-500 text-sm">BPA-free, food-grade PET bottles. Recyclable & safe for reuse.</p>
+        <p class="text-gray-500 text-sm leading-relaxed">BPA-free, food-grade PET bottles. Recyclable & safe for reuse.</p>
       </div>
     </div>
   </div>
@@ -274,7 +388,7 @@
   </div>
 
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="text-center mb-12 md:mb-16">
+    <div class="text-center mb-12 md:mb-16 reveal">
       <p class="text-cyan-300 font-semibold text-sm uppercase tracking-wider mb-2">Simple Process</p>
       <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">How It Works</h2>
       <p class="text-blue-200 mt-3 max-w-xl mx-auto">Get fresh water delivered in 4 simple steps.</p>
@@ -291,8 +405,8 @@
         { num: "04", title: "Enjoy", desc: "Fresh water delivered to your shop", icon: "M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" }
       ] %>
 
-      <% steps.each do |step| %>
-        <div class="text-center group">
+      <% steps.each_with_index do |step, idx| %>
+        <div class="text-center group reveal reveal-delay-<%= idx + 1 %>">
           <div class="w-20 h-20 mx-auto bg-gradient-to-br from-cyan-400 to-teal-400 rounded-2xl flex items-center justify-center mb-5 shadow-xl shadow-cyan-900/30 group-hover:scale-110 transition-transform duration-300 relative z-10">
             <svg class="w-8 h-8 text-[#0d2c63]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="<%= step[:icon] %>"/></svg>
           </div>
@@ -311,12 +425,12 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
       <!-- Left Content -->
-      <div class="order-2 lg:order-1">
+      <div class="order-2 lg:order-1 reveal">
         <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">B2B Wholesale</p>
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-5">
           Built for Kirana Stores, <span class="text-[#0d2c63]">Cool Points & Offices</span>
         </h2>
-        <p class="text-gray-500 mb-8 text-lg">
+        <p class="text-gray-500 mb-8 text-lg leading-relaxed">
           We understand dukan walo ki zaroorat. Bulk orders, credit limit, daily supply, and easy payment tracking — sab kuchh ek jagah.
         </p>
 
@@ -328,8 +442,8 @@
             { icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z", text: "Delivery across Patna, Gandhi Road, Station Road & more" }
           ] %>
 
-          <% features.each do |f| %>
-            <div class="flex items-start gap-4">
+          <% features.each_with_index do |f, idx| %>
+            <div class="flex items-start gap-4 reveal reveal-delay-<%= idx + 1 %>">
               <div class="w-10 h-10 bg-[#0d2c63]/10 rounded-lg flex items-center justify-center shrink-0">
                 <svg class="w-5 h-5 text-[#0d2c63]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="<%= f[:icon] %>"/></svg>
               </div>
@@ -338,7 +452,7 @@
           <% end %>
         </div>
 
-        <div class="mt-8">
+        <div class="mt-8 reveal">
           <%= link_to new_user_registration_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-[#0d2c63] text-white font-semibold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition" do %>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
             Register Your Shop
@@ -347,10 +461,10 @@
       </div>
 
       <!-- Right Visual -->
-      <div class="order-1 lg:order-2 flex justify-center">
+      <div class="order-1 lg:order-2 flex justify-center reveal reveal-right">
         <div class="relative">
           <div class="absolute inset-0 bg-gradient-to-br from-[#0d2c63]/10 to-cyan-400/10 rounded-3xl blur-2xl"></div>
-          <div class="relative bg-white rounded-3xl shadow-2xl p-6 md:p-8 w-full max-w-md border border-gray-100">
+          <div class="relative bg-white rounded-3xl shadow-2xl p-6 md:p-8 w-full max-w-md border border-gray-100 hover:shadow-cyan-200/50 hover:shadow-2xl transition-shadow duration-500">
             <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
               <div class="w-10 h-10 bg-[#0d2c63] rounded-lg flex items-center justify-center text-white font-bold">P</div>
               <div>
@@ -400,15 +514,15 @@
 <!-- ==================== DELIVERY AREAS ==================== -->
 <section class="py-16 md:py-20 bg-white">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10 md:mb-12">
+    <div class="text-center mb-10 md:mb-12 reveal">
       <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Coverage</p>
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900">We Deliver Here</h2>
       <p class="text-gray-500 mt-3 max-w-xl mx-auto">Currently serving major commercial areas of Patna & nearby.</p>
     </div>
 
     <div class="flex flex-wrap justify-center gap-3 md:gap-4">
-      <% @areas.each do |area| %>
-        <div class="px-5 py-3 bg-gray-50 hover:bg-[#0d2c63] hover:text-white rounded-xl font-medium text-gray-700 transition-all duration-300 cursor-default">
+      <% @areas.each_with_index do |area, idx| %>
+        <div class="px-5 py-3 bg-gray-50 hover:bg-[#0d2c63] hover:text-white rounded-xl font-medium text-gray-700 transition-all duration-300 cursor-default reveal reveal-delay-<%= (idx % 4) + 1 %> hover:shadow-lg hover:-translate-y-0.5">
           <svg class="w-4 h-4 inline mr-1.5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           <%= area %>
         </div>
@@ -421,7 +535,7 @@
 <!-- ==================== TESTIMONIALS ==================== -->
 <section class="py-16 md:py-24 bg-gray-50">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12 md:mb-16">
+    <div class="text-center mb-12 md:mb-16 reveal">
       <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">Testimonials</p>
       <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Dukan Walo Ka Bharosa</h2>
     </div>
@@ -433,14 +547,14 @@
         { name: "Priya Devi", shop: "Priya Departmental Store", area: "Station Road", text: "Customer ko cold water chahiye hota hai aur Puroxa ka taste sabse fresh lagta hai. Sales badh gaye hain." }
       ] %>
 
-      <% testimonials.each do |t| %>
-        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+      <% testimonials.each_with_index do |t, idx| %>
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 hover:border-cyan-100 transition-all duration-300 reveal reveal-delay-<%= idx + 1 %>">
           <div class="flex items-center gap-1 mb-4">
             <% 5.times do %>
               <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
             <% end %>
           </div>
-          <p class="text-gray-600 italic mb-6">"<%= t[:text] %>"</p>
+          <p class="text-gray-600 italic mb-6 leading-relaxed">"<%= t[:text] %>"</p>
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-[#0d2c63] rounded-full flex items-center justify-center text-white font-bold">
               <%= t[:name].first %>
@@ -460,25 +574,25 @@
 <!-- ==================== VENDOR CTA ==================== -->
 <section class="py-16 md:py-24 bg-[#0d2c63] relative overflow-hidden">
   <div class="absolute inset-0">
-    <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-72 h-72 bg-teal-400/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl animate-float-slow"></div>
+    <div class="absolute bottom-0 left-0 w-72 h-72 bg-teal-400/10 rounded-full blur-3xl animate-float-delay"></div>
   </div>
 
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
     <p class="text-cyan-300 font-semibold text-sm uppercase tracking-wider mb-3">Earn With Us</p>
     <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
       Apni Dukan Badhayein, Puroxa Ke Saath
     </h2>
     <p class="text-blue-200 text-lg max-w-2xl mx-auto mb-8">
-      Join <%= @total_vendors + 10 %>+ vendors delivering fresh water daily. Earn commission on every order. Low investment, high returns.
+      Join <span class="counter-value font-bold text-white" data-target="<%= @total_vendors + 10 %>">0</span>+ vendors delivering fresh water daily. Earn commission on every order. Low investment, high returns.
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <%= link_to vendor_signup_path, class: "group px-8 py-4 bg-gradient-to-r from-cyan-400 to-teal-400 text-[#0d2c63] font-bold rounded-xl hover:shadow-cyan-400/30 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 inline-flex items-center justify-center gap-2" do %>
+      <%= link_to vendor_signup_path, class: "group px-8 py-4 bg-gradient-to-r from-cyan-400 to-teal-400 text-[#0d2c63] font-bold rounded-xl hover:shadow-cyan-400/30 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 inline-flex items-center justify-center gap-2 text-lg" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
         Become a Vendor
       <% end %>
-      <%= link_to vendor_login_path, class: "px-8 py-4 bg-white/10 backdrop-blur text-white font-semibold rounded-xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 border border-white/20 inline-flex items-center justify-center gap-2" do %>
+      <%= link_to vendor_login_path, class: "px-8 py-4 bg-white/10 backdrop-blur text-white font-semibold rounded-xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 border border-white/20 inline-flex items-center justify-center gap-2 text-lg" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
         Vendor Login
       <% end %>
@@ -490,7 +604,7 @@
 <!-- ==================== FAQ ==================== -->
 <section class="py-16 md:py-24 bg-white">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10 md:mb-12">
+    <div class="text-center mb-10 md:mb-12 reveal">
       <p class="text-cyan-600 font-semibold text-sm uppercase tracking-wider mb-2">FAQ</p>
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Common Questions</h2>
     </div>
@@ -505,11 +619,11 @@
 
     <div class="space-y-3">
       <% faqs.each_with_index do |faq, idx| %>
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <div class="border border-gray-200 rounded-xl overflow-hidden reveal reveal-delay-<%= (idx % 3) + 1 %> hover:border-cyan-200 transition-colors">
           <button onclick="document.getElementById('faq-<%= idx %>').classList.toggle('hidden'); this.querySelector('svg').classList.toggle('rotate-180')"
             class="w-full flex items-center justify-between p-4 md:p-5 text-left hover:bg-gray-50 transition">
             <span class="font-semibold text-gray-800 pr-4"><%= faq[:q] %></span>
-            <svg class="w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div id="faq-<%= idx %>" class="hidden px-4 md:px-5 pb-4 md:pb-5">
             <p class="text-gray-500 text-sm leading-relaxed"><%= faq[:a] %></p>
@@ -523,20 +637,138 @@
 
 <!-- ==================== FINAL CTA ==================== -->
 <section class="py-12 md:py-16 bg-gray-50 border-t border-gray-200">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
     <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
       Ready for Fresh Water?
     </h2>
     <p class="text-gray-500 mb-8">Aaj hi register karein aur kal se fresh water supply shuru karein.</p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <%= link_to new_user_registration_path, class: "px-8 py-4 bg-[#0d2c63] text-white font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition inline-flex items-center justify-center gap-2" do %>
+      <%= link_to new_user_registration_path, class: "px-8 py-4 bg-[#0d2c63] text-white font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition inline-flex items-center justify-center gap-2 text-lg" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
         Register Your Shop Free
       <% end %>
-      <%= link_to customer_products_path, class: "px-8 py-4 border-2 border-[#0d2c63] text-[#0d2c63] font-bold rounded-xl hover:bg-[#0d2c63] hover:text-white transition inline-flex items-center justify-center gap-2" do %>
+      <%= link_to customer_products_path, class: "px-8 py-4 border-2 border-[#0d2c63] text-[#0d2c63] font-bold rounded-xl hover:bg-[#0d2c63] hover:text-white transition inline-flex items-center justify-center gap-2 text-lg" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
         Browse Products
       <% end %>
     </div>
   </div>
 </section>
+
+
+<!-- ==================== STICKY MOBILE CTA ==================== -->
+<div class="sticky-cta">
+  <%= link_to customer_products_path, class: "flex-1 py-3 bg-[#0d2c63] text-white font-semibold rounded-lg text-center text-sm hover:bg-blue-900 transition flex items-center justify-center gap-2" do %>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+    Order Water
+  <% end %>
+  <%= link_to new_user_registration_path, class: "flex-1 py-3 border-2 border-[#0d2c63] text-[#0d2c63] font-semibold rounded-lg text-center text-sm hover:bg-[#0d2c63] hover:text-white transition flex items-center justify-center gap-2" do %>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+    Register
+  <% end %>
+</div>
+
+
+<!-- ==================== SCROLL TO TOP ==================== -->
+<button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+  class="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-50 w-12 h-12 bg-[#0d2c63] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center">
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+</button>
+
+
+<!-- ==================== SCRIPTS ==================== -->
+<script>
+(function() {
+  // Scroll reveal with IntersectionObserver
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Don't unobserve — allow re-reveal on scroll back
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Counter animation
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target, 10);
+        if (isNaN(target)) return;
+
+        const duration = 2000;
+        const start = performance.now();
+
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease out quart
+          const eased = 1 - Math.pow(1 - progress, 4);
+          const current = Math.floor(eased * target);
+          el.textContent = current.toLocaleString('en-IN');
+
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          } else {
+            el.textContent = target.toLocaleString('en-IN') + (el.parentElement.textContent.includes('+') ? '' : '');
+          }
+        }
+
+        requestAnimationFrame(update);
+        countObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.counter-value[data-target]').forEach(el => {
+    countObserver.observe(el);
+  });
+
+  // Scroll to top button
+  const scrollTopBtn = document.getElementById('scrollTop');
+  if (scrollTopBtn) {
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 500) {
+        scrollTopBtn.classList.add('show');
+      } else {
+        scrollTopBtn.classList.remove('show');
+      }
+    }, { passive: true });
+  }
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Parallax effect on hero blobs (subtle)
+  const heroSection = document.querySelector('.hero-blob')?.closest('section');
+  if (heroSection) {
+    window.addEventListener('scroll', function() {
+      const scrolled = window.scrollY;
+      const blobs = heroSection.querySelectorAll('.hero-blob');
+      blobs.forEach((blob, i) => {
+        const speed = 0.05 + (i * 0.02);
+        blob.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+    }, { passive: true });
+  }
+})();
+</script>

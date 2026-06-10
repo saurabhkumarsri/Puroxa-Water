@@ -81,18 +81,22 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: puroxa_water_production
-    username: puroxa_water
-    password: <%= ENV["PUROXA_WATER_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
+    # If DATABASE_URL is not set, fallback to socket-less connection using RENDER_* vars
+    <% if ENV["RENDER"].present? && ENV["DATABASE_URL"].blank? %>
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
+    port: <%= ENV.fetch("PGPORT", "5432") %>
+    database: <%= ENV.fetch("PGDATABASE", "puroxa_water_production") %>
+    username: <%= ENV.fetch("PGUSER", "postgres") %>
+    password: <%= ENV.fetch("PGPASSWORD", "") %>
+    sslmode: require
+    <% end %>
   cache:
     <<: *primary_production
-    database: puroxa_water_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: puroxa_water_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: puroxa_water_production_cable
     migrations_paths: db/cable_migrate
