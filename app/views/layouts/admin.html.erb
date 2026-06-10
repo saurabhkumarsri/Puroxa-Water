@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <meta property="og:title" content="<%= content_for(:title) || 'Puroxa Water - Admin' %>">
+    <meta property="og:description" content="Puroxa Water Admin Panel">
+    <meta property="og:image" content="<%= request.base_url %>/icon.png">
 
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
