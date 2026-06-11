@@ -12,6 +12,8 @@
 
   <!-- RIGHT -->
   <div class="flex items-center gap-4">
+    <%= render "shared/notification_bell", namespace: :vendor, variant: :dark %>
+
     <div class="text-right hidden sm:block">
       <p class="text-sm text-gray-700 font-medium">
         <%= current_user&.display_name || "User" %>

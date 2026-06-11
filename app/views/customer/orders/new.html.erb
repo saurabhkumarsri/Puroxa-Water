@@ -158,26 +158,28 @@
   <% end %>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.qty-decrease').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var input = this.parentElement.querySelector('.qty-input');
-          var val = parseInt(input.value) || 0;
-          if (val > 0) {
-            input.value = val - 1;
-          }
-        });
-      });
-      document.querySelectorAll('.qty-increase').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var input = this.parentElement.querySelector('.qty-input');
-          var max = parseInt(this.dataset.max) || 999;
-          var val = parseInt(input.value) || 0;
-          if (val < max) {
-            input.value = val + 1;
-          }
-        });
-      });
+    // Use a named handler + once:true so it doesn't double-bind on
+    // turbo:load after the initial DOMContentLoaded. Otherwise each
+    // Turbo navigation stacks another click listener and a single
+    // "+" click ends up firing twice (or more on later visits).
+    function onQtyClick(e) {
+      var btn = e.target.closest('.qty-increase, .qty-decrease');
+      if (!btn) return;
+      var input = btn.parentElement.querySelector('.qty-input');
+      if (!input) return;
+      var current = parseInt(input.value, 10) || 0;
+      if (btn.classList.contains('qty-increase')) {
+        var max = parseInt(btn.dataset.max, 10) || 999;
+        if (current < max) input.value = current + 1;
+      } else if (btn.classList.contains('qty-decrease')) {
+        if (current > 0) input.value = current - 1;
+      }
+    }
+    document.addEventListener('click', onQtyClick);
+    document.addEventListener('turbo:load', function() {
+      // No-op: the click listener above is already wired to document,
+      // and the DOM is replaced by Turbo (not stacked), so re-binding
+      // isn't needed. Hook is kept in case future init work is required.
     });
   </script>
 </div>

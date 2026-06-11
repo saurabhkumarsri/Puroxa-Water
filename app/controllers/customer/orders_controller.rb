@@ -16,13 +16,39 @@ class Customer::OrdersController < Customer::BaseController
     result = Orders::CreateService.new(current_user, order_params).call
     if result.success?
       order = result.order
-      # Auto-notification for order placed
-      Notification.create!(
-        customer: current_user,
-        order: order,
-        title: "Order ##{order.id} Placed",
-        body: "Your order has been placed successfully. Total: ₹#{order.total_amount}."
-      )
+
+      if order.vendor_id.present?
+        # Specific vendor was already assigned — notify them directly.
+        Notification.create!(
+          customer_id: order.vendor_id,
+          order: order,
+          title: "New Order ##{order.id} from #{order.customer.display_name}",
+          body: "Total ₹#{order.total_amount} · #{order.payment_mode.to_s.titleize} · #{order.order_items.sum(:quantity)} pack(s)"
+        )
+      else
+        # No vendor assigned yet — fan the order out to every approved
+        # vendor so any of them can pick it up. Skip if there are none.
+        approved_vendor_user_ids = Vendor.where(approved: true).pluck(:user_id)
+        approved_vendor_user_ids.each do |vendor_user_id|
+          Notification.create!(
+            customer_id: vendor_user_id,
+            order: order,
+            title: "New Order ##{order.id} from #{order.customer.display_name}",
+            body: "Total ₹#{order.total_amount} · #{order.payment_mode.to_s.titleize} · #{order.order_items.sum(:quantity)} pack(s) · unassigned"
+          )
+        end
+      end
+
+      # Notify all admins about the new order
+      User.where(role: User::ROLES[:admin]).find_each do |admin|
+        Notification.create!(
+          customer_id: admin.id,
+          order: order,
+          title: "New Order ##{order.id} from #{order.customer.display_name}",
+          body: "Total ₹#{order.total_amount} · assigned to #{order.vendor&.display_name || 'unassigned'}"
+        )
+      end
+
       redirect_to customer_orders_path, notice: "Order placed successfully!"
     else
       flash.now[:alert] = result.errors.join(", ")

@@ -1,0 +1,91 @@
+<% content_for :page_title, "Notifications" %>
+
+<div class="max-w-3xl mx-auto">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-xl md:text-2xl font-bold text-gray-800">🔔 Notifications</h1>
+      <% if @unread_count > 0 %>
+        <p class="text-xs text-gray-500 mt-1"><%= @unread_count %> unread</p>
+      <% end %>
+    </div>
+    <% if @notifications.any? && @unread_count > 0 %>
+      <%= button_to admin_mark_all_notifications_read_path, method: :patch,
+        class: "text-sm text-[#0d2c63] hover:text-cyan-600 font-medium bg-transparent border border-[#0d2c63] hover:border-cyan-600 px-4 py-2 rounded-lg transition cursor-pointer" do %>
+        Mark All Read
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Notifications List -->
+  <% if @notifications.any? %>
+    <div class="space-y-3">
+      <% @notifications.each do |notification| %>
+        <%# Pull the customer (the person who placed the order) out of the
+            linked order when possible — gives the admin the "who ordered"
+            context that the previous view was missing. %>
+        <% order = notification.order %>
+        <% ordering_customer = order&.customer %>
+
+        <div class="bg-white rounded-2xl shadow-sm border <%= notification.read? ? 'border-gray-100' : 'border-blue-200 bg-blue-50/30' %> p-4 md:p-5 transition hover:shadow-md">
+          <div class="flex items-start gap-3">
+            <!-- Unread dot -->
+            <div class="mt-1.5">
+              <% if notification.read? %>
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+              <% else %>
+                <div class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></div>
+              <% end %>
+            </div>
+
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-sm text-gray-800 mb-1 break-words"><%= notification.title %></h3>
+              <% if notification.body.present? %>
+                <p class="text-sm text-gray-500 mb-2 break-words"><%= notification.body %></p>
+              <% end %>
+
+              <%# Customer + order meta row — answers "kaun sa customer ne
+                  order kiya hai" at a glance. %>
+              <% if ordering_customer || order %>
+                <div class="flex items-center gap-3 mt-2 text-xs flex-wrap">
+                  <% if ordering_customer %>
+                    <span class="inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
+                      <span class="w-4 h-4 rounded-full bg-[#0d2c63] text-white text-[10px] font-bold flex items-center justify-center">
+                        <%= ordering_customer.display_name.to_s.first.upcase %>
+                      </span>
+                      <span class="font-medium"><%= ordering_customer.display_name %></span>
+                      <% if ordering_customer.contact.present? %>
+                        <span class="text-gray-400">· <%= ordering_customer.contact %></span>
+                      <% end %>
+                    </span>
+                  <% end %>
+                  <% if order %>
+                    <%= link_to admin_order_path(order),
+                          class: "text-[#0d2c63] hover:text-cyan-600 font-medium underline-offset-2 hover:underline" do %>
+                      View Order #<%= order.id %> →
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+
+              <p class="text-xs text-gray-400 mt-2"><%= time_ago_in_words(notification.created_at) %> ago</p>
+            </div>
+
+            <% unless notification.read? %>
+              <%= button_to admin_mark_notification_read_path(notification), method: :patch,
+                class: "text-xs text-[#0d2c63] hover:text-cyan-600 font-medium bg-transparent border border-gray-200 hover:border-cyan-600 px-3 py-1.5 rounded-lg transition cursor-pointer shrink-0 mt-0.5" do %>
+                Mark Read
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
+      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🔔</div>
+      <p class="text-gray-500 text-lg mb-2">No notifications yet</p>
+      <p class="text-gray-400 text-sm">You'll be notified when a new order arrives.</p>
+    </div>
+  <% end %>
+</div>

@@ -24,12 +24,15 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
-      <span class="font-semibold"><%= content_for(:title) || content_for(:page_title) || "Puroxa Admin" %></span>
-      <% logout_path = current_user&.admin? ? admin_logout_path : subadmin_logout_path %>
-      <%= button_to logout_path, method: :delete,
-        class: "text-red-300 hover:text-red-100 text-sm bg-transparent border-0 cursor-pointer" do %>
-        🚪
-      <% end %>
+      <span class="font-semibold flex-1 text-center"><%= content_for(:title) || content_for(:page_title) || "Puroxa Admin" %></span>
+      <div class="flex items-center gap-1">
+        <%= render "shared/notification_bell", namespace: :admin, variant: :light %>
+        <% logout_path = current_user&.admin? ? admin_logout_path : subadmin_logout_path %>
+        <%= button_to logout_path, method: :delete,
+          class: "text-red-300 hover:text-red-100 text-sm bg-transparent border-0 cursor-pointer p-2" do %>
+          🚪
+        <% end %>
+      </div>
     </div>
 
     <div class="flex md:h-screen md:overflow-hidden">

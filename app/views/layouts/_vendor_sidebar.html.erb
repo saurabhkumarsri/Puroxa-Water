@@ -33,6 +33,21 @@
       💰 <span>Daily Collection</span>
     <% end %>
 
+    <% unread_notifications = Notification.where(customer_id: current_user&.id, read: false).count rescue 0 %>
+    <%= link_to vendor_new_orders_path,
+      data: { turbo: false },
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'orders' && action_name == 'new_orders' ? 'bg-gray-100 font-medium' : ''}" do %>
+      📋 <span>New Orders</span>
+    <% end %>
+
+    <%= link_to vendor_notifications_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'notifications' && %w[index mark_as_read mark_all_as_read].include?(action_name) ? 'bg-gray-100 font-medium' : ''}" do %>
+      🔔 <span>Notifications</span>
+      <% if unread_notifications > 0 %>
+        <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"><%= unread_notifications %></span>
+      <% end %>
+    <% end %>
+
     <%= link_to new_vendor_notification_path,
       class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'notifications' && action_name == 'new' ? 'bg-gray-100 font-medium' : ''}" do %>
       📢 <span>Send Notification</span>
@@ -108,6 +123,22 @@
           class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'reports' && controller.class.name.start_with?('Vendor::') ? 'bg-gray-100 font-medium' : ''}",
           onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
           💰 <span>Daily Collection</span>
+        <% end %>
+
+        <%= link_to vendor_new_orders_path,
+          data: { turbo: false },
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'orders' && action_name == 'new_orders' ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          📋 <span>New Orders</span>
+        <% end %>
+
+        <%= link_to vendor_notifications_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'notifications' && %w[index mark_as_read mark_all_as_read].include?(action_name) ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          🔔 <span>Notifications</span>
+          <% if unread_notifications > 0 %>
+            <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"><%= unread_notifications %></span>
+          <% end %>
         <% end %>
 
         <%= link_to new_vendor_notification_path,

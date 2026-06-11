@@ -35,7 +35,27 @@ class Vendor::OrdersController < Vendor::BaseController
     customer = User.find(params[:customer_id])
     result = Orders::CreateService.new(customer, order_params).call
     if result.success?
-      result.order.update!(vendor: current_user)
+      order = result.order
+      order.update!(vendor: current_user)
+
+      # Notify the customer that the vendor placed an order on their behalf
+      Notification.create!(
+        customer: customer,
+        order: order,
+        title: "Order ##{order.id} Placed by #{current_user.display_name}",
+        body: "Your order has been placed. Total: ₹#{order.total_amount}."
+      )
+
+      # Notify all admins about the new order
+      User.where(role: User::ROLES[:admin]).find_each do |admin|
+        Notification.create!(
+          customer_id: admin.id,
+          order: order,
+          title: "New Order ##{order.id} from #{customer.display_name} (by vendor #{current_user.display_name})",
+          body: "Total ₹#{order.total_amount} · assigned to #{current_user.display_name}"
+        )
+      end
+
       redirect_to vendor_orders_path, notice: "Order created successfully for #{customer.display_name}!"
     else
       flash.now[:alert] = result.errors.join(", ")
@@ -45,18 +65,33 @@ class Vendor::OrdersController < Vendor::BaseController
     end
   end
 
+  def new_orders
+    @orders = Order.includes(:customer, :order_items)
+                   .where.not(status: 'delivered')
+                   .where.not(payment_status: 'paid')
+                   .order(created_at: :desc)
+  end
+
   def update_status
     @order = Order.find(params[:id])
     allowed = %w[confirmed processing shipped delivered]
     if allowed.include?(params[:status])
       @order.update!(status: params[:status])
 
-      # Send notification to customer
+      # Custom message for 'confirmed' (Order Received)
+      if params[:status] == "confirmed"
+        title = "Order ##{@order.id} Received"
+        body = "Your Order request has been received by Puroxa Water."
+      else
+        title = "Order ##{@order.id} #{params[:status].titleize}"
+        body = "Your order has been #{params[:status]} by Puroxa Water."
+      end
+
       Notification.create!(
         customer: @order.customer,
         order: @order,
-        title: "Order ##{@order.id} #{params[:status].titleize}",
-        body: "Your order has been #{params[:status]} by #{current_user.display_name}."
+        title: title,
+        body: body
       )
 
       redirect_back fallback_location: vendor_orders_path, notice: "Order status updated to #{params[:status]}."
@@ -70,12 +105,11 @@ class Vendor::OrdersController < Vendor::BaseController
     if @order.payment_pending?
       # If vendor collects cash for an order that was originally "online" mode,
       # remove the online discount because cash payment gets no online discount.
-      if @order.payment_mode == "online"
-        @order.remove_online_discount!
-      end
-
-      @order.update!(payment_status: "paid", paid_at: Time.current)
-      redirect_back fallback_location: vendor_order_path(@order), notice: "Payment collected successfully! Cash collected — online discount removed."
+      @order.remove_online_discount! if @order.payment_mode == "online"
+      finalize_payment_and_deliver!(
+        @order,
+        notice: "Payment collected successfully! Cash collected — online discount removed."
+      )
     else
       redirect_back fallback_location: vendor_order_path(@order), alert: "Payment is already #{@order.payment_status}."
     end
@@ -85,14 +119,37 @@ class Vendor::OrdersController < Vendor::BaseController
     @order = Order.find(params[:id])
     if @order.payment_pending? && @order.payment_mode == "online"
       @order.apply_online_discount!
-      @order.update!(payment_status: "paid", paid_at: Time.current)
-      redirect_back fallback_location: vendor_order_path(@order), notice: "Online payment confirmed. Discount applied."
+      finalize_payment_and_deliver!(
+        @order,
+        notice: "Online payment confirmed. Discount applied."
+      )
     else
       redirect_back fallback_location: vendor_order_path(@order), alert: "Cannot confirm online payment for this order."
     end
   end
 
   private
+
+  # Mark the order as paid and auto-advance to "delivered", then notify the customer.
+  # Used by both collect_cash and confirm_online so behaviour stays consistent.
+  def finalize_payment_and_deliver!(order, notice:)
+    order.update!(payment_status: "paid", paid_at: Time.current)
+
+    # Auto-deliver: once payment is received, treat the order as delivered
+    # unless it was already delivered or cancelled.
+    if order.status != "delivered" && order.status != "cancelled"
+      order.update!(status: "delivered")
+
+      Notification.create!(
+        customer: order.customer,
+        order: order,
+        title: "Order ##{order.id} Delivered",
+        body: "Your order has been delivered by Puroxa Water. Thank you!"
+      )
+    end
+
+    redirect_back fallback_location: vendor_order_path(order), notice: notice
+  end
 
   def order_params
     params.permit(:delivery_address, :notes, :discount_code, :payment_mode, order_items: [:product_id, :quantity])

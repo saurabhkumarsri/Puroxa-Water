@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
     get "dashboard", to: "dashboards#index"
     resources :products
+    get "orders/new_orders", to: "orders#new_orders", as: :new_orders
     resources :orders, only: [:index, :show, :new, :create] do
       member do
         patch :update_status
@@ -33,9 +34,10 @@ Rails.application.routes.draw do
     get "invoices/:id", to: "invoices#show", as: :invoice
 
     # Notifications
-    get "notifications/new", to: "notifications#new", as: :new_notification
-    post "notifications", to: "notifications#create", as: :notifications
+    resources :notifications, only: [:index, :new, :create]
     get "notifications/sent", to: "notifications#sent", as: :sent_notifications
+    patch "notifications/:id/read", to: "notifications#mark_as_read", as: :mark_notification_read
+    patch "notifications/mark_all_read", to: "notifications#mark_all_as_read", as: :mark_all_notifications_read
   end
 
   # ================== ADMIN AUTH + PORTAL ==================
@@ -75,9 +77,10 @@ Rails.application.routes.draw do
     get "invoices/:id", to: "invoices#show", as: :invoice
 
     # Notifications
-    get "notifications/new", to: "notifications#new", as: :new_notification
-    post "notifications", to: "notifications#create", as: :notifications
+    resources :notifications, only: [:index, :new, :create]
     get "notifications/sent", to: "notifications#sent", as: :sent_notifications
+    patch "notifications/:id/read", to: "notifications#mark_as_read", as: :mark_notification_read
+    patch "notifications/mark_all_read", to: "notifications#mark_all_as_read", as: :mark_all_notifications_read
   end
 
   # ================== SUBADMIN AUTH + PORTAL ==================

@@ -1,4 +1,23 @@
 class Admin::NotificationsController < Admin::BaseController
+  def index
+    @notifications = Notification.where(customer_id: current_user.id)
+                                 .includes(:order)
+                                 .order(created_at: :desc)
+                                 .limit(100)
+    @unread_count = Notification.where(customer_id: current_user.id, read: false).count
+  end
+
+  def mark_as_read
+    @notification = Notification.where(customer_id: current_user.id).find(params[:id])
+    @notification.update!(read: true)
+    redirect_to admin_notifications_path, notice: "Marked as read."
+  end
+
+  def mark_all_as_read
+    Notification.where(customer_id: current_user.id, read: false).update_all(read: true)
+    redirect_to admin_notifications_path, notice: "All notifications marked as read."
+  end
+
   def new
     @customers = User.where(role: User::ROLES[:customer]).order(:first_name)
   end
