@@ -50,6 +50,15 @@ class Vendor::OrdersController < Vendor::BaseController
     allowed = %w[confirmed processing shipped delivered]
     if allowed.include?(params[:status])
       @order.update!(status: params[:status])
+
+      # Send notification to customer
+      Notification.create!(
+        customer: @order.customer,
+        order: @order,
+        title: "Order ##{@order.id} #{params[:status].titleize}",
+        body: "Your order has been #{params[:status]} by #{current_user.display_name}."
+      )
+
       redirect_back fallback_location: vendor_orders_path, notice: "Order status updated to #{params[:status]}."
     else
       redirect_back fallback_location: vendor_orders_path, alert: "Invalid status transition."

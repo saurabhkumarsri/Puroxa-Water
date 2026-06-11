@@ -52,6 +52,16 @@
       📈 <span>Reports</span>
     <% end %>
 
+    <%= link_to admin_new_notification_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'notifications' && action_name == 'new' ? 'bg-gray-100 font-medium' : ''}" do %>
+      📢 <span>Send Notification</span>
+    <% end %>
+
+    <%= link_to admin_sent_notifications_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'notifications' && action_name == 'sent' ? 'bg-gray-100 font-medium' : ''}" do %>
+      📨 <span>Sent Notifications</span>
+    <% end %>
+
     <%= link_to admin_daily_collection_report_path,
       class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'reports' && controller.class.name.start_with?('Admin::') && action_name == 'daily_collection' ? 'bg-gray-100 font-medium' : ''}" do %>
       💰 <span>Daily Collection</span>
@@ -149,6 +159,18 @@
           class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'reports' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}",
           onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
           📈 <span>Reports</span>
+        <% end %>
+
+        <%= link_to admin_new_notification_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'notifications' && action_name == 'new' ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          📢 <span>Send Notification</span>
+        <% end %>
+
+        <%= link_to admin_sent_notifications_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'notifications' && action_name == 'sent' ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          📨 <span>Sent Notifications</span>
         <% end %>
 
         <%= link_to admin_daily_collection_report_path,

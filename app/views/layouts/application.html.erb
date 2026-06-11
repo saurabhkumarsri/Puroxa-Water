@@ -15,7 +15,7 @@
     <meta property="og:description" content="Pure water delivery at your doorstep.">
     <meta property="og:image" content="<%= request.base_url %>/icon.png">
 
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
@@ -61,3 +61,4 @@
     <% end %>
   </body>
 </html>
+<!-- Turbo enabled for SPA navigation -->

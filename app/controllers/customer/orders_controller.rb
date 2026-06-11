@@ -15,6 +15,14 @@ class Customer::OrdersController < Customer::BaseController
   def create
     result = Orders::CreateService.new(current_user, order_params).call
     if result.success?
+      order = result.order
+      # Auto-notification for order placed
+      Notification.create!(
+        customer: current_user,
+        order: order,
+        title: "Order ##{order.id} Placed",
+        body: "Your order has been placed successfully. Total: ₹#{order.total_amount}."
+      )
       redirect_to customer_orders_path, notice: "Order placed successfully!"
     else
       flash.now[:alert] = result.errors.join(", ")

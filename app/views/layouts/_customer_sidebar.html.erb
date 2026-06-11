@@ -33,6 +33,15 @@
       📍 <span>Addresses</span>
     <% end %>
 
+    <%= link_to customer_notifications_path,
+      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'notifications' && controller.class.name.start_with?('Customer::') ? 'bg-gray-100 font-medium' : ''}" do %>
+      🔔 <span>Notifications</span>
+      <% unread_sidebar = current_user.notifications.unread.count rescue 0 %>
+      <% if unread_sidebar > 0 %>
+        <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center"><%= unread_sidebar > 9 ? "9+" : unread_sidebar %></span>
+      <% end %>
+    <% end %>
+
     <hr class="my-4 border-gray-200">
 
     <%= button_to destroy_user_session_path, method: :delete,
@@ -93,6 +102,16 @@
           class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'addresses' && controller.class.name.start_with?('Customer::') ? 'bg-gray-100 font-medium' : ''}",
           onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
           📍 <span>Addresses</span>
+        <% end %>
+
+        <%= link_to customer_notifications_path,
+          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'notifications' && controller.class.name.start_with?('Customer::') ? 'bg-gray-100 font-medium' : ''}",
+          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
+          🔔 <span>Notifications</span>
+          <% unread_mobile = current_user.notifications.unread.count rescue 0 %>
+          <% if unread_mobile > 0 %>
+            <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center"><%= unread_mobile > 9 ? "9+" : unread_mobile %></span>
+          <% end %>
         <% end %>
 
         <hr class="my-4 border-gray-200">

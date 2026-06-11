@@ -4,6 +4,8 @@ class Order < ApplicationRecord
   belongs_to :discount, optional: true
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
+  has_one :review, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   STATUSES = %w[pending confirmed processing shipped delivered cancelled].freeze
   PAYMENT_STATUSES = %w[pending paid failed refunded].freeze

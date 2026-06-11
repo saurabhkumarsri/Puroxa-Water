@@ -17,28 +17,36 @@
   </div>
 
   <!-- STATS CARDS -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
-      <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-2xl shrink-0">📦</div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 md:gap-4 hover:shadow-md transition">
+      <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-blue-50 flex items-center justify-center text-xl md:text-2xl shrink-0">📦</div>
       <div>
-        <p class="text-gray-500 text-sm font-medium">Total Orders</p>
-        <p class="text-2xl md:text-3xl font-bold text-[#0d2c63]"><%= @total_orders %></p>
+        <p class="text-gray-500 text-xs md:text-sm font-medium">Total Orders</p>
+        <p class="text-xl md:text-3xl font-bold text-[#0d2c63]"><%= @total_orders %></p>
       </div>
     </div>
 
-    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
-      <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-2xl shrink-0">⏳</div>
+    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 md:gap-4 hover:shadow-md transition">
+      <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-amber-50 flex items-center justify-center text-xl md:text-2xl shrink-0">⏳</div>
       <div>
-        <p class="text-gray-500 text-sm font-medium">Pending</p>
-        <p class="text-2xl md:text-3xl font-bold text-amber-500"><%= @pending_orders %></p>
+        <p class="text-gray-500 text-xs md:text-sm font-medium">Pending</p>
+        <p class="text-xl md:text-3xl font-bold text-amber-500"><%= @pending_orders %></p>
       </div>
     </div>
 
-    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
-      <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0">✅</div>
+    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 md:gap-4 hover:shadow-md transition">
+      <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-xl md:text-2xl shrink-0">✅</div>
       <div>
-        <p class="text-gray-500 text-sm font-medium">Delivered</p>
-        <p class="text-2xl md:text-3xl font-bold text-emerald-600"><%= @delivered_orders %></p>
+        <p class="text-gray-500 text-xs md:text-sm font-medium">Delivered</p>
+        <p class="text-xl md:text-3xl font-bold text-emerald-600"><%= @delivered_orders %></p>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 md:gap-4 hover:shadow-md transition">
+      <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-red-50 flex items-center justify-center text-xl md:text-2xl shrink-0">💳</div>
+      <div>
+        <p class="text-gray-500 text-xs md:text-sm font-medium">Pending Payment</p>
+        <p class="text-xl md:text-3xl font-bold text-red-500">₹<%= number_with_precision(@pending_amount, precision: 0) %></p>
       </div>
     </div>
   </div>
@@ -67,6 +75,43 @@
         <p class="font-semibold text-sm text-teal-700">Addresses</p>
       <% end %>
     </div>
+  </div>
+
+  <!-- MONTHLY SPEND CHART -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6 mb-6 md:mb-8">
+    <div class="flex justify-between items-center mb-5">
+      <h2 class="text-base md:text-lg font-semibold text-gray-800 flex items-center gap-2">
+        <span class="w-1 h-5 bg-[#0d2c63] rounded-full"></span>
+        Monthly Spend
+      </h2>
+      <p class="text-gray-500 text-sm">Last 6 months</p>
+    </div>
+
+    <% if @monthly_spend.any? { |m| m[:amount] > 0 } %>
+      <div class="flex items-end gap-2 md:gap-4 h-40 md:h-48">
+        <% max_amount = @monthly_spend.map { |m| m[:amount] }.max.to_f %>
+        <% @monthly_spend.each do |month| %>
+          <% height = max_amount > 0 ? (month[:amount] / max_amount * 100).round(1) : 0 %>
+          <div class="flex-1 flex flex-col items-center gap-2 group">
+            <div class="w-full bg-gray-100 rounded-t-lg relative overflow-hidden flex items-end h-32 md:h-40">
+              <div class="w-full bg-gradient-to-t from-[#0d2c63] to-blue-400 rounded-t-lg transition-all duration-500 group-hover:from-blue-600 group-hover:to-cyan-400 relative"
+                   style="height: <%= [height, 5].max %>%;">
+                <% if month[:amount] > 0 %>
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0d2c63] text-white text-[10px] md:text-xs px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    ₹<%= number_with_precision(month[:amount], precision: 0) %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <p class="text-[10px] md:text-xs text-gray-500 font-medium"><%= month[:label] %></p>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-8 text-gray-400">
+        <p class="text-sm">No orders yet. Start ordering to see your spend trend!</p>
+      </div>
+    <% end %>
   </div>
 
   <!-- RECENT ORDERS -->

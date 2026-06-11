@@ -11,6 +11,13 @@ class Admin::OrdersController < Admin::BaseController
   def update_status
     @order = Order.find(params[:id])
     if @order.update(status: params[:status])
+      # Send notification to customer
+      Notification.create!(
+        customer: @order.customer,
+        order: @order,
+        title: "Order ##{@order.id} #{params[:status].titleize}",
+        body: "Your order has been #{params[:status]}."
+      )
       redirect_to admin_orders_path, notice: "Order status updated to #{params[:status]}."
     else
       redirect_to admin_orders_path, alert: "Failed to update order status."

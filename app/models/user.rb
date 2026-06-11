@@ -23,6 +23,8 @@ class User < ApplicationRecord
   has_many :addresses, dependent: :destroy
   has_many :orders, foreign_key: "customer_id", dependent: :destroy
   has_many :assigned_orders, class_name: "Order", foreign_key: "vendor_id", dependent: :nullify
+  has_many :reviews, foreign_key: "customer_id", dependent: :destroy
+  has_many :notifications, foreign_key: "customer_id", dependent: :destroy
 
   def role
     ROLES.key(read_attribute(:role))

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_10_140204) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -84,6 +84,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body"
+    t.bigint "customer_id", null: false
+    t.bigint "order_id"
+    t.boolean "read", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_notifications_on_customer_id"
+    t.index ["order_id"], name: "index_notifications_on_order_id"
+  end
+
   create_table "order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.bigint "product_id", null: false
@@ -108,10 +120,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
     t.datetime "updated_at", null: false
     t.bigint "discount_id"
     t.decimal "discounted_amount"
-    t.string "payment_mode", default: "cash"
     t.datetime "paid_at"
     t.integer "online_discount_percent", default: 0, null: false
     t.decimal "online_discount_amount", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "payment_mode", default: "cash"
     t.index ["created_at"], name: "index_orders_on_created_at"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["discount_id"], name: "index_orders_on_discount_id"
@@ -143,6 +155,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
     t.string "supplier_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer "rating", null: false
+    t.text "comment"
+    t.bigint "customer_id", null: false
+    t.bigint "order_id", null: false
+    t.bigint "vendor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_reviews_on_customer_id"
+    t.index ["order_id"], name: "index_reviews_on_order_id"
+    t.index ["order_id"], name: "index_reviews_on_order_id_unique", unique: true
+    t.index ["vendor_id"], name: "index_reviews_on_vendor_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -196,10 +222,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_172347) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "users"
+  add_foreign_key "notifications", "orders"
+  add_foreign_key "notifications", "users", column: "customer_id"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "discounts"
   add_foreign_key "orders", "users", column: "customer_id"
   add_foreign_key "orders", "users", column: "vendor_id"
+  add_foreign_key "reviews", "orders"
+  add_foreign_key "reviews", "users", column: "customer_id"
+  add_foreign_key "reviews", "users", column: "vendor_id"
   add_foreign_key "vendors", "users"
 end

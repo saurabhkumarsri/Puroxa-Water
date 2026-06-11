@@ -31,6 +31,11 @@ Rails.application.routes.draw do
     resource :profile, only: [:show, :edit, :update]
     get "reports/daily_collection", to: "reports#daily_collection", as: :daily_collection_report
     get "invoices/:id", to: "invoices#show", as: :invoice
+
+    # Notifications
+    get "notifications/new", to: "notifications#new", as: :new_notification
+    post "notifications", to: "notifications#create", as: :notifications
+    get "notifications/sent", to: "notifications#sent", as: :sent_notifications
   end
 
   # ================== ADMIN AUTH + PORTAL ==================
@@ -68,6 +73,11 @@ Rails.application.routes.draw do
       end
     end
     get "invoices/:id", to: "invoices#show", as: :invoice
+
+    # Notifications
+    get "notifications/new", to: "notifications#new", as: :new_notification
+    post "notifications", to: "notifications#create", as: :notifications
+    get "notifications/sent", to: "notifications#sent", as: :sent_notifications
   end
 
   # ================== SUBADMIN AUTH + PORTAL ==================
@@ -98,11 +108,17 @@ Rails.application.routes.draw do
       member do
         patch :cancel
         get :pay
+        post :review, to: 'reviews#create'
       end
     end
     get "invoices/:id", to: "invoices#show", as: :invoice
     resource :profile, only: [:show, :edit, :update]
     resources :addresses, except: [:show]
+
+    # Notifications
+    get "notifications", to: "notifications#index", as: :notifications
+    patch "notifications/:id/read", to: "notifications#mark_as_read", as: :mark_notification_read
+    patch "notifications/mark_all_read", to: "notifications#mark_all_as_read", as: :mark_all_notifications_read
   end
 
   # ================== ROOT ==================
