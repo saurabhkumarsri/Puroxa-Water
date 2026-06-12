@@ -6,7 +6,7 @@ class User < ApplicationRecord
   # `subadmin: 3` is kept as a reserved/dead role: if any old user rows still
   # have role = 3, the integer stays valid in the DB; we just don't expose any
   # way to create or sign in as one.
-  ROLES = { admin: 0, customer: 1, vendor: 2, subadmin: 3 }.freeze
+  ROLES = { admin: 0, customer: 1, vendor: 2 }.freeze
 
   validates :email, presence: true, uniqueness: true
   validates :contact, presence: true, uniqueness: true, format: { with: /\A[6-9]\d{9}\z/, message: "must be a valid 10-digit Indian mobile number" }, if: -> { contact.present? }
