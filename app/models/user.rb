@@ -2,7 +2,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # NOTE: Do NOT change integer values — existing DB records depend on them
+  # NOTE: Do NOT change integer values — existing DB records depend on them.
+  # `subadmin: 3` is kept as a reserved/dead role: if any old user rows still
+  # have role = 3, the integer stays valid in the DB; we just don't expose any
+  # way to create or sign in as one.
   ROLES = { admin: 0, customer: 1, vendor: 2, subadmin: 3 }.freeze
 
   validates :email, presence: true, uniqueness: true
@@ -36,10 +39,6 @@ class User < ApplicationRecord
 
   def admin?
     role == :admin
-  end
-
-  def subadmin?
-    role == :subadmin
   end
 
   def customer?

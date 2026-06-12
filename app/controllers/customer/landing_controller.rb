@@ -16,8 +16,6 @@ class Customer::LandingController < ApplicationController
 
     if current_user.admin?
       redirect_to admin_dashboard_path and return
-    elsif current_user.subadmin?
-      redirect_to subadmin_dashboard_path and return
     elsif current_user.customer?
       redirect_to customer_dashboard_path and return
     elsif current_user.vendor?

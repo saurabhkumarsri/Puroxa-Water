@@ -14,18 +14,6 @@ admin.assign_attributes(
 admin.save!
 puts "Created Admin: admin@puroxa.com / 123456"
 
-# Subadmin
-subadmin = User.find_or_initialize_by(email: "subadmin@puroxa.com")
-subadmin.assign_attributes(
-  first_name: "Sub Admin",
-  contact: "9876543200",
-  password: "123456",
-  password_confirmation: "123456",
-  role: :subadmin
-)
-subadmin.save!
-puts "Created Subadmin: subadmin@puroxa.com / 123456"
-
 # ================== CUSTOMERS (Shop Owners) ==================
 customers_data = [
   {
@@ -337,7 +325,6 @@ puts "=========================================="
 puts "SEED COMPLETE! Login credentials:"
 puts "=========================================="
 puts "Admin:     admin@puroxa.com     / 123456"
-puts "Subadmin:  subadmin@puroxa.com / 123456"
 puts "Vendor 1:  vendor@puroxa.com   / 123456  (or 9135080893)"
 puts "Vendor 2:  vendor2@puroxa.com  / 123456  (or 9135080894)"
 puts "Vendor 3:  vendor3@puroxa.com  / 123456  (or 9135080895)"

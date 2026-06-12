@@ -77,11 +77,6 @@
       💰 <span>Daily Collection</span>
     <% end %>
 
-    <%= link_to admin_subadmins_path,
-      class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'subadmins' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
-      🛡️ <span>Subadmins</span>
-    <% end %>
-
     <%= link_to admin_settings_path,
       class: "flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition #{controller_name == 'settings' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}" do %>
       ⚙️ <span>Settings</span>
@@ -89,8 +84,7 @@
 
     <hr class="my-4 border-gray-200">
 
-    <% logout_path = current_user&.admin? ? admin_logout_path : subadmin_logout_path %>
-    <%= button_to logout_path, method: :delete,
+    <%= button_to admin_logout_path, method: :delete,
       class: "w-full flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition text-left bg-transparent border-0 cursor-pointer" do %>
       🚪 <span>Logout</span>
     <% end %>
@@ -199,12 +193,6 @@
           💰 <span>Daily Collection</span>
         <% end %>
 
-        <%= link_to admin_subadmins_path,
-          class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'subadmins' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}",
-          onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
-          🛡️ <span>Subadmins</span>
-        <% end %>
-
         <%= link_to admin_settings_path,
           class: "flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition #{controller_name == 'settings' && controller.class.name.start_with?('Admin::') ? 'bg-gray-100 font-medium' : ''}",
           onclick: "document.getElementById('mobile-sidebar-overlay').classList.add('hidden')" do %>
@@ -213,8 +201,7 @@
 
         <hr class="my-4 border-gray-200">
 
-        <% logout_path = current_user&.admin? ? admin_logout_path : subadmin_logout_path %>
-        <%= button_to logout_path, method: :delete,
+        <%= button_to admin_logout_path, method: :delete,
           class: "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-red-600 hover:bg-red-50 transition text-left bg-transparent border-0 cursor-pointer" do %>
           🚪 <span>Logout</span>
         <% end %>

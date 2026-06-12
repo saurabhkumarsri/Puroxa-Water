@@ -15,9 +15,9 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= begin
-      # Try Devise warden first (for admin, customer, subadmin)
+      # Try Devise warden first (for admin and customer — vendor uses custom
+      # session-based auth set in Vendor::SessionsController#login)
       warden_user = defined?(warden) ? (warden.user rescue nil) : nil
-      # Fall back to session-based auth (for vendor custom login)
       warden_user || User.find_by(id: session[:user_id])
     end
   end
@@ -31,8 +31,6 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if resource.admin?
       admin_dashboard_path
-    elsif resource.subadmin?
-      subadmin_dashboard_path
     elsif resource.customer?
       customer_dashboard_path
     else

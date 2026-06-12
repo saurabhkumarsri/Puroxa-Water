@@ -66,7 +66,6 @@ Rails.application.routes.draw do
       end
     end
     resources :customers, only: [:index, :show, :edit, :update, :destroy]
-    resources :subadmins
     resources :products
     resources :orders, only: [:index, :show] do
       member do
@@ -81,25 +80,6 @@ Rails.application.routes.draw do
     get "notifications/sent", to: "notifications#sent", as: :sent_notifications
     patch "notifications/:id/read", to: "notifications#mark_as_read", as: :mark_notification_read
     patch "notifications/mark_all_read", to: "notifications#mark_all_as_read", as: :mark_all_notifications_read
-  end
-
-  # ================== SUBADMIN AUTH + PORTAL ==================
-  devise_scope :user do
-    get 'subadmin/login', to: 'subadmin/sessions#new', as: :subadmin_login
-    post 'subadmin/login', to: 'subadmin/sessions#create'
-    delete 'subadmin/logout', to: 'subadmin/sessions#destroy', as: :subadmin_logout
-  end
-
-  namespace :subadmin do
-    get "dashboard", to: "dashboards#index"
-    resources :orders, only: [:index, :show] do
-      member do
-        patch :update_status
-        patch :assign_vendor
-      end
-    end
-    resources :customers, only: [:index, :show]
-    resources :vendors, only: [:index, :show]
   end
 
   # ================== CUSTOMER PORTAL ==================

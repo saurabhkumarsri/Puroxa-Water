@@ -8,7 +8,7 @@ class Vendor::BaseController < ApplicationController
   #   1. There must be a logged-in user (custom session-based login sets
   #      session[:user_id]; see Vendor::SessionsController#login).
   #   2. That user must actually have the :vendor role. This blocks
-  #      admins/customers/subadmins from poking at /vendor/* URLs.
+  #      admins and customers from poking at /vendor/* URLs.
   def authenticate_vendor!
     unless current_user
       redirect_to vendor_login_path, alert: "Please login as a vendor to access this area."
