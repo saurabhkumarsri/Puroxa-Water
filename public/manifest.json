@@ -38,6 +38,14 @@
       "purpose": "maskable"
     }
   ],
+  "edge_side_panel": {
+    "preferred_width": 480
+  },
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate",
   "shortcuts": [
     {
       "name": "Place Order",
@@ -51,6 +59,27 @@
       "short_name": "Orders",
       "description": "View your order history",
       "url": "/customer/orders",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Notifications",
+      "short_name": "Alerts",
+      "description": "Check new order alerts and updates",
+      "url": "/customer/notifications",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Vendor Dashboard",
+      "short_name": "Vendor",
+      "description": "Manage vendor orders and deliveries",
+      "url": "/vendor/dashboard",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Admin Dashboard",
+      "short_name": "Admin",
+      "description": "Puroxa Water admin panel",
+      "url": "/admin/dashboard",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ]
