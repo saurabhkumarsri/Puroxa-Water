@@ -1,27 +1,52 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-    <div class="text-center mb-6">
-      <h1 class="text-2xl font-bold text-[#0d2c63]">Admin Login</h1>
-      <p class="text-gray-500 mt-1">Puroxa Water Administration</p>
-    </div>
+<% content_for(:title) { "Admin login — Puroxa Water" } %>
 
-    <%= form_with url: admin_login_path, method: :post, class: "space-y-4" do |f| %>
-      <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.email_field :user_email, name: "user[email]", class: "w-full border rounded-lg px-3 py-2", required: true %>
+<div class="min-h-screen flex flex-col md:flex-row">
+  <%# Left: Branding panel (slate/indigo accent — admin = serious) %>
+  <%= render "shared/auth_branding", accent: "slate", variant: :login %>
+
+  <%# Right: Form panel %>
+  <div class="flex-1 flex items-center justify-center px-5 py-10 md:py-12 bg-gradient-to-br from-slate-50 via-white to-indigo-50">
+    <div class="w-full max-w-md">
+
+      <div class="text-center md:text-left mb-7">
+        <div class="inline-flex items-center gap-2 text-xs font-semibold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full mb-3">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Restricted area
+        </div>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Admin sign in</h2>
+        <p class="text-sm text-gray-500 mt-1.5">Puroxa Water administration</p>
       </div>
 
-      <div>
-        <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.password_field :user_password, name: "user[password]", class: "w-full border rounded-lg px-3 py-2", required: true %>
-      </div>
+      <%= form_with url: admin_login_path, method: :post, html: { class: "space-y-4" } do |f| %>
+        <%= render "shared/auth_field",
+              form: f,
+              name: :user_email,
+              type: :email,
+              label: "Admin email",
+              placeholder: "admin@puroxa.com",
+              autocomplete: "username",
+              required: true,
+              icon: "M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" %>
 
-      <%= f.submit "Sign In",
-        class: "w-full bg-[#0d2c63] text-white py-2 rounded-lg hover:scale-105 transition cursor-pointer" %>
-    <% end %>
+        <%= render "shared/auth_field",
+              form: f,
+              name: :user_password,
+              type: :password,
+              label: "Password",
+              placeholder: "••••••••",
+              autocomplete: "current-password",
+              required: true,
+              icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" %>
 
-    <div class="mt-4 text-center text-sm">
-      <%= link_to "← Back to Website", root_path, class: "text-gray-500 hover:text-[#0d2c63]" %>
+        <%= f.submit "Sign in",
+              class: "w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-200 hover:shadow-xl hover:from-indigo-700 hover:to-violet-700 hover:-translate-y-0.5 transition cursor-pointer" %>
+      <% end %>
+
+      <p class="text-center text-xs text-gray-500 mt-8">
+        <%= link_to "← Back to website", root_path, class: "hover:text-gray-700" %>
+      </p>
     </div>
   </div>
 </div>

@@ -1,52 +1,99 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-cyan-50 to-gray-50 px-4">
-  <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg w-full max-w-md">
-    <div class="text-center mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold text-[#0d2c63]">Customer Sign Up</h1>
-      <p class="text-gray-500 mt-1 text-sm md:text-base">Create your account to order fresh water</p>
-    </div>
+<% content_for(:title) { "Sign up — Puroxa Water" } %>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+<div class="min-h-[calc(100vh-160px)] flex items-center justify-center px-4 py-10 bg-gradient-to-br from-sky-50 via-white to-cyan-50">
+  <div class="w-full max-w-md">
 
-      <div>
-        <%= f.label :first_name, "Full Name", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :first_name, class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Enter your name" %>
-      </div>
+    <div class="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+      <div class="h-1.5 bg-gradient-to-r from-[#0d2c63] via-sky-500 to-cyan-400"></div>
 
-      <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Enter your email" %>
-      </div>
+      <div class="p-7 md:p-9">
+        <!-- Header -->
+        <div class="text-center mb-7">
+          <div class="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0d2c63] to-cyan-500 items-center justify-center shadow-lg shadow-sky-200 mb-4">
+            <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.69l5.66 5.66a8 8 0 11-11.32 0L12 2.69z"/>
+            </svg>
+          </div>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Create your account</h1>
+          <p class="text-sm text-gray-500 mt-1.5">Fresh water, faster reorders, smarter tracking</p>
+        </div>
 
-      <div>
-        <%= f.label :contact, "Phone Number", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.telephone_field :contact, class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Enter your phone number" %>
-      </div>
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f| %>
+          <%= render "shared/auth_field",
+                form: f,
+                name: :first_name,
+                type: :text,
+                label: "Full name",
+                placeholder: "Your name",
+                autocomplete: "name",
+                required: true,
+                icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" %>
 
-      <div>
-        <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <% if @minimum_password_length %>
-          <span class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</span>
+          <%= render "shared/auth_field",
+                form: f,
+                name: :email,
+                type: :email,
+                label: "Email",
+                placeholder: "you@example.com",
+                autocomplete: "email",
+                required: true,
+                icon: "M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" %>
+
+          <%= render "shared/auth_field",
+                form: f,
+                name: :contact,
+                type: :tel,
+                label: "Phone number",
+                placeholder: "9876543210",
+                autocomplete: "tel",
+                required: true,
+                icon: "M3 5a2 2 0 012-2h2.28a2 2 0 011.94 1.515l.7 2.81a2 2 0 01-.45 1.95L8.09 10.91a16 16 0 006 6l1.64-1.39a2 2 0 011.95-.45l2.81.7A2 2 0 0121 17.72V20a2 2 0 01-2 2A18 18 0 013 5z" %>
+
+          <div>
+            <%= render "shared/auth_field",
+                  form: f,
+                  name: :password,
+                  type: :password,
+                  label: "Password",
+                  placeholder: "At least 6 characters",
+                  autocomplete: "new-password",
+                  required: true,
+                  icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" %>
+            <% if @minimum_password_length %>
+              <p class="text-xs text-gray-400 mt-1.5 ml-1">Minimum <%= @minimum_password_length %> characters</p>
+            <% end %>
+          </div>
+
+          <%= render "shared/auth_field",
+                form: f,
+                name: :password_confirmation,
+                type: :password,
+                label: "Confirm password",
+                placeholder: "Re-enter password",
+                autocomplete: "new-password",
+                required: true,
+                icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" %>
+
+          <%= f.submit "Create account",
+                class: "w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-[#0d2c63] to-sky-600 text-white font-semibold shadow-lg shadow-sky-200 hover:shadow-xl hover:from-[#0d2c63] hover:to-sky-500 hover:-translate-y-0.5 transition cursor-pointer" %>
         <% end %>
-        <%= f.password_field :password, autocomplete: "new-password", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Create a password" %>
+
+        <div class="my-6 flex items-center gap-3 text-xs text-gray-400">
+          <div class="flex-1 h-px bg-gray-200"></div>
+          <span>OR</span>
+          <div class="flex-1 h-px bg-gray-200"></div>
+        </div>
+
+        <div class="text-center text-sm text-gray-600">
+          Already have an account?
+          <%= link_to "Sign in", new_user_session_path,
+                class: "text-[#0d2c63] hover:text-sky-600 font-semibold ml-1" %>
+        </div>
       </div>
-
-      <div>
-        <%= f.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full border rounded-lg px-3 py-2 text-sm md:text-base", required: true, placeholder: "Confirm your password" %>
-      </div>
-
-      <%= f.submit "Sign Up",
-        class: "w-full bg-[#0d2c63] text-white py-2.5 md:py-3 rounded-lg hover:scale-105 transition cursor-pointer text-sm md:text-base font-medium" %>
-    <% end %>
-
-    <div class="mt-4 text-center text-sm space-y-2">
-      <p>Already have an account?
-        <%= link_to "Login", new_user_session_path, class: "text-[#0d2c63] hover:underline font-medium" %>
-      </p>
-      <p>
-        <%= link_to "← Back to Website", root_path, class: "text-gray-500 hover:text-[#0d2c63]" %>
-      </p>
     </div>
+
+    <p class="text-center text-xs text-gray-500 mt-6">
+      <%= link_to "← Back to website", root_path, class: "hover:text-gray-700" %>
+    </p>
   </div>
 </div>
