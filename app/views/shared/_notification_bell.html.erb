@@ -1,10 +1,15 @@
 <%#
   Reusable notification bell with dropdown.
   Locals:
-    namespace  - :vendor or :admin (selects route helpers)
+    namespace  - :vendor, :admin, or :customer (selects route helpers)
     variant    - :light (white text on dark bg, for mobile dark headers)
                  or :dark (default, for white topbars)
     bell_data  - optional override; defaults to notification_bell_data
+
+  Wires up via the `notification-bell` Stimulus controller
+  (app/javascript/controllers/notification_bell_controller.js). The controller
+  re-binds on every Turbo navigation, so the dropdown keeps working without
+  re-rendering this partial.
 %>
 <% ns      = (local_assigns[:namespace] || :vendor).to_sym %>
 <% variant = (local_assigns[:variant]  || :dark).to_sym %>
@@ -37,15 +42,13 @@
     btn_classes   = "relative text-gray-600 hover:text-[#0d2c63] p-2 rounded-lg hover:bg-gray-100 transition"
     ring_color    = "ring-white"
   end
-
-  # Unique DOM id for this bell instance
-  dom_id = "notification-bell-#{ns}-#{object_id}"
 %>
 
-<div class="relative">
+<div class="relative"
+     data-controller="notification-bell">
   <button type="button"
-          id="<%= dom_id %>-button"
-          onclick="var p=document.getElementById('<%= dom_id %>-panel'); p.classList.toggle('hidden');"
+          data-notification-bell-target="button"
+          data-action="notification-bell#toggle"
           aria-label="Notifications"
           class="<%= btn_classes %>">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -59,7 +62,7 @@
     <% end %>
   </button>
 
-  <div id="<%= dom_id %>-panel"
+  <div data-notification-bell-target="panel"
        class="hidden absolute right-0 mt-2 w-[320px] max-w-[90vw] bg-white text-gray-800 rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50">
     <%# Header %>
     <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
