@@ -1,3 +1,4 @@
+<div data-controller="mobile-menu">
 <header class="bg-white/80 backdrop-blur-md shadow-sm px-4 md:px-6 py-3 md:py-4 flex justify-between items-center sticky top-0 z-50 border-b border-gray-100">
   <!-- Logo -->
   <div class="flex items-center gap-2">
@@ -119,107 +120,109 @@
   <% end %>
 </header>
 
-<!-- Guest Mobile Menu (slide-in sheet from the right) -->
+<!-- Guest Mobile Menu (slide-in sheet from the right) — rendered as siblings
+     of <header> but inside the same Stimulus controller wrapper opened at the
+     top of this file, so the hamburger button's data-action="mobile-menu#toggle"
+     resolves correctly. -->
 <% unless current_user %>
-  <div data-controller="mobile-menu">
-    <!-- Backdrop with blur -->
-    <div data-mobile-menu-target="backdrop"
-         data-action="click->mobile-menu#close"
-         class="md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <!-- Backdrop with blur -->
+  <div data-mobile-menu-target="backdrop"
+       data-action="click->mobile-menu#close"
+       class="md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- Slide-in panel -->
-    <aside id="guest-mobile-panel"
-           data-mobile-menu-target="panel"
-           role="dialog"
-           aria-modal="true"
-           aria-label="Guest menu"
-           class="md:hidden fixed top-0 right-0 bottom-0 w-[85vw] max-w-sm z-50 bg-gradient-to-b from-white via-sky-50/30 to-cyan-50/30 shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col">
+  <!-- Slide-in panel -->
+  <aside id="guest-mobile-panel"
+         data-mobile-menu-target="panel"
+         role="dialog"
+         aria-modal="true"
+         aria-label="Guest menu"
+         class="md:hidden fixed top-0 right-0 bottom-0 w-[85vw] max-w-sm z-50 bg-gradient-to-b from-white via-sky-50/30 to-cyan-50/30 shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col">
 
-      <!-- Top brand strip with close button -->
-      <div class="relative px-5 py-5 bg-gradient-to-r from-[#0d2c63] via-sky-600 to-cyan-500 text-white overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-        <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-cyan-300/20 rounded-full blur-xl"></div>
-        <div class="relative flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 bg-white/15 backdrop-blur rounded-lg flex items-center justify-center ring-1 ring-white/30">
-              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2.69l5.66 5.66a8 8 0 11-11.32 0L12 2.69z"/>
-              </svg>
-            </div>
-            <span class="font-bold tracking-tight">Puroxa</span>
+    <!-- Top brand strip with close button -->
+    <div class="relative px-5 py-5 bg-gradient-to-r from-[#0d2c63] via-sky-600 to-cyan-500 text-white overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+      <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-cyan-300/20 rounded-full blur-xl"></div>
+      <div class="relative flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 bg-white/15 backdrop-blur rounded-lg flex items-center justify-center ring-1 ring-white/30">
+            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.69l5.66 5.66a8 8 0 11-11.32 0L12 2.69z"/>
+            </svg>
           </div>
-          <button data-action="mobile-menu#close"
-            aria-label="Close menu"
-            class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur flex items-center justify-center transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
+          <span class="font-bold tracking-tight">Puroxa</span>
         </div>
-        <p class="relative mt-3 text-xs text-sky-100/90">Pure water. Pure trust.</p>
+        <button data-action="mobile-menu#close"
+          aria-label="Close menu"
+          class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur flex items-center justify-center transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <p class="relative mt-3 text-xs text-sky-100/90">Pure water. Pure trust.</p>
+    </div>
+
+    <!-- Body -->
+    <div class="flex-1 overflow-y-auto px-5 py-6 space-y-5">
+      <!-- Mini hero -->
+      <div>
+        <p class="text-xs font-semibold text-sky-600 uppercase tracking-wider mb-1.5">Get started</p>
+        <h2 class="text-xl font-extrabold text-gray-900 leading-tight">Welcome to Puroxa 👋</h2>
+        <p class="text-sm text-gray-500 mt-1">Sign in to place orders, or create a free account in seconds.</p>
       </div>
 
-      <!-- Body -->
-      <div class="flex-1 overflow-y-auto px-5 py-6 space-y-5">
-        <!-- Mini hero -->
-        <div>
-          <p class="text-xs font-semibold text-sky-600 uppercase tracking-wider mb-1.5">Get started</p>
-          <h2 class="text-xl font-extrabold text-gray-900 leading-tight">Welcome to Puroxa 👋</h2>
-          <p class="text-sm text-gray-500 mt-1">Sign in to place orders, or create a free account in seconds.</p>
-        </div>
+      <!-- Primary: Login -->
+      <%= link_to new_user_session_path,
+            class: "group block w-full px-5 py-4 rounded-2xl bg-white border-2 border-[#0d2c63] text-[#0d2c63] font-semibold text-center hover:bg-[#0d2c63] hover:text-white hover:shadow-xl hover:shadow-sky-200/60 hover:-translate-y-0.5 transition-all duration-200" do %>
+        <span class="inline-flex items-center gap-2.5">
+          <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+          </svg>
+          Login to your account
+        </span>
+      <% end %>
 
-        <!-- Primary: Login -->
-        <%= link_to new_user_session_path,
-              class: "group block w-full px-5 py-4 rounded-2xl bg-white border-2 border-[#0d2c63] text-[#0d2c63] font-semibold text-center hover:bg-[#0d2c63] hover:text-white hover:shadow-xl hover:shadow-sky-200/60 hover:-translate-y-0.5 transition-all duration-200" do %>
-          <span class="inline-flex items-center gap-2.5">
-            <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-            </svg>
-            Login to your account
-          </span>
-        <% end %>
+      <!-- Secondary: Sign up -->
+      <%= link_to new_user_registration_path,
+            class: "group relative block w-full px-5 py-4 rounded-2xl text-white font-semibold text-center bg-gradient-to-r from-[#0d2c63] via-sky-600 to-cyan-500 shadow-lg shadow-sky-200/60 hover:shadow-xl hover:shadow-cyan-300/50 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden" do %>
+        <span class="absolute inset-0 bg-gradient-to-r from-sky-400 to-cyan-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+        <span class="relative inline-flex items-center gap-2.5">
+          <svg class="w-5 h-5 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+          </svg>
+          Create a free account
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+        </span>
+      <% end %>
 
-        <!-- Secondary: Sign up -->
-        <%= link_to new_user_registration_path,
-              class: "group relative block w-full px-5 py-4 rounded-2xl text-white font-semibold text-center bg-gradient-to-r from-[#0d2c63] via-sky-600 to-cyan-500 shadow-lg shadow-sky-200/60 hover:shadow-xl hover:shadow-cyan-300/50 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden" do %>
-          <span class="absolute inset-0 bg-gradient-to-r from-sky-400 to-cyan-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          <span class="relative inline-flex items-center gap-2.5">
-            <svg class="w-5 h-5 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-            </svg>
-            Create a free account
-            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-          </span>
-        <% end %>
-
-        <!-- Divider -->
-        <div class="flex items-center gap-3 text-xs text-gray-400 pt-2">
-          <div class="flex-1 h-px bg-gray-200"></div>
-          <span>OR</span>
-          <div class="flex-1 h-px bg-gray-200"></div>
-        </div>
-
-        <!-- Cross-link: vendor -->
-        <%= link_to vendor_login_path,
-              class: "group block w-full px-4 py-3 rounded-xl border border-cyan-200 bg-cyan-50/40 text-cyan-800 text-sm font-medium text-center hover:bg-cyan-50 hover:border-cyan-300 transition" do %>
-          <span class="inline-flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M9 22V12h6v10"/>
-            </svg>
-            I'm a vendor
-            <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-            </svg>
-          </span>
-        <% end %>
+      <!-- Divider -->
+      <div class="flex items-center gap-3 text-xs text-gray-400 pt-2">
+        <div class="flex-1 h-px bg-gray-200"></div>
+        <span>OR</span>
+        <div class="flex-1 h-px bg-gray-200"></div>
       </div>
 
-      <!-- Footer hint -->
-      <div class="px-5 py-4 border-t border-gray-100 bg-white/60 backdrop-blur-sm text-center">
-        <p class="text-xs text-gray-500">Press <kbd class="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 font-mono text-[10px]">Esc</kbd> to close</p>
-      </div>
-    </aside>
-  </div>
+      <!-- Cross-link: vendor -->
+      <%= link_to vendor_login_path,
+            class: "group block w-full px-4 py-3 rounded-xl border border-cyan-200 bg-cyan-50/40 text-cyan-800 text-sm font-medium text-center hover:bg-cyan-50 hover:border-cyan-300 transition" do %>
+        <span class="inline-flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M9 22V12h6v10"/>
+          </svg>
+          I'm a vendor
+          <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      <% end %>
+    </div>
+
+    <!-- Footer hint -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white/60 backdrop-blur-sm text-center">
+      <p class="text-xs text-gray-500">Press <kbd class="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 font-mono text-[10px]">Esc</kbd> to close</p>
+    </div>
+  </aside>
 <% end %>
+</div>
