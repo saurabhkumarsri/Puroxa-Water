@@ -108,4 +108,7 @@ Rails.application.routes.draw do
   root "customer/landing#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # ================== INSTALL / QR CODE ==================
+  get "install", to: "install#show", as: :install
 end

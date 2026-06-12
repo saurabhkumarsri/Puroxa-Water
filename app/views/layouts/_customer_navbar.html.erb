@@ -98,6 +98,14 @@
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center gap-2.5">
+      <%= link_to install_path,
+            class: "group inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-cyan-700 font-medium bg-cyan-50 hover:bg-cyan-100 transition border border-cyan-200",
+            title: "Install Puroxa as an app on your phone" do %>
+        <svg class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        <span class="text-sm">Install App</span>
+      <% end %>
       <%= link_to new_user_session_path,
             class: "group inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#0d2c63]/20 bg-white/60 backdrop-blur-sm text-[#0d2c63] font-medium hover:border-[#0d2c63] hover:bg-[#0d2c63] hover:text-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" do %>
         <svg class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

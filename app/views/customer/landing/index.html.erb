@@ -668,6 +668,137 @@
 </section>
 
 
+<!-- ==================== GET APP / INSTALL PWA ==================== -->
+<section class="py-16 md:py-24 bg-gradient-to-br from-[#0d2c63] via-blue-700 to-cyan-500 relative overflow-hidden">
+  <!-- Decorative blobs -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-0 left-0 w-72 h-72 bg-cyan-300/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-10 md:mb-14 reveal">
+      <p class="text-cyan-200 font-semibold text-sm uppercase tracking-wider mb-2">Mobile App</p>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+        Install Puroxa App
+      </h2>
+      <p class="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto">
+        No Play Store. No App Store. Bilkul free — apne phone pe native app jaisa use karo, full screen me, fast aur offline bhi.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
+
+      <!-- iOS Card -->
+      <div class="reveal reveal-delay-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 md:p-8 hover:bg-white/15 transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-14 h-14 bg-gradient-to-br from-gray-700 to-black rounded-2xl flex items-center justify-center shadow-lg">
+            <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-cyan-200 text-xs font-semibold uppercase tracking-wider">For iPhone</p>
+            <h3 class="text-2xl font-bold text-white">iOS App</h3>
+          </div>
+        </div>
+
+        <ol class="space-y-3 mb-6 text-blue-50 text-sm">
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">1</span>
+            <span>Safari me apna link kholo</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">2</span>
+            <span>Bottom me <strong>Share button (⬆️)</strong> dabao</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">3</span>
+            <span><strong>"Add to Home Screen"</strong> select karo</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">4</span>
+            <span>App icon se kholo — full screen, no Safari</span>
+          </li>
+        </ol>
+
+        <%= link_to install_path, class: "block w-full text-center bg-black text-white py-3 px-4 rounded-xl font-semibold hover:bg-gray-800 transition shadow-lg" do %>
+          <span class="inline-flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            Get iOS App — Free
+          </span>
+        <% end %>
+      </div>
+
+      <!-- Android Card -->
+      <div class="reveal reveal-delay-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 md:p-8 hover:bg-white/15 transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4483-.9993.9993-.9993c.5511 0 .9993.4483.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4483.9993.9993 0 .5511-.4483.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.8508 12 7.8508s-3.5902.3931-5.1367 1.0989L4.841 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-cyan-200 text-xs font-semibold uppercase tracking-wider">For Android</p>
+            <h3 class="text-2xl font-bold text-white">Android App</h3>
+          </div>
+        </div>
+
+        <ol class="space-y-3 mb-6 text-blue-50 text-sm">
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">1</span>
+            <span>Chrome me apna link kholo</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">2</span>
+            <span>Top right <strong>Menu (⋮)</strong> dabao</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">3</span>
+            <span><strong>"Install app"</strong> ya <strong>"Add to Home Screen"</strong> pe click</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-6 h-6 bg-cyan-400 text-[#0d2c63] rounded-full flex items-center justify-center text-xs font-bold">4</span>
+            <span>App icon se kholo — full screen experience</span>
+          </li>
+        </ol>
+
+        <%= link_to install_path, class: "block w-full text-center bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-xl font-semibold hover:shadow-lg hover:from-green-600 hover:to-emerald-700 transition" do %>
+          <span class="inline-flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4483-.9993.9993-.9993c.5511 0 .9993.4483.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4483.9993.9993 0 .5511-.4483.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.8508 12 7.8508s-3.5902.3931-5.1367 1.0989L4.841 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/></svg>
+            Get Android App — Free
+          </span>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- QR Code Strip -->
+    <div class="reveal reveal-delay-3 mt-10 md:mt-14 bg-white rounded-2xl p-6 md:p-8 max-w-2xl mx-auto flex flex-col sm:flex-row items-center gap-6 shadow-2xl">
+      <div class="shrink-0 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-2">
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=<%= u request.base_url %>&color=0d2c63"
+          alt="Scan QR"
+          class="w-32 h-32 sm:w-40 sm:h-40 block"
+          width="160"
+          height="160">
+      </div>
+      <div class="text-center sm:text-left">
+        <h4 class="text-xl font-bold text-gray-900 mb-2">Ya QR Code Scan Karo 📱</h4>
+        <p class="text-gray-600 text-sm mb-3">
+          Phone camera se QR code scan karo. Link khulega, install karo — bilkul free aur bina kisi store ke.
+        </p>
+        <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+          <span class="text-xs bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full font-semibold">⚡ Fast</span>
+          <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">📱 Full screen</span>
+          <span class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">🔌 Offline bhi</span>
+          <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-semibold">🆓 100% Free</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- ==================== STICKY MOBILE CTA ==================== -->
 <div class="sticky-cta">
   <%= link_to customer_products_path, class: "flex-1 py-3 bg-[#0d2c63] text-white font-semibold rounded-lg text-center text-sm hover:bg-blue-900 transition flex items-center justify-center gap-2" do %>
