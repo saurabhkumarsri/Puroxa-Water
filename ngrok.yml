@@ -1,0 +1,20 @@
+# ngrok configuration for Puroxa Water PWA testing
+#
+# Run: ngrok start puroxa
+# (requires you to be logged in: ngrok config add-authtoken <TOKEN>)
+
+version: "2"
+tunnels:
+  puroxa:
+    proto: http
+    addr: 3000
+    # Bind to localhost only (safer)
+    bind_tls: true
+    # Add a header that bypasses ngrok's interstitial warning page
+    # so service workers and install prompts work on the first visit
+    request_headers:
+      add:
+        - "ngrok-skip-browser-warning: true"
+    response_headers:
+      add:
+        - "ngrok-skip-browser-warning: true"

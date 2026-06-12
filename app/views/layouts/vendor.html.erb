@@ -2,21 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover">
     <title><%= content_for(:title) || "Vendor Panel" %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
     <meta property="og:title" content="<%= content_for(:title) || 'Vendor Panel' %>">
     <meta property="og:description" content="Puroxa Water Vendor Panel">
-    <meta property="og:image" content="<%= request.base_url %>/icon.png">
+    <meta property="og:image" content="<%= request.base_url %>/icons/icon-512.png">
+
+    <%= render "shared/pwa_head" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-100 md:h-screen md:overflow-hidden">
+  <body class="bg-gray-100 md:h-screen md:overflow-hidden" data-controller="service-worker">
     <!-- Mobile Header -->
     <div class="md:hidden bg-[#0d2c63] text-white px-4 py-3 flex items-center justify-between sticky top-0 z-50">
       <button onclick="document.getElementById('mobile-sidebar-overlay').classList.remove('hidden')"
@@ -56,5 +57,7 @@
         </main>
       </div>
     </div>
+
+    <%= render "shared/pwa_install_prompt" %>
   </body>
 </html>

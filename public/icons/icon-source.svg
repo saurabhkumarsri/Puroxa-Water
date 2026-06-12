@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d2c63"/>
+      <stop offset="60%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="drop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Water drop -->
+  <path d="M256 96
+           C 256 96, 144 224, 144 312
+           C 144 376, 195 416, 256 416
+           C 317 416, 368 376, 368 312
+           C 368 224, 256 96, 256 96 Z"
+        fill="url(#drop)"/>
+  <!-- Letter P -->
+  <path d="M214 232
+           L 214 376
+           L 240 376
+           L 240 322
+           L 268 322
+           C 304 322, 326 300, 326 277
+           C 326 254, 304 232, 268 232
+           Z
+           M 240 256
+           L 268 256
+           C 286 256, 300 264, 300 277
+           C 300 290, 286 298, 268 298
+           L 240 298
+           Z"
+        fill="#0d2c63"/>
+  <!-- Shine highlight -->
+  <ellipse cx="216" cy="200" rx="20" ry="32" fill="#ffffff" opacity="0.45" transform="rotate(-20 216 200)"/>
+</svg>

@@ -1,0 +1,35 @@
+<%# PWA shared head tags + registrations
+    Drop this into every layout's <head> and at the end of <body>.
+    - Adds manifest, theme-color, apple-mobile-web-app meta tags
+    - Mounts the service-worker Stimulus controller (idempotent)
+    - Renders the slide-up install prompt banner
+
+    Why partial? Three layouts (application, customer, vendor, admin) all
+    need this; keeping the markup in one place avoids drift. %>
+
+<%# PWA manifest — must be on every page so iOS and Android can install %>
+<link rel="manifest" href="/manifest.json">
+
+<%# Standard PWA theme + address-bar color %>
+<meta name="theme-color" content="#0d2c63" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d2c63" media="(prefers-color-scheme: dark)">
+
+<%# iOS-specific: full-screen mode when installed from Safari %>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Puroxa">
+
+<%# iOS touch icons (multiple sizes for different devices) %>
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+
+<%# Standard favicon — also referenced for some browsers %>
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
+
+<%# Windows tile %>
+<meta name="msapplication-TileImage" content="/icons/icon-512.png">
+<meta name="msapplication-TileColor" content="#0d2c63">

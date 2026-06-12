@@ -1,0 +1,91 @@
+<%# PWA install prompt — slide-up banner
+    Captures the browser's `beforeinstallprompt` event and offers the
+    user a one-tap way to install Puroxa as a home-screen app.
+
+    Visibility is controlled by the pwa-install Stimulus controller:
+      - hidden by default (CSS `hidden`)
+      - shown ~30s after the controller captures beforeinstallprompt
+      - hidden again if the user dismisses (persisted in localStorage for 14 days)
+
+    Mounts on every layout (guest + customer + vendor + admin) so any
+    role can install the app. %>
+
+<aside data-controller="pwa-install"
+       data-pwa-install-delay-ms-value="30000"
+       aria-label="Install Puroxa"
+       aria-hidden="true"
+       class="hidden fixed inset-x-0 bottom-0 z-[60] px-3 pb-3 sm:px-4 sm:pb-4 pointer-events-none">
+
+  <div data-pwa-install-target="banner"
+       class="pointer-events-auto mx-auto max-w-md rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden
+              transform transition-transform duration-300 ease-out translate-y-4
+              sm:rounded-2xl">
+
+    <div class="flex items-start gap-3 p-4 bg-gradient-to-r from-[#0d2c63] via-sky-600 to-cyan-500 text-white">
+      <div class="shrink-0 w-12 h-12 rounded-xl bg-white/15 backdrop-blur ring-1 ring-white/30 flex items-center justify-center">
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2.69l5.66 5.66a8 8 0 11-11.32 0L12 2.69z"/>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-[10px] font-semibold uppercase tracking-wider text-sky-100/90">Install app</p>
+        <h3 class="text-base font-bold leading-tight">Add Puroxa to your home screen</h3>
+      </div>
+      <button type="button"
+              data-action="pwa-install#dismiss"
+              aria-label="Dismiss install prompt"
+              class="shrink-0 -mr-1 -mt-1 p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/15 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-4">
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Install for one-tap access, offline browsing, and a faster, app-like experience — no app store needed.
+      </p>
+
+      <ul class="mt-3 space-y-1.5 text-xs text-gray-600">
+        <li class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-cyan-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          Works offline
+        </li>
+        <li class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-cyan-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          Full-screen, no browser bar
+        </li>
+        <li class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-cyan-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          Faster loads
+        </li>
+      </ul>
+
+      <div class="mt-4 flex items-center gap-2">
+        <button type="button"
+                data-action="pwa-install#prompt"
+                class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
+                       bg-gradient-to-r from-[#0d2c63] to-cyan-500 text-white text-sm font-semibold
+                       shadow-lg shadow-cyan-200/60 hover:shadow-xl hover:shadow-cyan-300/50
+                       hover:-translate-y-0.5 transition cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Install
+        </button>
+        <button type="button"
+                data-action="pwa-install#dismiss"
+                class="px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition">
+          Not now
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>

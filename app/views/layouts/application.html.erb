@@ -2,24 +2,23 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Puroxa Water" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
     <meta property="og:title" content="<%= content_for(:title) || 'Puroxa Water' %>">
     <meta property="og:description" content="Pure water delivery at your doorstep.">
-    <meta property="og:image" content="<%= request.base_url %>/icon.png">
+    <meta property="og:image" content="<%= request.base_url %>/icons/icon-512.png">
+
+    <%= render "shared/pwa_head" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="flex flex-col min-h-screen">
+  <body class="flex flex-col min-h-screen" data-controller="service-worker">
     <!-- Navbar -->
     <%= render "layouts/customer_navbar" %>
 
@@ -59,6 +58,8 @@
       <!-- Footer -->
       <%= render "layouts/customer_footer" %>
     <% end %>
+
+    <%= render "shared/pwa_install_prompt" %>
   </body>
 </html>
 <!-- Turbo enabled for SPA navigation -->

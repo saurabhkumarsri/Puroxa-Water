@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d2c63"/>
+      <stop offset="60%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="drop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <!-- Full bleed background (maskable icons can be cropped to any shape) -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- Logo content within safe zone (centered, ~62% of canvas) -->
+  <g transform="translate(96, 96)">
+    <!-- Water drop inside 320x320 area -->
+    <path d="M160 24
+             C 160 24, 88 112, 88 168
+             C 88 208, 120 232, 160 232
+             C 200 232, 232 208, 232 168
+             C 232 112, 160 24, 160 24 Z"
+          fill="url(#drop)"/>
+    <!-- Letter P -->
+    <path d="M132 112
+             L 132 200
+             L 148 200
+             L 148 168
+             L 168 168
+             C 192 168, 206 154, 206 140
+             C 206 126, 192 112, 168 112
+             Z
+             M 148 126
+             L 168 126
+             C 180 126, 190 132, 190 140
+             C 190 148, 180 154, 168 154
+             L 148 154
+             Z"
+          fill="#0d2c63"/>
+  </g>
+</svg>
