@@ -112,24 +112,24 @@
             border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.04)]
             pb-[env(safe-area-inset-bottom)]"
      aria-label="<%= namespace.to_s.titleize %> navigation">
-  <ul class="grid grid-cols-<%= tabs.size %> h-16">
+  <ul class="grid grid-cols-4 h-14">
     <% tabs.each do |tab| %>
       <% is_active = active.call(tab[:match_controller]) %>
       <li>
         <%= link_to tab[:path],
-              class: "group flex flex-col items-center justify-center h-full gap-0.5 transition
+              class: "group flex flex-row items-center justify-center h-full gap-1.5 px-1 transition
                       #{ is_active ? 'text-[#0d2c63]' : 'text-gray-500 hover:text-gray-900' }",
               aria: { current: is_active ? "page" : nil } do %>
-          <span class="relative flex items-center justify-center w-10 h-7 rounded-full transition
+          <span class="relative flex items-center justify-center w-6 h-6 rounded-full transition shrink-0
                        <%= is_active ? 'bg-gradient-to-r from-sky-100 to-cyan-100' : '' %>">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="<%= is_active ? '2.5' : '2' %>" viewBox="0 0 24 24" aria-hidden="true">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="<%= is_active ? '2.5' : '2' %>" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="<%= tab[:icon] %>"/>
             </svg>
             <% if is_active %>
-              <span class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400"></span>
+              <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400"></span>
             <% end %>
           </span>
-          <span class="text-[10px] font-<%= is_active ? 'bold' : 'semibold' %> tracking-wide leading-none">
+          <span class="text-[11px] font-<%= is_active ? 'bold' : 'semibold' %> tracking-wide leading-none whitespace-nowrap">
             <%= tab[:label] %>
           </span>
         <% end %>
